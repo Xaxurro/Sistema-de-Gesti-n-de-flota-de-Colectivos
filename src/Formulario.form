@@ -91,14 +91,14 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblPatenteColectivo" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblMatriculaColectivo" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                                      <Component id="txtPatenteColectivo" min="-2" max="-2" attributes="0"/>
+                                      <Component id="txtMatriculaColectivo" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblSeguroColectivo" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblCompraColectivo" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="dchSeguroColectivo" min="-2" pref="200" max="-2" attributes="0"/>
+                                      <Component id="dchCompraColectivo" min="-2" pref="200" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="lblMarcaColectivo" min="-2" max="-2" attributes="0"/>
@@ -116,15 +116,15 @@
                                       <Component id="txtVinColectivo" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
-                                          <Component id="lblCompraColectivo" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblRevisionColectivo" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblSeguroColectivo" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="dchRevisionColectivo" pref="200" max="32767" attributes="0"/>
-                                          <Component id="dchCompraColectivo" max="32767" attributes="0"/>
+                                          <Component id="dchSeguroColectivo" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
@@ -133,7 +133,7 @@
                                       <Component id="txtMotorColectivo" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="214" max="32767" attributes="0"/>
+                              <EmptySpace pref="225" max="32767" attributes="0"/>
                               <Component id="lblBusquedaTablaColectivos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -159,22 +159,22 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblPatenteColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtPatenteColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMatriculaColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtMatriculaColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtBusquedaTablaColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblBusquedaTablaColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lblSeguroColectivo" min="-2" max="-2" attributes="0"/>
-                                  <Component id="dchSeguroColectivo" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="dchCompraColectivo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCompraColectivo" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblCompraColectivo" min="-2" max="-2" attributes="0"/>
-                                  <Component id="dchCompraColectivo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="dchSeguroColectivo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblSeguroColectivo" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -204,7 +204,7 @@
                           </Group>
                           <Component id="scpColectivos" alignment="0" min="-2" pref="262" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="107" max="32767" attributes="0"/>
+                      <EmptySpace pref="114" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnAñadirColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnModificarColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -216,16 +216,26 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JLabel" name="lblPatenteColectivo">
+            <Component class="javax.swing.JLabel" name="lblMatriculaColectivo">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Patente:"/>
+                <Property name="text" type="java.lang.String" value="Matricula:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtPatenteColectivo">
+            <Component class="javax.swing.JTextField" name="txtMatriculaColectivo">
               <Properties>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 22]"/>
                 </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblCompraColectivo">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Fecha de Compra:"/>
+              </Properties>
+            </Component>
+            <Component class="com.toedter.calendar.JDateChooser" name="dchCompraColectivo">
+              <Properties>
+                <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblSeguroColectivo">
@@ -234,13 +244,9 @@
               </Properties>
             </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="dchSeguroColectivo">
-            </Component>
-            <Component class="javax.swing.JLabel" name="lblCompraColectivo">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Fecha de Compra:"/>
+                <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
               </Properties>
-            </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="dchCompraColectivo">
             </Component>
             <Component class="javax.swing.JLabel" name="lblRevisionColectivo">
               <Properties>
@@ -248,6 +254,9 @@
               </Properties>
             </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="dchRevisionColectivo">
+              <Properties>
+                <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblKilometrajeColectivo">
               <Properties>
@@ -325,6 +334,10 @@
                       <StringArray count="0"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="lstColectivosFocusLost"/>
+                    <EventHandler event="valueChanged" listener="javax.swing.event.ListSelectionListener" parameters="javax.swing.event.ListSelectionEvent" handler="lstColectivosValueChanged"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                   </AuxValues>
@@ -342,6 +355,7 @@
             <Component class="javax.swing.JButton" name="btnModificarColectivo">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModificarColectivoActionPerformed"/>
@@ -350,6 +364,7 @@
             <Component class="javax.swing.JButton" name="btnEliminarColectivo">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -930,7 +945,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDebug">
       <Properties>
-        <Property name="text" type="java.lang.String" value="DEBUG"/>
+        <Property name="text" type="java.lang.String" value="Re-Crear DB"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDebugActionPerformed"/>
