@@ -2,15 +2,18 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class Formulario extends javax.swing.JFrame {
     /*
     String usuario = JOptionPane.showInputDialog("Usuario:");
     String contraseña = JOptionPane.showInputDialog("Contraseña:");
     */
-    
+     
     String usuario = "root";
     String contraseña = "";
+    
     String url = "jdbc:mysql://localhost:3306/";
     String nombreDB = "colectivos";
     Connection con = conectar(url, usuario, contraseña);
@@ -49,29 +52,46 @@ public class Formulario extends javax.swing.JFrame {
         try {
             stm.execute("CREATE DATABASE Colectivos;");
             stm.execute("USE Colectivos;");
-            stm.execute("CREATE TABLE Colectivo(Matricula Char(6) PRIMERY KEY, RutConductor VarChar(12), Compra Date, Seguro Date, RevisionTecnica Date, KilometrajeActual Int(7), Marca VarChar(15), Vin VarChar(17), Motor VarChar(12));");
+            stm.execute("CREATE TABLE Colectivo(Matricula Char(6), RutConductor VarChar(12), Compra Date, Seguro Date, RevisionTecnica Date, KilometrajeActual Int(7), Marca VarChar(15), Vin VarChar(17), Motor VarChar(12));");
             stm.execute("CREATE TABLE Conductor(RutConductor Char(12), Matricula Char(6), Nombre VarChar(50), Direccion VarChar(150), Telefono VarChar(12));");
-            stm.execute("CREATE TABLE Repuesto(TipoRepuesto VarChar(50), Matricula Char(6), Compra Date, KilometrajeMax Int(7), KilometrajeActual Int(7));");
+            stm.execute("CREATE TABLE Repuesto(TipoRepuesto VarChar(50), Compra Date, KilometrajeMax Int(7), KilometrajeActual Int(7), Matricula Char(6));");
+            stm.execute("ALTER TABLE Colectivo ADD CONSTRAINT PK_COLECTIVO PRIMARY KEY (Matricula);");
         } catch (SQLException e) {
         }
     }
     
-    private void limpiar(){
-        cmbColectivoSeleccionado.removeAllItems();
-    }
-    
     private void refrescar(){
-        try {
-            limpiar();
-            
+        try {  
+            // Tabla Colectivos
             DefaultListModel lmColectivos = new DefaultListModel();
-            rs = stm.executeQuery("SELECT Matricula FROM Colectivo;");
-            
-            while (rs.next()) {                
-                cmbColectivoSeleccionado.addItem(rs.getString("Matricula"));
+            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula LIKE '%" + txtBusquedaTablaColectivos.getText() + "%' ORDER BY Matricula ASC;");
+            while (rs.next()) {
                 lmColectivos.addElement(rs.getString("Matricula"));
             }
             lstColectivos.setModel(lmColectivos);
+            System.out.println("TABLA COLECTIVOS");
+            
+            // Tabla Conductores
+            DefaultTableModel tmConductores = (DefaultTableModel) tblConductores.getModel();
+            tmConductores.setRowCount(0);
+            rs = stm.executeQuery("SELECT * FROM Conductor ORDER BY RutConductor ASC;");
+            while (rs.next()) {
+                Object [] fila = {rs.getString("RutConductor"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono"), rs.getString("Matricula")};
+                tmConductores.addRow(fila);
+            }
+            tblConductores.setModel(tmConductores);
+            System.out.println("TABLA CONDUCTOR");
+            
+            // Tabla Repuestos
+            DefaultTableModel tmRepuestos = (DefaultTableModel) tblRepuestos.getModel();
+            tmRepuestos.setRowCount(0);
+            rs = stm.executeQuery("SELECT * FROM Repuesto ORDER BY TipoRepuesto ASC;");
+            while (rs.next()) {
+                Object [] fila = {rs.getString("TipoRepuesto"), rs.getString("Matricula"), rs.getString("Compra"), rs.getString("KilometrajeMax"), rs.getString("KilometrajeActual")};
+                tmRepuestos.addRow(fila);
+            }
+            tblRepuestos.setModel(tmRepuestos);
+            System.out.println("TABLA REPUESTOS");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -170,8 +190,6 @@ public class Formulario extends javax.swing.JFrame {
         pnlGanancias = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
-        cmbColectivoSeleccionado = new javax.swing.JComboBox<>();
-        lblColectivoSeleccionado = new javax.swing.JLabel();
         btnDebug = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -216,12 +234,12 @@ public class Formulario extends javax.swing.JFrame {
 
         txtBusquedaTablaColectivos.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtBusquedaTablaColectivos.setPreferredSize(new java.awt.Dimension(200, 22));
-
-        lstColectivos.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                lstColectivosFocusLost(evt);
+        txtBusquedaTablaColectivos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBusquedaTablaColectivosKeyReleased(evt);
             }
         });
+
         lstColectivos.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstColectivosValueChanged(evt);
@@ -246,6 +264,11 @@ public class Formulario extends javax.swing.JFrame {
 
         btnEliminarColectivo.setText("Eliminar");
         btnEliminarColectivo.setEnabled(false);
+        btnEliminarColectivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarColectivoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlColectivoLayout = new javax.swing.GroupLayout(pnlColectivo);
         pnlColectivo.setLayout(pnlColectivoLayout);
@@ -380,13 +403,40 @@ public class Formulario extends javax.swing.JFrame {
                 "Rut", "Nombre", "Direccion", "Telefono", "Colectivo"
             }
         ));
+        tblConductores.setCellSelectionEnabled(true);
+        tblConductores.setEnabled(false);
+        tblConductores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tblConductores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tblConductores.setShowGrid(true);
+        tblConductores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblConductoresMouseClicked(evt);
+            }
+        });
         scpConductores.setViewportView(tblConductores);
 
         btnAñadirConductor.setText("Añadir");
+        btnAñadirConductor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAñadirConductorActionPerformed(evt);
+            }
+        });
 
         btnModificarConductor.setText("Modificar");
+        btnModificarConductor.setEnabled(false);
+        btnModificarConductor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarConductorActionPerformed(evt);
+            }
+        });
 
         btnEliminarConductor.setText("Eliminar");
+        btnEliminarConductor.setEnabled(false);
+        btnEliminarConductor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarConductorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlConductorLayout = new javax.swing.GroupLayout(pnlConductor);
         pnlConductor.setLayout(pnlConductorLayout);
@@ -414,7 +464,7 @@ public class Formulario extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(pnlConductorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(scpConductores, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+                .addComponent(scpConductores, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
                 .addContainerGap())
         );
         pnlConductorLayout.setVerticalGroup(
@@ -471,8 +521,10 @@ public class Formulario extends javax.swing.JFrame {
         btnAñadirRepuesto.setText("Añadir");
 
         btnModificarRepuesto.setText("Modificar");
+        btnModificarRepuesto.setEnabled(false);
 
         btnEliminarRepuesto.setText("Eliminar");
+        btnEliminarRepuesto.setEnabled(false);
 
         javax.swing.GroupLayout pnlRepuestosLayout = new javax.swing.GroupLayout(pnlRepuestos);
         pnlRepuestos.setLayout(pnlRepuestosLayout);
@@ -481,9 +533,9 @@ public class Formulario extends javax.swing.JFrame {
             .addGroup(pnlRepuestosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scpRepuestos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
+                    .addComponent(scpRepuestos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE)
                     .addGroup(pnlRepuestosLayout.createSequentialGroup()
-                        .addGap(38, 38, 38)
+                        .addGap(12, 12, 12)
                         .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblCompraRepuesto)
                             .addComponent(lblNombreRepuesto)
@@ -504,7 +556,7 @@ public class Formulario extends javax.swing.JFrame {
         pnlRepuestosLayout.setVerticalGroup(
             pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestosLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(13, 13, 13)
                 .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombreRepuesto)
                     .addComponent(txtNombreRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -522,7 +574,7 @@ public class Formulario extends javax.swing.JFrame {
                     .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnEliminarRepuesto)
                         .addComponent(btnModificarRepuesto)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
                 .addComponent(scpRepuestos, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26))
         );
@@ -564,8 +616,10 @@ public class Formulario extends javax.swing.JFrame {
         btnAñadirEvento.setText("Añadir");
 
         btnModificarEvento.setText("Modificar");
+        btnModificarEvento.setEnabled(false);
 
         btnEliminarEvento.setText("Eliminar");
+        btnEliminarEvento.setEnabled(false);
 
         javax.swing.GroupLayout pnlEventosLayout = new javax.swing.GroupLayout(pnlEventos);
         pnlEventos.setLayout(pnlEventosLayout);
@@ -639,7 +693,7 @@ public class Formulario extends javax.swing.JFrame {
         pnlGanancias.setLayout(pnlGananciasLayout);
         pnlGananciasLayout.setHorizontalGroup(
             pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 771, Short.MAX_VALUE)
+            .addGap(0, 776, Short.MAX_VALUE)
         );
         pnlGananciasLayout.setVerticalGroup(
             pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -656,8 +710,6 @@ public class Formulario extends javax.swing.JFrame {
         });
 
         btnAñadirKilometraje.setText("Añadir Kilometraje");
-
-        lblColectivoSeleccionado.setText("Colectivo a Añadir Kilometraje:");
 
         btnDebug.setText("Re-Crear DB");
         btnDebug.addActionListener(new java.awt.event.ActionListener() {
@@ -676,10 +728,6 @@ public class Formulario extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnDebug)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblColectivoSeleccionado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbColectivoSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
                         .addComponent(btnAñadirKilometraje)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalir))
@@ -695,8 +743,6 @@ public class Formulario extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
                     .addComponent(btnAñadirKilometraje)
-                    .addComponent(cmbColectivoSeleccionado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblColectivoSeleccionado)
                     .addComponent(btnDebug))
                 .addContainerGap())
         );
@@ -710,9 +756,9 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
         try {
-            stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText() + "', '', " + txtKilometrajeColectivo.getText() + ", '" 
-                    + formato.format(dchCompraColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', '" + formato.format(dchSeguroColectivo.getDate()) 
-                    + "', '" + txtMarcaColectivo.getText() + "', '" + txtVinColectivo.getText() + "', '" + txtMotorColectivo.getText() + "');");
+            stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText() + "', '', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
+                    + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText() 
+                    + ", '" + txtMarcaColectivo.getText() + "', '" + txtVinColectivo.getText() + "', '" + txtMotorColectivo.getText() + "');");
             refrescar();
         } catch (Exception e) {
             e.printStackTrace();
@@ -720,7 +766,15 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAñadirColectivoActionPerformed
 
     private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
-        // TODO add your handling code here:
+        btnAñadirColectivo.setEnabled(true);
+        txtMatriculaColectivo.setEnabled(true);
+        btnModificarColectivo.setEnabled(false);
+        btnEliminarColectivo.setEnabled(false);
+        try {
+            stm.executeUpdate("UPDATE Colectivo SET Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText() + ", Marca = '" + txtMarcaColectivo.getText() + "', Vin = '" + txtVinColectivo.getText() + "', Motor = '" + txtMotorColectivo.getText() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText() + "';");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_btnModificarColectivoActionPerformed
 
     private void btnDebugActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDebugActionPerformed
@@ -728,15 +782,20 @@ public class Formulario extends javax.swing.JFrame {
         crearDB();
     }//GEN-LAST:event_btnDebugActionPerformed
 
+    // Coloca los datos en la interfaz, ademas de alternar los botones de añadir y modificar
     private void lstColectivosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstColectivosValueChanged
+        txtMatriculaColectivo.setEnabled(false);
+        btnAñadirColectivo.setEnabled(false);
+        btnModificarColectivo.setEnabled(true);
+        btnEliminarColectivo.setEnabled(true);
         try {
             rs = stm.executeQuery("SELECT * FROM Colectivo WHERE matricula = '" + lstColectivos.getSelectedValue() + "';");
             while (rs.next()) {
                 txtMatriculaColectivo.setText(rs.getString(1));
-                dchCompraColectivo.setDate(formato.parse(rs.getString(4)));
-                dchSeguroColectivo.setDate(formato.parse(rs.getString(5)));
-                dchRevisionColectivo.setDate(formato.parse(rs.getString(6)));
-                txtKilometrajeColectivo.setText(rs.getString(3));
+                dchCompraColectivo.setDate(formato.parse(rs.getString(3)));
+                dchSeguroColectivo.setDate(formato.parse(rs.getString(4)));
+                dchRevisionColectivo.setDate(formato.parse(rs.getString(5)));
+                txtKilometrajeColectivo.setText(rs.getString(6));
                 txtMarcaColectivo.setText(rs.getString(7));
                 txtVinColectivo.setText(rs.getString(8));
                 txtMotorColectivo.setText(rs.getString(9));
@@ -744,17 +803,57 @@ public class Formulario extends javax.swing.JFrame {
         } catch (Exception e) {
         }
         
-        btnAñadirColectivo.setEnabled(false);
-        btnModificarColectivo.setEnabled(true);
-        btnEliminarColectivo.setEnabled(true);
     }//GEN-LAST:event_lstColectivosValueChanged
 
-    private void lstColectivosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_lstColectivosFocusLost
-        btnAñadirColectivo.setEnabled(true);
-        btnModificarColectivo.setEnabled(false);
-        btnEliminarColectivo.setEnabled(false);
-    }//GEN-LAST:event_lstColectivosFocusLost
+    private void btnEliminarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarColectivoActionPerformed
+        try {
+            stm.execute("DELETE FROM Colectivo WHERE Matricula = '" + lstColectivos.getSelectedValue() + "';");
+            refrescar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnEliminarColectivoActionPerformed
 
+    private void txtBusquedaTablaColectivosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaColectivosKeyReleased
+        refrescar();
+    }//GEN-LAST:event_txtBusquedaTablaColectivosKeyReleased
+
+    private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
+        try {
+            stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText() + "', '', '" + txtNombreConductor.getText() + "', '" 
+                    + txtDireccionConductor.getText() + "', '" + txtTelefonoConductor.getText() + "');");
+            refrescar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btnAñadirConductorActionPerformed
+
+    private void tblConductoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConductoresMouseClicked
+        JTable src = (JTable)evt.getSource();
+        int row = src.rowAtPoint(evt.getPoint());
+        int col = src.columnAtPoint(evt.getPoint());
+        txtRutConductor.setEnabled(false);
+        btnAñadirConductor.setEnabled(false);
+        btnModificarConductor.setEnabled(true);
+        btnEliminarConductor.setEnabled(true);
+        txtRutConductor.setText(src.getModel().getValueAt(row, 0).toString());
+        txtNombreConductor.setText(src.getModel().getValueAt(row, 1).toString());
+        txtDireccionConductor.setText(src.getModel().getValueAt(row, 2).toString());
+        txtTelefonoConductor.setText(src.getModel().getValueAt(row, 3).toString());
+    }//GEN-LAST:event_tblConductoresMouseClicked
+
+    private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
+        try {
+            stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText()+ "';");
+            refrescar();
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnEliminarConductorActionPerformed
+
+    private void btnModificarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarConductorActionPerformed
+        
+    }//GEN-LAST:event_btnModificarConductorActionPerformed
+
+    
     public static void main(String args[]) {
         
         try {
@@ -797,7 +896,6 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JButton btnModificarRepuesto;
     private javax.swing.JButton btnSalir;
     private com.toedter.calendar.JCalendar cdrFechas;
-    private javax.swing.JComboBox<String> cmbColectivoSeleccionado;
     private com.toedter.calendar.JDateChooser dchCompraColectivo;
     private com.toedter.calendar.JDateChooser dchRevisionColectivo;
     private com.toedter.calendar.JDateChooser dchSeguroColectivo;
@@ -806,7 +904,6 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBusquedaTablaColectivos;
     private javax.swing.JLabel lblBusquedaTablaEventos;
-    private javax.swing.JLabel lblColectivoSeleccionado;
     private javax.swing.JLabel lblCompraColectivo;
     private javax.swing.JLabel lblCompraRepuesto;
     private javax.swing.JLabel lblDireccionConductor;
