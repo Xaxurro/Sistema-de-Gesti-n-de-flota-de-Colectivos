@@ -9,13 +9,14 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class Formulario extends javax.swing.JFrame {
+    /*
     String usuario = JOptionPane.showInputDialog("Usuario:");
     String contraseña = JOptionPane.showInputDialog("Contraseña:");
-     
-    /*
+    */
+    
     String usuario = "root";
     String contraseña = "";
-    */
+    
     
     String url = "jdbc:mysql://localhost:3306/";
     String nombreDB = "colectivos";
@@ -68,7 +69,7 @@ public class Formulario extends javax.swing.JFrame {
             // Colectivos
             DefaultTableModel tmColectivos = (DefaultTableModel) tblColectivos.getModel();
             tmColectivos.setRowCount(0);
-            rs = stm.executeQuery("SELECT * FROM Colectivo WHERE Matricula LIKE '%" + txtBusquedaTablaColectivos.getText() + "%' ORDER BY Matricula ASC;");
+            rs = stm.executeQuery("SELECT * FROM Colectivo WHERE Matricula LIKE '%" + txtBusquedaTablaColectivos.getText().strip() + "%' ORDER BY Matricula ASC;");
             while (rs.next()) {
                 Object [] fila = {rs.getString("Matricula"), rs.getString("RutConductor"), rs.getString("Compra"), rs.getString("Seguro"), rs.getString("RevisionTecnica"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
@@ -80,7 +81,7 @@ public class Formulario extends javax.swing.JFrame {
             tmConductores.setRowCount(0);
             cmbConductoresColectivos.removeAllItems();
             cmbConductoresColectivos.addItem("Sin Conductor");
-            rs = stm.executeQuery("SELECT * FROM Conductor WHERE Nombre LIKE '%" + txtBusquedaTablaConductorNombre.getText() + "%' AND RutConductor LIKE '%" + txtBusquedaTablaConductorRut.getText() + "%' ORDER BY RutConductor ASC;");
+            rs = stm.executeQuery("SELECT * FROM Conductor WHERE Nombre LIKE '%" + txtBusquedaTablaConductorNombre.getText().strip() + "%' AND RutConductor LIKE '%" + txtBusquedaTablaConductorRut.getText().strip() + "%' ORDER BY RutConductor ASC;");
             while (rs.next()) {
                 Object [] fila = {rs.getString("RutConductor"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono"), rs.getString("Matricula")};
                 tmConductores.addRow(fila);
@@ -879,13 +880,13 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
         try {
-            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText() + "';");
+            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
             if (!rs.next()) {
-                stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
-                        + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText() 
-                        + ", '" + txtMarcaColectivo.getText() + "', '" + txtVinColectivo.getText() + "', '" + txtMotorColectivo.getText() + "');");
+                stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
+                        + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText().strip() 
+                        + ", '" + txtMarcaColectivo.getText().strip() + "', '" + txtVinColectivo.getText().strip() + "', '" + txtMotorColectivo.getText().strip() + "');");
                 if (cmbConductoresColectivos.getSelectedIndex() != 0) {
-                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
                 }
                 refrescar();
             } else {
@@ -904,8 +905,13 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
         try {
-            stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText() + "', '------', '" + txtNombreConductor.getText() + "', '" + txtDireccionConductor.getText() + "', '" + txtTelefonoConductor.getText() + "');");
-            refrescar();
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if (!rs.next()) {
+                stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Rut duplicado.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -923,17 +929,27 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
         try {
-            stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText()+ "';");
-            stm.executeUpdate("UPDATE Colectivo SET Rut Conductor = 'Sin Conductor' WHERE RutConductor = '" + txtRutConductor.getText() + "';");
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if(rs.next()){
+            stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
+            stm.executeUpdate("UPDATE Colectivo SET RutConductor = 'Sin Conductor' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
             refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Actualmente no existe un conductor con ese rut.");
+            }
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btnEliminarConductorActionPerformed
 
     private void btnModificarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarConductorActionPerformed
         try {
-            stm.executeUpdate("UPDATE Conductor SET Nombre = '" + txtNombreConductor.getText() + "', Direccion = '" + txtDireccionConductor.getText() + "', Telefono = '" + txtTelefonoConductor.getText() + "'WHERE RutConductor = '" + txtRutConductor.getText() + "';");
-            refrescar();
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if(rs.next()){
+                stm.executeUpdate("UPDATE Conductor SET Nombre = '" + txtNombreConductor.getText().strip() + "', Direccion = '" + txtDireccionConductor.getText().strip() + "', Telefono = '" + txtTelefonoConductor.getText().strip() + "'WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Actualmente no existe un conductor con ese rut.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -941,10 +957,15 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
         try {
-            stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText() + ", Marca = '" + txtMarcaColectivo.getText() + "', Vin = '" + txtVinColectivo.getText() + "', Motor = '" + txtMotorColectivo.getText() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText() + "';");
-            stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText() + "';");
-            stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
-            refrescar();
+            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+            if(rs.next()){
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -952,9 +973,14 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnEliminarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarColectivoActionPerformed
         try {
-            stm.execute("DELETE FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText() + "';");
-            stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText() + "';");
-            refrescar();
+            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+            if(rs.next()){
+                stm.execute("DELETE FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
