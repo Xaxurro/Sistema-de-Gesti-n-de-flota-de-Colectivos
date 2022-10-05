@@ -963,7 +963,7 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
         try {
-            if (!txtRutConductor.getText().strip().equals("") && !txtNombreConductor.getText().strip().equals("") && !txtDireccionConductor.getText().strip().equals("") && !txtTelefonoConductor.getText().strip().equals("") && isNumber(txtRutConductor.getText())) {
+            if (!txtRutConductor.getText().strip().equals("") && !txtNombreConductor.getText().strip().equals("") && !txtDireccionConductor.getText().strip().equals("") && !txtTelefonoConductor.getText().strip().equals("") && isNumber(txtRutConductor.getText()) && isNumber(txtTelefonoConductor.getText())) {
                 rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
                 if (!rs.next()) {
                     stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
