@@ -35,7 +35,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnSalir" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jTabbedPane1" alignment="0" pref="983" max="32767" attributes="0"/>
+                  <Component id="jTabbedPane1" alignment="0" pref="989" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -46,7 +46,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTabbedPane1" min="-2" pref="500" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="32767" attributes="0"/>
+              <EmptySpace pref="21" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnSalir" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAñadirKilometraje" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -95,7 +95,7 @@
                               <Component id="btnModificarColectivo" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="btnEliminarColectivo" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="323" max="32767" attributes="0"/>
+                              <EmptySpace pref="329" max="32767" attributes="0"/>
                               <Component id="lblMotorColectivo1" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="cmbConductoresColectivos" min="-2" pref="200" max="-2" attributes="0"/>
@@ -506,7 +506,7 @@
                                           <Component id="txtRutConductor" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="txtNombreConductor" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace pref="361" max="32767" attributes="0"/>
+                                      <EmptySpace pref="367" max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="lblDireccionConductor" alignment="1" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblTelefonoConductor" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -787,27 +787,51 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="scpRepuestos" alignment="1" pref="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lblCompraRepuesto" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblNombreRepuesto" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblKilometrajeRepuesto" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnAñadirRepuesto" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="scpRepuestos" pref="977" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="btnModificarRepuesto" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                                      <Component id="btnEliminarRepuesto" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblBusquedaTablaRepuestoNombre" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="txtBusquedaTablaRepuestoNombre" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="txtNombreRepuesto" max="32767" attributes="0"/>
-                                  <Component id="txtKilometrajeRepuesto" max="32767" attributes="0"/>
-                                  <Component id="dcsCompraRepuesto" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Component id="lblCompraRepuesto" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                                  <Component id="dcsCompraRepuesto" min="-2" pref="200" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="lblKilometrajeRepuesto" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="lblNombreRepuesto" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                      <Component id="cmbMatriculaRepuesto" max="32767" attributes="0"/>
+                                                      <Component id="txtKilometrajeRepuesto" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" attributes="0">
+                                              <Component id="btnAñadirRepuesto" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                              <Component id="btnLimpiarRepuesto" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                              <Component id="btnModificarRepuesto" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                              <Component id="btnEliminarRepuesto" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
@@ -819,32 +843,38 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblBusquedaTablaRepuestoNombre" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtBusquedaTablaRepuestoNombre" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="scpRepuestos" min="-2" pref="228" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblNombreRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtNombreRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbMatriculaRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblKilometrajeRepuesto" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtKilometrajeRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblCompraRepuesto" min="-2" max="-2" attributes="0"/>
                           <Component id="dcsCompraRepuesto" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblKilometrajeRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtKilometrajeRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace pref="53" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnAñadirRepuesto" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="btnEliminarRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnLimpiarRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnModificarRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="scpRepuestos" min="-2" pref="228" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -852,14 +882,7 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="lblNombreRepuesto">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Nombre:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JTextField" name="txtNombreRepuesto">
-              <Properties>
-                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[200, 22]"/>
-                </Property>
+                <Property name="text" type="java.lang.String" value="Matricula:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblCompraRepuesto">
@@ -879,6 +902,21 @@
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 22]"/>
                 </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnA&#xf1;adirRepuesto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnLimpiarRepuesto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Limpiar"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnEliminarRepuesto">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="scpRepuestos">
@@ -903,22 +941,37 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="btnA&#xf1;adirRepuesto">
+            <Component class="javax.swing.JLabel" name="lblBusquedaTablaRepuestoNombre">
               <Properties>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
+                <Property name="text" type="java.lang.String" value="Buscar Matricula:"/>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtBusquedaTablaRepuestoNombre">
+              <Properties>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[200, 22]"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBusquedaTablaRepuestoNombreKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnModificarRepuesto">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Modificar"/>
-                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnEliminarRepuesto">
+            <Component class="javax.swing.JComboBox" name="cmbMatriculaRepuesto">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Eliminar"/>
-                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="1">
+                    <StringItem index="0" value="Sin Matricula"/>
+                  </StringArray>
+                </Property>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
