@@ -919,21 +919,25 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
         try {
-            if (txtMatriculaColectivo.getText() != "") {
-                rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                if (!rs.next()) {
-                    stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
-                            + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText().strip() 
-                            + ", '" + txtMarcaColectivo.getText().strip() + "', '" + txtVinColectivo.getText().strip() + "', '" + txtMotorColectivo.getText().strip() + "');");
-                    if (cmbConductoresColectivos.getSelectedIndex() != 0) {
-                        stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+            if (txtMatriculaColectivo.getText() != "" && txtMatriculaColectivo.getText().length() == 6) {
+                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null) {
+                    rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                    if (!rs.next()) {
+                        stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
+                                + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText().strip() 
+                                + ", '" + txtMarcaColectivo.getText().strip() + "', '" + txtVinColectivo.getText().strip() + "', '" + txtMotorColectivo.getText().strip() + "');");
+                        if (cmbConductoresColectivos.getSelectedIndex() != 0) {
+                            stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+                        }
+                        refrescar();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Matricula duplicada.");
                     }
-                    refrescar();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Matricula duplicada.");
+                    JOptionPane.showMessageDialog(null, "Ingrese todas las fechas especificadas.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "No puede haber una matricula vacia.");
+                JOptionPane.showMessageDialog(null, "Ingrese una matricula válida.");
             }
         } catch (Exception e) {
             e.printStackTrace();
