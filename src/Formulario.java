@@ -919,8 +919,8 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
         try {
-            if (txtMatriculaColectivo.getText() != "" && txtMatriculaColectivo.getText().length() == 6) {
-                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null) {
+            if (txtMatriculaColectivo.getText().strip() != "" && txtMatriculaColectivo.getText().length() == 6) {
+                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && txtKilometrajeColectivo.getText().strip() != "" && txtMarcaColectivo.getText().strip() != "" && txtVinColectivo.getText().strip() != "" && txtMotorColectivo.getText().strip() != "") {
                     rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                     if (!rs.next()) {
                         stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
@@ -934,7 +934,7 @@ public class Formulario extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Matricula duplicada.");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Ingrese todas las fechas especificadas.");
+                    JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Ingrese una matricula válida.");
