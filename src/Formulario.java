@@ -26,12 +26,12 @@ public class Formulario extends javax.swing.JFrame {
     SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
     
     private boolean isNumber(String s){
-        for (int i = 0; i < s.length(); i++) {
-            if (!Character.isLetter(s.charAt(i))){
-                return false;
+        for (char c : s.toCharArray()) {
+            if (!Character.isLetter(c)){
+                return true;
             }
         }
-        return true;
+        return false;
     }
     
     private Connection conectar(String url, String usuario, String contraseña){
@@ -238,7 +238,7 @@ public class Formulario extends javax.swing.JFrame {
         btnDebug = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("PLACEHOLDER");
+        setTitle("Sistema de Gestion de Flota de Colectivos");
         setResizable(false);
 
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(750, 550));
@@ -929,7 +929,9 @@ public class Formulario extends javax.swing.JFrame {
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
         try {
             if (!txtMatriculaColectivo.getText().strip().equals("") && txtMatriculaColectivo.getText().length() == 6) {
-                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && !txtKilometrajeColectivo.getText().strip().equals("") && !txtMarcaColectivo.getText().strip().equals("") && !txtVinColectivo.getText().strip().equals("") && !txtMotorColectivo.getText().strip().equals("") && isNumber(txtKilometrajeColectivo.getText())) {
+                System.out.println(dchCompraColectivo.getDate() != null);
+                System.out.println(isNumber(txtKilometrajeColectivo.getText().strip()));
+                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && !txtKilometrajeColectivo.getText().strip().equals("") && !txtMarcaColectivo.getText().strip().equals("") && !txtVinColectivo.getText().strip().equals("") && !txtMotorColectivo.getText().strip().equals("") && isNumber(txtKilometrajeColectivo.getText().strip())) {
                     rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                     if (!rs.next()) {
                         stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
@@ -1017,7 +1019,7 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
         try {
-            if(dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && txtKilometrajeColectivo.getText().strip().equals("") && txtMarcaColectivo.getText().strip().equals("") && txtVinColectivo.getText().strip().equals("") && txtMotorColectivo.getText().strip().equals("")){
+            if(dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && !txtKilometrajeColectivo.getText().strip().equals("") && !txtMarcaColectivo.getText().strip().equals("") && !txtVinColectivo.getText().strip().equals("") && !txtMotorColectivo.getText().strip().equals("")){
                 rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                 if(rs.next()){
                     stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
