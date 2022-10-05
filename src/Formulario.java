@@ -86,7 +86,7 @@ public class Formulario extends javax.swing.JFrame {
             DefaultTableModel tmConductores = (DefaultTableModel) tblConductores.getModel();
             tmConductores.setRowCount(0);
             cmbConductoresColectivos.removeAllItems();
-            cmbConductoresColectivos.addItem("Sin Conductor");
+            cmbConductoresColectivos.addItem("------");
             rs = stm.executeQuery("SELECT * FROM Conductor WHERE Nombre LIKE '%" + txtBusquedaTablaConductorNombre.getText().strip() + "%' AND RutConductor LIKE '%" + txtBusquedaTablaConductorRut.getText().strip() + "%' ORDER BY RutConductor ASC;");
             while (rs.next()) {
                 Object [] fila = {rs.getString("RutConductor"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono"), rs.getString("Matricula")};
