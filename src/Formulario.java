@@ -952,7 +952,8 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
         try {
-            if (txtRutConductor.getText() != "" && txtNombreConductor.getText() != "") {
+            
+            if (txtRutConductor.getText() != "" && txtNombreConductor.getText() != "" && txtDireccionConductor.getText() != "" && txtTelefonoConductor.getText() != "") {
                 rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
                 if (!rs.next()) {
                     stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
@@ -961,7 +962,7 @@ public class Formulario extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Rut duplicado.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Ingrese rut y nombre del conductor.");
+                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1008,14 +1009,18 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
         try {
-            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-            if(rs.next()){
-                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
-                refrescar();
+            if(dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && txtKilometrajeColectivo.getText().strip() != "" && txtMarcaColectivo.getText().strip() != "" && txtVinColectivo.getText().strip() != "" && txtMotorColectivo.getText().strip() != ""){
+                rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                if(rs.next()){
+                    stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                    stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+                    refrescar();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
+                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
