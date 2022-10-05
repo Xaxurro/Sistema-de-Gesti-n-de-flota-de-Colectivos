@@ -25,6 +25,15 @@ public class Formulario extends javax.swing.JFrame {
     ResultSet rs = null;
     SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
     
+    private boolean isNumber(String s){
+        for (int i = 0; i < s.length(); i++) {
+            if (!Character.isLetter(s.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+    
     private Connection conectar(String url, String usuario, String contraseña){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -919,8 +928,8 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
         try {
-            if (txtMatriculaColectivo.getText().strip() != "" && txtMatriculaColectivo.getText().length() == 6) {
-                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && txtKilometrajeColectivo.getText().strip() != "" && txtMarcaColectivo.getText().strip() != "" && txtVinColectivo.getText().strip() != "" && txtMotorColectivo.getText().strip() != "") {
+            if (!txtMatriculaColectivo.getText().strip().equals("") && txtMatriculaColectivo.getText().length() == 6) {
+                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && !txtKilometrajeColectivo.getText().strip().equals("") && !txtMarcaColectivo.getText().strip().equals("") && !txtVinColectivo.getText().strip().equals("") && !txtMotorColectivo.getText().strip().equals("") && isNumber(txtKilometrajeColectivo.getText())) {
                     rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                     if (!rs.next()) {
                         stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
@@ -952,8 +961,7 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
         try {
-            
-            if (txtRutConductor.getText() != "" && txtNombreConductor.getText() != "" && txtDireccionConductor.getText() != "" && txtTelefonoConductor.getText() != "") {
+            if (!txtRutConductor.getText().strip().equals("") && !txtNombreConductor.getText().strip().equals("") && !txtDireccionConductor.getText().strip().equals("") && !txtTelefonoConductor.getText().strip().equals("") && isNumber(txtRutConductor.getText())) {
                 rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
                 if (!rs.next()) {
                     stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
@@ -962,7 +970,7 @@ public class Formulario extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Rut duplicado.");
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1009,7 +1017,7 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
         try {
-            if(dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && txtKilometrajeColectivo.getText().strip() != "" && txtMarcaColectivo.getText().strip() != "" && txtVinColectivo.getText().strip() != "" && txtMotorColectivo.getText().strip() != ""){
+            if(dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && txtKilometrajeColectivo.getText().strip().equals("") && txtMarcaColectivo.getText().strip().equals("") && txtVinColectivo.getText().strip().equals("") && txtMotorColectivo.getText().strip().equals("")){
                 rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                 if(rs.next()){
                     stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
