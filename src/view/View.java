@@ -1,11 +1,4 @@
 package view;
-
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -13,82 +6,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class View extends javax.swing.JFrame {
     
-    //INICIAR CON LOGIN
-    String usuario = JOptionPane.showInputDialog("Usuario:");
-    String contraseña = JOptionPane.showInputDialog("Contraseña:");
-    
-    /*
-    //INICIAR SIN LOGIN
-    String usuario = "root";
-    String contraseña = "";
-    */
-    
-    String nombreDB = "colectivos";
-    //Connection con = conectar(usuario, contraseña);
-    Connection con = null;
-    Statement stm = null;
-    ResultSet rs = null;
-    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-    
     boolean valido;
-    
-    private Connection conectar(String usuario, String contraseña){
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "");
-            stm = con.createStatement();
-            if(!existeDB(con, rs, nombreDB)){
-                crearDB();
-            }
-            rs = stm.executeQuery("SELECT * FROM Administrador WHERE Usuario = '" + usuario + "' AND Contraseña = '" + contraseña + "';");
-            return (rs.next()) ? con : null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e){
-        }
-        return null;
-    }
-    
-    private boolean existeDB(Connection con, ResultSet rs, String nombreDB){
-        try {
-            rs = con.getMetaData().getCatalogs();
-            while (rs.next()) {
-                String db = rs.getString(1);
-                if(nombreDB.equals(db)){
-                    stm.execute("USE Colectivos;");
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-        }
-        return false;
-    }
-    
-    private void crearDB(){
-        try {
-            stm.execute("CREATE DATABASE Colectivos;");
-            stm.execute("USE Colectivos;");
-
-            //TABLAS
-            stm.execute("CREATE TABLE Colectivo(Matricula Char(6) NOT NULL, RutConductor VarChar(13), Compra Date, Seguro Date, RevisionTecnica Date, KilometrajeActual Int(7), Marca VarChar(15), Vin VarChar(17), Motor VarChar(12), PRIMARY KEY (Matricula));");
-            stm.execute("CREATE TABLE Conductor(RutConductor Char(12) NOT NULL, Matricula Char(6), Nombre VarChar(50), Direccion VarChar(150), Telefono VarChar(12), PRIMARY KEY (RutConductor));");
-            stm.execute("CREATE TABLE Repuesto(IdRepuesto int(3) NOT NULL AUTO_INCREMENT, TipoRepuesto VarChar(50), Compra Date, KilometrajeMax Int(7), KilometrajeActual Int(7), Matricula Char(6), PRIMARY KEY (IdRepuesto, TipoRepuesto));");
-            stm.execute("CREATE TABLE Evento(IdEvento int(3) NOT NULL AUTO_INCREMENT, Fecha Date, NombreEvento VarChar(50), Descripcion VarChar(250), Beneficio Int(7), PRIMARY KEY (IdEvento, Fecha));");
-            stm.execute("CREATE TABLE Ganancia(Fecha Date NOT NULL, Matricula Char(6) NOT NULL, Ganancia Int(7), PRIMARY KEY (Fecha, Matricula));");
-            stm.execute("CREATE TABLE Administrador(Usuario VarChar(30) NOT NULL, Contraseña VarChar(30) NOT NULL, PRIMARY KEY (Usuario));");
-            
-            //CLAVES FORANEAS
-            stm.execute("ALTER TABLE Colectivo ADD CONSTRAINT FK_COLECTIVO_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor);");
-            stm.execute("ALTER TABLE Conductor ADD CONSTRAINT FK_CONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE Repuesto ADD CONSTRAINT FK_REPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            
-            //INSERTAR USUARIO INICIAL
-            stm.execute("INSERT INTO Administrador VALUES ('admin', '12345');");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     
     private void refrescar(){
         try {  
@@ -262,11 +180,11 @@ public class View extends javax.swing.JFrame {
         lblBusquedaTablaEventos = new javax.swing.JLabel();
         txtBusquedaTablaEventos = new javax.swing.JTextField();
         scpEventos = new javax.swing.JScrollPane();
-        lstEventos = new javax.swing.JList<>();
         lvlNoEventos = new javax.swing.JLabel();
         btnAñadirEvento = new javax.swing.JButton();
         btnModificarEvento = new javax.swing.JButton();
         btnEliminarEvento = new javax.swing.JButton();
+        lstEventos = new javax.swing.JList<>();
         pnlGanancias = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
@@ -882,8 +800,6 @@ public class View extends javax.swing.JFrame {
         txtBusquedaTablaEventos.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtBusquedaTablaEventos.setPreferredSize(new java.awt.Dimension(200, 22));
 
-        scpEventos.setViewportView(lstEventos);
-
         lvlNoEventos.setText("No hay eventos");
         lvlNoEventos.setEnabled(false);
         lvlNoEventos.setFocusable(false);
@@ -923,6 +839,11 @@ public class View extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnEliminarEvento)))
                 .addContainerGap())
+            .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlEventosLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lstEventos, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         pnlEventosLayout.setVerticalGroup(
             pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -953,6 +874,11 @@ public class View extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnAñadirEvento)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlEventosLayout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(lstEventos, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Eventos", pnlEventos);
@@ -1296,34 +1222,34 @@ public class View extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAñadirColectivo;
-    private javax.swing.JButton btnAñadirConductor;
-    private javax.swing.JButton btnAñadirEvento;
-    private javax.swing.JButton btnAñadirKilometraje;
-    private javax.swing.JButton btnAñadirRepuesto;
-    private javax.swing.JButton btnEliminarColectivo;
-    private javax.swing.JButton btnEliminarConductor;
-    private javax.swing.JButton btnEliminarEvento;
-    private javax.swing.JButton btnEliminarRepuesto;
-    private javax.swing.JButton btnLimpiarBuscadoresColectivo;
-    private javax.swing.JButton btnLimpiarBuscadoresConductor;
-    private javax.swing.JButton btnLimpiarColectivo;
-    private javax.swing.JButton btnLimpiarConductor;
-    private javax.swing.JButton btnLimpiarRepuesto;
-    private javax.swing.JButton btnModificarColectivo;
-    private javax.swing.JButton btnModificarConductor;
-    private javax.swing.JButton btnModificarEvento;
-    private javax.swing.JButton btnModificarRepuesto;
-    private javax.swing.JButton btnSalir;
-    private com.toedter.calendar.JCalendar cdrFechas;
-    private javax.swing.JComboBox<String> cmbColectivosConductor;
-    private javax.swing.JComboBox<String> cmbConductoresColectivos;
-    private javax.swing.JComboBox<String> cmbMatriculaRepuesto;
-    private javax.swing.JComboBox<String> cmbTipoRepuesto;
-    private com.toedter.calendar.JDateChooser dchCompraColectivo;
-    private com.toedter.calendar.JDateChooser dchCompraRepuesto;
-    private com.toedter.calendar.JDateChooser dchRevisionColectivo;
-    private com.toedter.calendar.JDateChooser dchSeguroColectivo;
+    public static javax.swing.JButton btnAñadirColectivo;
+    public static javax.swing.JButton btnAñadirConductor;
+    public static javax.swing.JButton btnAñadirEvento;
+    public static javax.swing.JButton btnAñadirKilometraje;
+    public static javax.swing.JButton btnAñadirRepuesto;
+    public static javax.swing.JButton btnEliminarColectivo;
+    public static javax.swing.JButton btnEliminarConductor;
+    public static javax.swing.JButton btnEliminarEvento;
+    public static javax.swing.JButton btnEliminarRepuesto;
+    public static javax.swing.JButton btnLimpiarBuscadoresColectivo;
+    public static javax.swing.JButton btnLimpiarBuscadoresConductor;
+    public static javax.swing.JButton btnLimpiarColectivo;
+    public static javax.swing.JButton btnLimpiarConductor;
+    public static javax.swing.JButton btnLimpiarRepuesto;
+    public static javax.swing.JButton btnModificarColectivo;
+    public static javax.swing.JButton btnModificarConductor;
+    public static javax.swing.JButton btnModificarEvento;
+    public static javax.swing.JButton btnModificarRepuesto;
+    public static javax.swing.JButton btnSalir;
+    public static com.toedter.calendar.JCalendar cdrFechas;
+    public static javax.swing.JComboBox<String> cmbColectivosConductor;
+    public static javax.swing.JComboBox<String> cmbConductoresColectivos;
+    public static javax.swing.JComboBox<String> cmbMatriculaRepuesto;
+    public static javax.swing.JComboBox<String> cmbTipoRepuesto;
+    public static com.toedter.calendar.JDateChooser dchCompraColectivo;
+    public static com.toedter.calendar.JDateChooser dchCompraRepuesto;
+    public static com.toedter.calendar.JDateChooser dchRevisionColectivo;
+    public static com.toedter.calendar.JDateChooser dchSeguroColectivo;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBusquedaTablaColectivosMatricula;
@@ -1351,7 +1277,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel lblTelefonoConductor;
     private javax.swing.JLabel lblTipoRepuesto;
     private javax.swing.JLabel lblVinColectivo;
-    private javax.swing.JList<String> lstEventos;
+    public static javax.swing.JList<String> lstEventos;
     private javax.swing.JLabel lvlNoEventos;
     private javax.swing.JPanel pnlColectivo;
     private javax.swing.JPanel pnlConductor;
@@ -1361,28 +1287,28 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JScrollPane scpColectivos;
     private javax.swing.JScrollPane scpConductores;
     private javax.swing.JScrollPane scpDescripcionEvento;
-    private javax.swing.JScrollPane scpEventos;
+    public static javax.swing.JScrollPane scpEventos;
     private javax.swing.JScrollPane scpRepuestos;
-    private javax.swing.JTable tblColectivos;
-    private javax.swing.JTable tblConductores;
-    private javax.swing.JTable tblRepuestos;
-    private javax.swing.JTextArea txaDescripcionEvento;
-    private javax.swing.JTextField txtBusquedaTablaColectivosMatricula;
-    private javax.swing.JTextField txtBusquedaTablaColectivosRut;
-    private javax.swing.JTextField txtBusquedaTablaConductorNombre;
-    private javax.swing.JTextField txtBusquedaTablaConductorRut;
-    private javax.swing.JTextField txtBusquedaTablaEventos;
-    private javax.swing.JTextField txtBusquedaTablaRepuestoNombre;
-    private javax.swing.JTextField txtDireccionConductor;
-    private javax.swing.JTextField txtKilometrajeColectivo;
-    private javax.swing.JTextField txtKilometrajeRepuesto;
-    private javax.swing.JTextField txtMarcaColectivo;
-    private javax.swing.JTextField txtMatriculaColectivo;
-    private javax.swing.JTextField txtMotorColectivo;
-    private javax.swing.JTextField txtNombreConductor;
-    private javax.swing.JTextField txtNombreEvento;
-    private javax.swing.JTextField txtRutConductor;
-    private javax.swing.JTextField txtTelefonoConductor;
-    private javax.swing.JTextField txtVinColectivo;
+    public static javax.swing.JTable tblColectivos;
+    public static javax.swing.JTable tblConductores;
+    public static javax.swing.JTable tblRepuestos;
+    public static javax.swing.JTextArea txaDescripcionEvento;
+    public static javax.swing.JTextField txtBusquedaTablaColectivosMatricula;
+    public static javax.swing.JTextField txtBusquedaTablaColectivosRut;
+    public static javax.swing.JTextField txtBusquedaTablaConductorNombre;
+    public static javax.swing.JTextField txtBusquedaTablaConductorRut;
+    public static javax.swing.JTextField txtBusquedaTablaEventos;
+    public static javax.swing.JTextField txtBusquedaTablaRepuestoNombre;
+    public static javax.swing.JTextField txtDireccionConductor;
+    public static javax.swing.JTextField txtKilometrajeColectivo;
+    public static javax.swing.JTextField txtKilometrajeRepuesto;
+    public static javax.swing.JTextField txtMarcaColectivo;
+    public static javax.swing.JTextField txtMatriculaColectivo;
+    public static javax.swing.JTextField txtMotorColectivo;
+    public static javax.swing.JTextField txtNombreConductor;
+    public static javax.swing.JTextField txtNombreEvento;
+    public static javax.swing.JTextField txtRutConductor;
+    public static javax.swing.JTextField txtTelefonoConductor;
+    public static javax.swing.JTextField txtVinColectivo;
     // End of variables declaration//GEN-END:variables
 }

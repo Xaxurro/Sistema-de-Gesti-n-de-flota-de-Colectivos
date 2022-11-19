@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import view.View;
 import model.Model;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionListener;
 
 public class Controller implements ActionListener{
     private Model model;
@@ -24,6 +25,11 @@ public class Controller implements ActionListener{
     }
     
     public void iniciar(){
-        v.
+        view.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void actionPerformed(ActionListener e){
+        
     }
 }
