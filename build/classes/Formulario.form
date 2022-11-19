@@ -159,10 +159,16 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Component id="lblBusquedaTablaColectivos" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblBusquedaTablaColectivosMatricula" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtBusquedaTablaColectivos" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtBusquedaTablaColectivosMatricula" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lblBusquedaTablaColectivosRut" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="txtBusquedaTablaColectivosRut" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnLimpiarBuscadoresColectivo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -170,9 +176,16 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblBusquedaTablaColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtBusquedaTablaColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="lblBusquedaTablaColectivosRut" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtBusquedaTablaColectivosRut" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnLimpiarBuscadoresColectivo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblBusquedaTablaColectivosMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtBusquedaTablaColectivosMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="scpColectivos" min="-2" pref="228" max="-2" attributes="0"/>
@@ -247,6 +260,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtMatriculaColectivo">
               <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Sin digito Verificador"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 22]"/>
                 </Property>
@@ -411,19 +425,19 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JLabel" name="lblBusquedaTablaColectivos">
+            <Component class="javax.swing.JLabel" name="lblBusquedaTablaColectivosMatricula">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Buscar Matricula:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtBusquedaTablaColectivos">
+            <Component class="javax.swing.JTextField" name="txtBusquedaTablaColectivosMatricula">
               <Properties>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 22]"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBusquedaTablaColectivosKeyReleased"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBusquedaTablaColectivosMatriculaKeyReleased"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblMotorColectivo1">
@@ -463,6 +477,29 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimpiarColectivoActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtBusquedaTablaColectivosRut">
+              <Properties>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[200, 22]"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBusquedaTablaColectivosRutKeyReleased"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblBusquedaTablaColectivosRut">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Buscar Rut:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnLimpiarBuscadoresColectivo">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Limpiar Buscadores"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimpiarBuscadoresColectivoActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -509,12 +546,6 @@
                                           <Component id="lblDireccionConductor" alignment="1" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblTelefonoConductor" alignment="1" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="txtDireccionConductor" alignment="0" max="-2" attributes="0"/>
-                                          <Component id="txtTelefonoConductor" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
                                       <Component id="btnAñadirConductor" min="-2" max="-2" attributes="0"/>
@@ -525,8 +556,16 @@
                                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                       <Component id="btnEliminarConductor" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="lblColectivosConductor" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="txtDireccionConductor" alignment="0" max="-2" attributes="0"/>
+                                  <Component id="txtTelefonoConductor" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cmbColectivosConductor" min="-2" pref="200" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -535,10 +574,12 @@
                       <Component id="lblBusquedaTablaConductorNombre" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtBusquedaTablaConductorNombre" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="lblBusquedaTablaConductorRut" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtBusquedaTablaConductorRut" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnLimpiarBuscadoresConductor" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -551,6 +592,7 @@
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                               <Component id="lblBusquedaTablaConductorRut" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="txtBusquedaTablaConductorRut" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnLimpiarBuscadoresConductor" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblBusquedaTablaConductorNombre" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -590,6 +632,8 @@
                           <Component id="btnLimpiarConductor" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnModificarConductor" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEliminarConductor" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cmbColectivosConductor" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblColectivosConductor" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
@@ -604,6 +648,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtRutConductor">
               <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Siga el formato 12345678-9"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 22]"/>
                 </Property>
@@ -640,6 +685,7 @@
             </Component>
             <Component class="javax.swing.JTextField" name="txtTelefonoConductor">
               <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="Siga el formato +12345678901"/>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[200, 22]"/>
                 </Property>
@@ -770,6 +816,29 @@
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtBusquedaTablaConductorRutKeyReleased"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblColectivosConductor">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Colectivo:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="cmbColectivosConductor">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnLimpiarBuscadoresConductor">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Limpiar Buscadores"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimpiarBuscadoresConductorActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlRepuestos">
@@ -847,23 +916,23 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="scpRepuestos" min="-2" pref="228" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblMatriculaRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cmbMatriculaRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
                               <Component id="lblKilometrajeRepuesto" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtKilometrajeRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtKilometrajeRepuesto" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblMatriculaRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cmbMatriculaRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lblCompraRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="3" groupAlignment="3" attributes="0">
-                                  <Component id="lblTipoRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cmbTipoRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="lblTipoRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="cmbTipoRepuesto" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="lblCompraRepuesto" min="-2" max="-2" attributes="0"/>
                           <Component id="dchCompraRepuesto" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="93" max="32767" attributes="0"/>

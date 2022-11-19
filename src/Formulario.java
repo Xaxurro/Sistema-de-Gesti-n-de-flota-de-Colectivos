@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -10,36 +11,37 @@ import javax.swing.table.DefaultTableModel;
 
 public class Formulario extends javax.swing.JFrame {
     
+    //INICIAR CON LOGIN
     String usuario = JOptionPane.showInputDialog("Usuario:");
     String contraseña = JOptionPane.showInputDialog("Contraseña:");
     
+    /*
+    //INICIAR SIN LOGIN
+    String usuario = "root";
+    String contraseña = "";
+    */
     
-    //String usuario = "root";
-    //String contraseña = "";
-    
-    
-    String url = "jdbc:mysql://localhost:3306/";
     String nombreDB = "colectivos";
-    Connection con = conectar(url, usuario, contraseña);
+    //Connection con = conectar(usuario, contraseña);
+    Connection con = null;
     Statement stm = null;
     ResultSet rs = null;
     SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
     
-    private boolean isNumber(String s){
-        for (char c : s.toCharArray()) {
-            if (Character.isLetter(c)){
-                return false;
-            }
-        }
-        return true;
-    }
+    boolean valido;
     
-    private Connection conectar(String url, String usuario, String contraseña){
+    private Connection conectar(String usuario, String contraseña){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(url, usuario, contraseña);
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "");
+            stm = con.createStatement();
+            if(!existeDB(con, rs, nombreDB)){
+                crearDB();
+            }
+            rs = stm.executeQuery("SELECT * FROM Administrador WHERE Usuario = '" + usuario + "' AND Contraseña = '" + contraseña + "';");
+            return (rs.next()) ? con : null;
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "No se pudo establecer conexion con la Base de Datos, o se ingresaron incorrectamente los datos de inicio de sesion.");
+            e.printStackTrace();
         } catch (ClassNotFoundException e){
         }
         return null;
@@ -64,21 +66,25 @@ public class Formulario extends javax.swing.JFrame {
         try {
             stm.execute("CREATE DATABASE Colectivos;");
             stm.execute("USE Colectivos;");
-            stm.execute("CREATE TABLE Colectivo(Matricula Char(6) NOT NULL, RutConductor VarChar(13), Compra Date, Seguro Date, RevisionTecnica Date, KilometrajeActual Int(7), Marca VarChar(15), Vin VarChar(17), Motor VarChar(12));");
-            stm.execute("CREATE TABLE Conductor(RutConductor Char(12) NOT NULL, Matricula Char(6), Nombre VarChar(50), Direccion VarChar(150), Telefono VarChar(12));");
-            stm.execute("CREATE TABLE Repuesto(IdRepuesto int(3) NOT NULL AUTO_INCREMENT, TipoRepuesto VarChar(50), Compra Date, KilometrajeMax Int(7), KilometrajeActual Int(7), Matricula Char(6));");
-            stm.execute("CREATE TABLE Evento(IdEvento int(3) NOT NULL AUTO_INCREMENT, Fecha Date, NombreEvento VarChar(50), Descripcion VarChar(250), Beneficio Int(7));");
-            stm.execute("CREATE TABLE Ganancia(Fecha Date NOT NULL, Matricula Char(6) NOT NULL, Ganancia Int(7));");
-            stm.execute("ALTER TABLE Colectivo ADD CONSTRAINT PK_COLECTIVO PRIMARY KEY (Matricula);");
+
+            //TABLAS
+            stm.execute("CREATE TABLE Colectivo(Matricula Char(6) NOT NULL, RutConductor VarChar(13), Compra Date, Seguro Date, RevisionTecnica Date, KilometrajeActual Int(7), Marca VarChar(15), Vin VarChar(17), Motor VarChar(12), PRIMARY KEY (Matricula));");
+            stm.execute("CREATE TABLE Conductor(RutConductor Char(12) NOT NULL, Matricula Char(6), Nombre VarChar(50), Direccion VarChar(150), Telefono VarChar(12), PRIMARY KEY (RutConductor));");
+            stm.execute("CREATE TABLE Repuesto(IdRepuesto int(3) NOT NULL AUTO_INCREMENT, TipoRepuesto VarChar(50), Compra Date, KilometrajeMax Int(7), KilometrajeActual Int(7), Matricula Char(6), PRIMARY KEY (IdRepuesto, TipoRepuesto));");
+            stm.execute("CREATE TABLE Evento(IdEvento int(3) NOT NULL AUTO_INCREMENT, Fecha Date, NombreEvento VarChar(50), Descripcion VarChar(250), Beneficio Int(7), PRIMARY KEY (IdEvento, Fecha));");
+            stm.execute("CREATE TABLE Ganancia(Fecha Date NOT NULL, Matricula Char(6) NOT NULL, Ganancia Int(7), PRIMARY KEY (Fecha, Matricula));");
+            stm.execute("CREATE TABLE Administrador(Usuario VarChar(30) NOT NULL, Contraseña VarChar(30) NOT NULL, PRIMARY KEY (Usuario));");
+            
+            //CLAVES FORANEAS
             stm.execute("ALTER TABLE Colectivo ADD CONSTRAINT FK_COLECTIVO_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor);");
-            stm.execute("ALTER TABLE Conductor ADD CONSTRAINT PK_CONDUCTOR PRIMARY KEY (RutConductor);");
             stm.execute("ALTER TABLE Conductor ADD CONSTRAINT FK_CONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE Repuesto ADD CONSTRAINT PK_REPUESTO PRIMARY KEY (id_repuesto, TipoRepuesto);");
             stm.execute("ALTER TABLE Repuesto ADD CONSTRAINT FK_REPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE Evento ADD CONSTRAINT PK_EVENTO PRIMARY KEY (id_evento, Fecha);");
-            stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT PK_EVENTO PRIMARY KEY (Fecha, Matricula);");
             stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
+            
+            //INSERTAR USUARIO INICIAL
+            stm.execute("INSERT INTO Administrador VALUES ('admin', '12345');");
         } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     
@@ -87,17 +93,20 @@ public class Formulario extends javax.swing.JFrame {
             // Colectivos
             cmbMatriculaRepuesto.removeAllItems();
             cmbMatriculaRepuesto.addItem("------");
+            cmbColectivosConductor.removeAllItems();
+            cmbColectivosConductor.addItem("------");
             DefaultTableModel tmColectivos = (DefaultTableModel) tblColectivos.getModel();
             tmColectivos.setRowCount(0);
-            rs = stm.executeQuery("SELECT * FROM Colectivo WHERE Matricula LIKE '%" + txtBusquedaTablaColectivos.getText().strip() + "%' ORDER BY Matricula ASC;");
+            rs = stm.executeQuery("SELECT * FROM Colectivo WHERE Matricula LIKE '%" + txtBusquedaTablaColectivosMatricula.getText().strip() + "%' AND RutConductor LIKE '%" + txtBusquedaTablaColectivosRut.getText().strip() + "%' ORDER BY Matricula ASC;");
             while (rs.next()) {
                 Object [] fila = {rs.getString("Matricula"), rs.getString("RutConductor"), rs.getString("Compra"), rs.getString("Seguro"), rs.getString("RevisionTecnica"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
                 cmbMatriculaRepuesto.addItem(rs.getString("Matricula"));
+                cmbColectivosConductor.addItem(rs.getString("Matricula"));
             }
             tblColectivos.setModel(tmColectivos);
             
-            // Conductores
+            // Conductores 
             DefaultTableModel tmConductores = (DefaultTableModel) tblConductores.getModel();
             tmConductores.setRowCount(0);
             cmbConductoresColectivos.removeAllItems();
@@ -133,28 +142,38 @@ public class Formulario extends javax.swing.JFrame {
     
     public Formulario() {
         try {
-            stm = con.createStatement();
-        } catch (Exception e) {
-        }
-        if(!existeDB(con, rs, nombreDB)){
+            con = conectar(usuario, contraseña);
+            //stm = con.createStatement();
+            /*
+            //DESCOMENTAR EN CASO DE QUERER RE HACER DB
+            eliminarDB();
             crearDB();
+            */
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
-        initComponents();
         
-        // Modificar Tamaño de las Columnas Jtables
-        tblColectivos.getColumnModel().getColumn(0).setMinWidth(100);
-        tblColectivos.getColumnModel().getColumn(1).setMinWidth(100);
-        tblColectivos.getColumnModel().getColumn(2).setMinWidth(100);
-        tblColectivos.getColumnModel().getColumn(3).setMinWidth(125);
-        tblColectivos.getColumnModel().getColumn(4).setMinWidth(130);
-        tblColectivos.getColumnModel().getColumn(5).setMinWidth(100);
-        tblColectivos.getColumnModel().getColumn(6).setMinWidth(100);
-        tblColectivos.getColumnModel().getColumn(7).setMinWidth(100);
-        tblColectivos.getColumnModel().getColumn(8).setMinWidth(100);
-        
-        
-        refrescar();
+        if (con != null) {
+
+            initComponents();
+            
+            // Modificar Tamaño de las Columnas Jtables
+            tblColectivos.getColumnModel().getColumn(0).setMinWidth(100);
+            tblColectivos.getColumnModel().getColumn(1).setMinWidth(100);
+            tblColectivos.getColumnModel().getColumn(2).setMinWidth(100);
+            tblColectivos.getColumnModel().getColumn(3).setMinWidth(125);
+            tblColectivos.getColumnModel().getColumn(4).setMinWidth(130);
+            tblColectivos.getColumnModel().getColumn(5).setMinWidth(100);
+            tblColectivos.getColumnModel().getColumn(6).setMinWidth(100);
+            tblColectivos.getColumnModel().getColumn(7).setMinWidth(100);
+            tblColectivos.getColumnModel().getColumn(8).setMinWidth(100);
+            
+            refrescar();
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo establecer conexion con la Base de Datos, o se ingresaron incorrectamente los datos de inicio de sesion.");
+            System.exit(0);
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -182,13 +201,16 @@ public class Formulario extends javax.swing.JFrame {
         btnAñadirColectivo = new javax.swing.JButton();
         scpColectivos = new javax.swing.JScrollPane();
         tblColectivos = new javax.swing.JTable();
-        lblBusquedaTablaColectivos = new javax.swing.JLabel();
-        txtBusquedaTablaColectivos = new javax.swing.JTextField();
+        lblBusquedaTablaColectivosMatricula = new javax.swing.JLabel();
+        txtBusquedaTablaColectivosMatricula = new javax.swing.JTextField();
         lblMotorColectivo1 = new javax.swing.JLabel();
         cmbConductoresColectivos = new javax.swing.JComboBox<>();
         btnModificarColectivo = new javax.swing.JButton();
         btnEliminarColectivo = new javax.swing.JButton();
         btnLimpiarColectivo = new javax.swing.JButton();
+        txtBusquedaTablaColectivosRut = new javax.swing.JTextField();
+        lblBusquedaTablaColectivosRut = new javax.swing.JLabel();
+        btnLimpiarBuscadoresColectivo = new javax.swing.JButton();
         pnlConductor = new javax.swing.JPanel();
         lblRutConductor = new javax.swing.JLabel();
         txtRutConductor = new javax.swing.JTextField();
@@ -208,6 +230,9 @@ public class Formulario extends javax.swing.JFrame {
         btnLimpiarConductor = new javax.swing.JButton();
         lblBusquedaTablaConductorRut = new javax.swing.JLabel();
         txtBusquedaTablaConductorRut = new javax.swing.JTextField();
+        lblColectivosConductor = new javax.swing.JLabel();
+        cmbColectivosConductor = new javax.swing.JComboBox<>();
+        btnLimpiarBuscadoresConductor = new javax.swing.JButton();
         pnlRepuestos = new javax.swing.JPanel();
         lblMatriculaRepuesto = new javax.swing.JLabel();
         cmbMatriculaRepuesto = new javax.swing.JComboBox<>();
@@ -254,6 +279,7 @@ public class Formulario extends javax.swing.JFrame {
 
         lblMatriculaColectivo.setText("Matricula:");
 
+        txtMatriculaColectivo.setToolTipText("Sin digito Verificador");
         txtMatriculaColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblCompraColectivo.setText("Fecha de Compra:");
@@ -313,12 +339,12 @@ public class Formulario extends javax.swing.JFrame {
         });
         scpColectivos.setViewportView(tblColectivos);
 
-        lblBusquedaTablaColectivos.setText("Buscar Matricula:");
+        lblBusquedaTablaColectivosMatricula.setText("Buscar Matricula:");
 
-        txtBusquedaTablaColectivos.setPreferredSize(new java.awt.Dimension(200, 22));
-        txtBusquedaTablaColectivos.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtBusquedaTablaColectivosMatricula.setPreferredSize(new java.awt.Dimension(200, 22));
+        txtBusquedaTablaColectivosMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBusquedaTablaColectivosKeyReleased(evt);
+                txtBusquedaTablaColectivosMatriculaKeyReleased(evt);
             }
         });
 
@@ -342,6 +368,22 @@ public class Formulario extends javax.swing.JFrame {
         btnLimpiarColectivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarColectivoActionPerformed(evt);
+            }
+        });
+
+        txtBusquedaTablaColectivosRut.setPreferredSize(new java.awt.Dimension(200, 22));
+        txtBusquedaTablaColectivosRut.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBusquedaTablaColectivosRutKeyReleased(evt);
+            }
+        });
+
+        lblBusquedaTablaColectivosRut.setText("Buscar Rut:");
+
+        btnLimpiarBuscadoresColectivo.setText("Limpiar Buscadores");
+        btnLimpiarBuscadoresColectivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarBuscadoresColectivoActionPerformed(evt);
             }
         });
 
@@ -409,18 +451,29 @@ public class Formulario extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(pnlColectivoLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(lblBusquedaTablaColectivos)
+                .addComponent(lblBusquedaTablaColectivosMatricula)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBusquedaTablaColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(txtBusquedaTablaColectivosMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblBusquedaTablaColectivosRut)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtBusquedaTablaColectivosRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLimpiarBuscadoresColectivo)
+                .addContainerGap())
         );
         pnlColectivoLayout.setVerticalGroup(
             pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlColectivoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBusquedaTablaColectivos)
-                    .addComponent(txtBusquedaTablaColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblBusquedaTablaColectivosRut)
+                        .addComponent(txtBusquedaTablaColectivosRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnLimpiarBuscadoresColectivo))
+                    .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblBusquedaTablaColectivosMatricula)
+                        .addComponent(txtBusquedaTablaColectivosMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addComponent(scpColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -476,6 +529,7 @@ public class Formulario extends javax.swing.JFrame {
 
         lblRutConductor.setText("RUT:");
 
+        txtRutConductor.setToolTipText("Siga el formato 12345678-9");
         txtRutConductor.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblNombreConductor.setText("Nombre Completo:");
@@ -488,6 +542,7 @@ public class Formulario extends javax.swing.JFrame {
 
         lblTelefonoConductor.setText("Telefono:");
 
+        txtTelefonoConductor.setToolTipText("Siga el formato +12345678901");
         txtTelefonoConductor.setPreferredSize(new java.awt.Dimension(200, 22));
 
         tblConductores.setModel(new javax.swing.table.DefaultTableModel(
@@ -555,6 +610,15 @@ public class Formulario extends javax.swing.JFrame {
             }
         });
 
+        lblColectivosConductor.setText("Colectivo:");
+
+        btnLimpiarBuscadoresConductor.setText("Limpiar Buscadores");
+        btnLimpiarBuscadoresConductor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarBuscadoresConductorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlConductorLayout = new javax.swing.GroupLayout(pnlConductor);
         pnlConductor.setLayout(pnlConductorLayout);
         pnlConductorLayout.setHorizontalGroup(
@@ -579,12 +643,7 @@ public class Formulario extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 367, Short.MAX_VALUE)
                                 .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblDireccionConductor)
-                                    .addComponent(lblTelefonoConductor))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtDireccionConductor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtTelefonoConductor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18))
+                                    .addComponent(lblTelefonoConductor)))
                             .addGroup(pnlConductorLayout.createSequentialGroup()
                                 .addComponent(btnAñadirConductor)
                                 .addGap(18, 18, 18)
@@ -593,16 +652,25 @@ public class Formulario extends javax.swing.JFrame {
                                 .addComponent(btnModificarConductor)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnEliminarConductor)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblColectivosConductor)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtDireccionConductor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelefonoConductor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbColectivosConductor, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18))))
             .addGroup(pnlConductorLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(lblBusquedaTablaConductorNombre)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBusquedaTablaConductorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(lblBusquedaTablaConductorRut)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBusquedaTablaConductorRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnLimpiarBuscadoresConductor)
                 .addContainerGap())
         );
         pnlConductorLayout.setVerticalGroup(
@@ -612,7 +680,8 @@ public class Formulario extends javax.swing.JFrame {
                 .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblBusquedaTablaConductorRut)
-                        .addComponent(txtBusquedaTablaConductorRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtBusquedaTablaConductorRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnLimpiarBuscadoresConductor))
                     .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblBusquedaTablaConductorNombre)
                         .addComponent(txtBusquedaTablaConductorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -641,7 +710,9 @@ public class Formulario extends javax.swing.JFrame {
                     .addComponent(btnAñadirConductor)
                     .addComponent(btnLimpiarConductor)
                     .addComponent(btnModificarConductor)
-                    .addComponent(btnEliminarConductor))
+                    .addComponent(btnEliminarConductor)
+                    .addComponent(cmbColectivosConductor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblColectivosConductor))
                 .addGap(10, 10, 10))
         );
 
@@ -757,19 +828,19 @@ public class Formulario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(scpRepuestos, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMatriculaRepuesto)
-                    .addComponent(cmbMatriculaRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblKilometrajeRepuesto, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(txtKilometrajeRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblKilometrajeRepuesto)
-                        .addComponent(txtKilometrajeRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblMatriculaRepuesto)
+                        .addComponent(cmbMatriculaRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblCompraRepuesto)
-                        .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblTipoRepuesto)
-                            .addComponent(cmbTipoRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblTipoRepuesto)
+                        .addComponent(cmbTipoRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblCompraRepuesto)
                     .addComponent(dchCompraRepuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
                 .addGroup(pnlRepuestosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -941,28 +1012,32 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
+        valido = true;
         try {
-            if (!txtMatriculaColectivo.getText().strip().equals("") && txtMatriculaColectivo.getText().length() == 6) {
-                System.out.println(dchCompraColectivo.getDate() != null);
-                System.out.println(isNumber(txtKilometrajeColectivo.getText().strip()));
-                if (dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && !txtKilometrajeColectivo.getText().strip().equals("") && !txtMarcaColectivo.getText().strip().equals("") && !txtVinColectivo.getText().strip().equals("") && !txtMotorColectivo.getText().strip().equals("") && isNumber(txtKilometrajeColectivo.getText().strip())) {
-                    rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                    if (!rs.next()) {
-                        stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
-                                + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText().strip() 
-                                + ", '" + txtMarcaColectivo.getText().strip() + "', '" + txtVinColectivo.getText().strip() + "', '" + txtMotorColectivo.getText().strip() + "');");
-                        if (cmbConductoresColectivos.getSelectedIndex() != 0) {
-                            stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
-                        }
-                        refrescar();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Matricula duplicada.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
-                }
-            } else {
+            if (dchCompraColectivo.getDate() == null || dchRevisionColectivo.getDate() == null || 
+                    dchSeguroColectivo.getDate() == null || txtKilometrajeColectivo.getText().strip().equals("") || 
+                    txtMarcaColectivo.getText().strip().equals("") || txtVinColectivo.getText().strip().equals("") || 
+                    txtMotorColectivo.getText().strip().equals("") || !Pattern.matches("^\\d*$", txtKilometrajeColectivo.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
+                valido = false;
+            }
+            if ((txtMatriculaColectivo.getText().strip().equals("") || txtMatriculaColectivo.getText().strip().length() != 6) && valido) {
                 JOptionPane.showMessageDialog(null, "Ingrese una matricula válida.");
+                valido = false;
+            }
+            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+            if (rs.next() && valido) {
+                JOptionPane.showMessageDialog(null, "Matricula duplicada.");
+                valido = false;
+            }
+            if (valido) {
+                stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
+                        + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText().strip() 
+                        + ", '" + txtMarcaColectivo.getText().strip() + "', '" + txtVinColectivo.getText().strip() + "', '" + txtMotorColectivo.getText().strip() + "');");
+                if (cmbConductoresColectivos.getSelectedIndex() != 0) {
+                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+                }
+                refrescar();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -970,17 +1045,23 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAñadirColectivoActionPerformed
 
     private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
+        valido = true;
         try {
-            if (!txtRutConductor.getText().strip().equals("") && !txtNombreConductor.getText().strip().equals("") && !txtDireccionConductor.getText().strip().equals("") && !txtTelefonoConductor.getText().strip().equals("") && isNumber(txtRutConductor.getText().strip()) && isNumber(txtTelefonoConductor.getText().strip())) {
-                rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-                if (!rs.next()) {
-                    stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
-                    refrescar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Rut duplicado.");
-                }
-            } else {
+            if (txtRutConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
                 JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
+            }
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if (rs.next() && valido) {
+                JOptionPane.showMessageDialog(null, "Rut duplicado.");
+                valido = false;
+            }
+            if (valido) {   
+                stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
+                if (cmbColectivosConductor.getSelectedIndex() != 0) {
+                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + cmbColectivosConductor.getSelectedItem() + "' WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
+                }
+                refrescar();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -998,27 +1079,44 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_tblConductoresMouseClicked
 
     private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
+        valido = true;
         try {
+            if (txtRutConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
+            }
             rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-            if(rs.next()){
-            stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
-            stm.executeUpdate("UPDATE Colectivo SET RutConductor = 'Sin Conductor' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-            refrescar();
-            } else {
+            if(!rs.next() && valido){
                 JOptionPane.showMessageDialog(null, "Rut no encontrado.");
+                valido = false;
+            }
+            if (valido) {
+                stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = 'Sin Conductor' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                refrescar();
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }//GEN-LAST:event_btnEliminarConductorActionPerformed
 
     private void btnModificarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarConductorActionPerformed
+        valido = true;
         try {
+            if (txtRutConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
+            }
             rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-            if(rs.next()){
-                stm.executeUpdate("UPDATE Conductor SET Nombre = '" + txtNombreConductor.getText().strip() + "', Direccion = '" + txtDireccionConductor.getText().strip() + "', Telefono = '" + txtTelefonoConductor.getText().strip() + "'WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-                refrescar();
-            } else {
+            if(!rs.next() && valido){
                 JOptionPane.showMessageDialog(null, "Rut no encontrado.");
+                valido = false;
+            }
+            if (valido) {   
+                stm.executeUpdate("UPDATE Conductor SET Nombre = '" + txtNombreConductor.getText().strip() + "', Matricula = '" + cmbColectivosConductor.getSelectedItem() + "', Direccion = '" + txtDireccionConductor.getText().strip() + "', Telefono = '" + txtTelefonoConductor.getText().strip() + "' WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + txtRutConductor.getText().strip() + "' WHERE Matricula = '" + cmbColectivosConductor.getSelectedItem() + "';");
+                refrescar();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1026,19 +1124,25 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarConductorActionPerformed
 
     private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
+        valido = true;
         try {
-            if(dchCompraColectivo.getDate() != null && dchRevisionColectivo.getDate() != null && dchSeguroColectivo.getDate() != null && !txtKilometrajeColectivo.getText().strip().equals("") && !txtMarcaColectivo.getText().strip().equals("") && !txtVinColectivo.getText().strip().equals("") && !txtMotorColectivo.getText().strip().equals("")){
-                rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                if(rs.next()){
-                    stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                    stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
-                    refrescar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
+            if(dchCompraColectivo.getDate() == null || dchRevisionColectivo.getDate() == null || 
+                    dchSeguroColectivo.getDate() == null || txtKilometrajeColectivo.getText().strip().equals("") || 
+                    txtMarcaColectivo.getText().strip().equals("") || txtVinColectivo.getText().strip().equals("") || 
+                    txtMotorColectivo.getText().strip().equals("") || !Pattern.matches("^\\d*$", txtKilometrajeColectivo.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
+            }
+            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+            if(!rs.next() && valido){
+                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
+                valido = false;
+            }
+            if (valido) {
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
+                refrescar();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1046,14 +1150,21 @@ public class Formulario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModificarColectivoActionPerformed
 
     private void btnEliminarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarColectivoActionPerformed
+        valido = true;
         try {
+            if (txtMatriculaColectivo.getText().strip().equals("") || txtMatriculaColectivo.getText().strip().length() != 6) {
+                JOptionPane.showMessageDialog(null, "Ingrese una matricula valida.");
+                valido = false;
+            }
             rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-            if(rs.next()){
+            if(!rs.next() && valido){
+                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
+                valido = false;
+            }
+            if (valido) {   
                 stm.execute("DELETE FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                 stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
                 refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1091,9 +1202,9 @@ public class Formulario extends javax.swing.JFrame {
         cmbConductoresColectivos.setSelectedIndex(0);
     }//GEN-LAST:event_btnLimpiarColectivoActionPerformed
 
-    private void txtBusquedaTablaColectivosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaColectivosKeyReleased
+    private void txtBusquedaTablaColectivosMatriculaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaColectivosMatriculaKeyReleased
         refrescar();
-    }//GEN-LAST:event_txtBusquedaTablaColectivosKeyReleased
+    }//GEN-LAST:event_txtBusquedaTablaColectivosMatriculaKeyReleased
 
     private void btnLimpiarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarConductorActionPerformed
         txtRutConductor.setText("");
@@ -1116,11 +1227,13 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnAñadirRepuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirRepuestoActionPerformed
         try {
-            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && isNumber(txtKilometrajeRepuesto.getText())){
+            valido = true;
+            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && Pattern.matches("^\\d*$", txtKilometrajeRepuesto.getText().strip())){
+                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
+            }
+            if (valido) {   
                 stm.execute("INSERT INTO Repuesto (tipoRepuesto, Compra, KilometrajeMax, KilometrajeActual, Matricula) VALUES ('" + cmbTipoRepuesto.getSelectedItem() + "', '" + formato.format(dchCompraRepuesto.getDate()) + "', " + txtKilometrajeRepuesto.getText().strip() + ", 0, '" + cmbMatriculaRepuesto.getSelectedItem() + "');");
                 refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
             }
         } catch (Exception e) {
         }
@@ -1128,7 +1241,7 @@ public class Formulario extends javax.swing.JFrame {
 
     private void btnModificarRepuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarRepuestoActionPerformed
         try {
-            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && isNumber(txtKilometrajeRepuesto.getText())){
+            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && Pattern.matches("^\\d*$", txtKilometrajeRepuesto.getText().strip())){
                 stm.execute("UPDATE Repuesto SET TipoRepuesto;");
                 refrescar();
             } else {
@@ -1137,6 +1250,22 @@ public class Formulario extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }//GEN-LAST:event_btnModificarRepuestoActionPerformed
+
+    private void txtBusquedaTablaColectivosRutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaColectivosRutKeyReleased
+        refrescar();
+    }//GEN-LAST:event_txtBusquedaTablaColectivosRutKeyReleased
+
+    private void btnLimpiarBuscadoresColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarBuscadoresColectivoActionPerformed
+        txtBusquedaTablaColectivosMatricula.setText("");
+        txtBusquedaTablaColectivosRut.setText("");
+        refrescar();
+    }//GEN-LAST:event_btnLimpiarBuscadoresColectivoActionPerformed
+
+    private void btnLimpiarBuscadoresConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarBuscadoresConductorActionPerformed
+        txtBusquedaTablaConductorNombre.setText("");
+        txtBusquedaTablaConductorRut.setText("");
+        refrescar();
+    }//GEN-LAST:event_btnLimpiarBuscadoresConductorActionPerformed
 
     
     public static void main(String args[]) {
@@ -1174,6 +1303,8 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminarConductor;
     private javax.swing.JButton btnEliminarEvento;
     private javax.swing.JButton btnEliminarRepuesto;
+    private javax.swing.JButton btnLimpiarBuscadoresColectivo;
+    private javax.swing.JButton btnLimpiarBuscadoresConductor;
     private javax.swing.JButton btnLimpiarColectivo;
     private javax.swing.JButton btnLimpiarConductor;
     private javax.swing.JButton btnLimpiarRepuesto;
@@ -1183,6 +1314,7 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JButton btnModificarRepuesto;
     private javax.swing.JButton btnSalir;
     private com.toedter.calendar.JCalendar cdrFechas;
+    private javax.swing.JComboBox<String> cmbColectivosConductor;
     private javax.swing.JComboBox<String> cmbConductoresColectivos;
     private javax.swing.JComboBox<String> cmbMatriculaRepuesto;
     private javax.swing.JComboBox<String> cmbTipoRepuesto;
@@ -1192,11 +1324,13 @@ public class Formulario extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dchSeguroColectivo;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JLabel lblBusquedaTablaColectivos;
+    private javax.swing.JLabel lblBusquedaTablaColectivosMatricula;
+    private javax.swing.JLabel lblBusquedaTablaColectivosRut;
     private javax.swing.JLabel lblBusquedaTablaConductorNombre;
     private javax.swing.JLabel lblBusquedaTablaConductorRut;
     private javax.swing.JLabel lblBusquedaTablaEventos;
     private javax.swing.JLabel lblBusquedaTablaRepuestoNombre;
+    private javax.swing.JLabel lblColectivosConductor;
     private javax.swing.JLabel lblCompraColectivo;
     private javax.swing.JLabel lblCompraRepuesto;
     private javax.swing.JLabel lblDireccionConductor;
@@ -1231,7 +1365,8 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JTable tblConductores;
     private javax.swing.JTable tblRepuestos;
     private javax.swing.JTextArea txaDescripcionEvento;
-    private javax.swing.JTextField txtBusquedaTablaColectivos;
+    private javax.swing.JTextField txtBusquedaTablaColectivosMatricula;
+    private javax.swing.JTextField txtBusquedaTablaColectivosRut;
     private javax.swing.JTextField txtBusquedaTablaConductorNombre;
     private javax.swing.JTextField txtBusquedaTablaConductorRut;
     private javax.swing.JTextField txtBusquedaTablaEventos;
