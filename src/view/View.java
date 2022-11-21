@@ -8,92 +8,148 @@ public class View extends javax.swing.JFrame {
     
     boolean valido;
     
-    private void refrescar(){
-        try {  
-            // Colectivos
-            cmbMatriculaRepuesto.removeAllItems();
-            cmbMatriculaRepuesto.addItem("------");
-            cmbColectivosConductor.removeAllItems();
-            cmbColectivosConductor.addItem("------");
-            DefaultTableModel tmColectivos = (DefaultTableModel) tblColectivos.getModel();
-            tmColectivos.setRowCount(0);
-            rs = stm.executeQuery("SELECT * FROM Colectivo WHERE Matricula LIKE '%" + txtBusquedaTablaColectivosMatricula.getText().strip() + "%' AND RutConductor LIKE '%" + txtBusquedaTablaColectivosRut.getText().strip() + "%' ORDER BY Matricula ASC;");
-            while (rs.next()) {
-                Object [] fila = {rs.getString("Matricula"), rs.getString("RutConductor"), rs.getString("Compra"), rs.getString("Seguro"), rs.getString("RevisionTecnica"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
-                tmColectivos.addRow(fila);
-                cmbMatriculaRepuesto.addItem(rs.getString("Matricula"));
-                cmbColectivosConductor.addItem(rs.getString("Matricula"));
+    /*
+    
+    private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                   
+        valido = true;
+        try {
+            if (txtRutConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
             }
-            tblColectivos.setModel(tmColectivos);
-            
-            // Conductores 
-            DefaultTableModel tmConductores = (DefaultTableModel) tblConductores.getModel();
-            tmConductores.setRowCount(0);
-            cmbConductoresColectivos.removeAllItems();
-            cmbConductoresColectivos.addItem("------");
-            rs = stm.executeQuery("SELECT * FROM Conductor WHERE Nombre LIKE '%" + txtBusquedaTablaConductorNombre.getText().strip() + "%' AND RutConductor LIKE '%" + txtBusquedaTablaConductorRut.getText().strip() + "%' ORDER BY RutConductor ASC;");
-            while (rs.next()) {
-                Object [] fila = {rs.getString("RutConductor"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono"), rs.getString("Matricula")};
-                tmConductores.addRow(fila);
-                cmbConductoresColectivos.addItem(rs.getString("RutConductor"));
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if (rs.next() && valido) {
+                JOptionPane.showMessageDialog(null, "Rut duplicado.");
+                valido = false;
             }
-            tblConductores.setModel(tmConductores);
-            
-            // Repuestos
-            DefaultTableModel tmRepuestos = (DefaultTableModel) tblRepuestos.getModel();
-            tmRepuestos.setRowCount(0);
-            rs = stm.executeQuery("SELECT * FROM Repuesto ORDER BY Matricula ASC;");
-            while (rs.next()) {
-                Object [] fila = {rs.getString("TipoRepuesto"), rs.getString("Matricula"), rs.getString("Compra"), rs.getString("KilometrajeMax"), rs.getString("KilometrajeActual")};
-                tmRepuestos.addRow(fila);
+            if (valido) {   
+                stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
+                if (cmbColectivosConductor.getSelectedIndex() != 0) {
+                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + cmbColectivosConductor.getSelectedItem() + "' WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
+                }
+                refrescar();
             }
-            tblRepuestos.setModel(tmRepuestos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }                                                  
+
+    private void tblConductoresMouseClicked(java.awt.event.MouseEvent evt) {                                            
+        if (evt.getClickCount() == 1) {
+            JTable src = (JTable) evt.getSource();
+            txtRutConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 0).toString());
+            txtNombreConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 1).toString());
+            txtDireccionConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 2).toString());
+            txtTelefonoConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 3).toString());
+        }
+    }                                           
+
+    private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                     
+        valido = true;
+        try {
+            if (txtRutConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
+            }
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if(!rs.next() && valido){
+                JOptionPane.showMessageDialog(null, "Rut no encontrado.");
+                valido = false;
+            }
+            if (valido) {
+                stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = 'Sin Conductor' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
+                refrescar();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }                                                    
+
+    private void btnModificarConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+        valido = true;
+        try {
+            if (txtRutConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
+                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
+                valido = false;
+            }
+            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+            if(!rs.next() && valido){
+                JOptionPane.showMessageDialog(null, "Rut no encontrado.");
+                valido = false;
+            }
+            if (valido) {   
+                stm.executeUpdate("UPDATE Conductor SET Nombre = '" + txtNombreConductor.getText().strip() + "', Matricula = '" + cmbColectivosConductor.getSelectedItem() + "', Direccion = '" + txtDireccionConductor.getText().strip() + "', Telefono = '" + txtTelefonoConductor.getText().strip() + "' WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
+                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + txtRutConductor.getText().strip() + "' WHERE Matricula = '" + cmbColectivosConductor.getSelectedItem() + "';");
+                refrescar();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-    
-    private void eliminarDB(){
-        try {
-            stm.execute("DROP DATABASE Colectivos;");
-        } catch (Exception e) {
-        }
-    }
-    
-    public View() {
-        try {
-            con = conectar(usuario, contraseña);
-            //stm = con.createStatement();
-            /*
-            //DESCOMENTAR EN CASO DE QUERER RE HACER DB
-            eliminarDB();
-            crearDB();
-            */
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        
-        if (con != null) {
+    }                                                     
 
-            initComponents();
-            
-            // Modificar Tamaño de las Columnas Jtables
-            tblColectivos.getColumnModel().getColumn(0).setMinWidth(100);
-            tblColectivos.getColumnModel().getColumn(1).setMinWidth(100);
-            tblColectivos.getColumnModel().getColumn(2).setMinWidth(100);
-            tblColectivos.getColumnModel().getColumn(3).setMinWidth(125);
-            tblColectivos.getColumnModel().getColumn(4).setMinWidth(130);
-            tblColectivos.getColumnModel().getColumn(5).setMinWidth(100);
-            tblColectivos.getColumnModel().getColumn(6).setMinWidth(100);
-            tblColectivos.getColumnModel().getColumn(7).setMinWidth(100);
-            tblColectivos.getColumnModel().getColumn(8).setMinWidth(100);
-            
-            refrescar();
-        } else {
-            JOptionPane.showMessageDialog(null, "No se pudo establecer conexion con la Base de Datos, o se ingresaron incorrectamente los datos de inicio de sesion.");
-            System.exit(0);
+    private void btnLimpiarConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+        txtRutConductor.setText("");
+        txtNombreConductor.setText("");
+        txtDireccionConductor.setText("");
+        txtTelefonoConductor.setText("");
+    }                                                   
+
+    private void btnAñadirRepuestoActionPerformed(java.awt.event.ActionEvent evt) {                                                  
+        try {
+            valido = true;
+            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && Pattern.matches("^\\d*$", txtKilometrajeRepuesto.getText().strip())){
+                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
+            }
+            if (valido) {   
+                stm.execute("INSERT INTO Repuesto (tipoRepuesto, Compra, KilometrajeMax, KilometrajeActual, Matricula) VALUES ('" + cmbTipoRepuesto.getSelectedItem() + "', '" + formato.format(dchCompraRepuesto.getDate()) + "', " + txtKilometrajeRepuesto.getText().strip() + ", 0, '" + cmbMatriculaRepuesto.getSelectedItem() + "');");
+                refrescar();
+            }
+        } catch (Exception e) {
         }
+    }                                                 
+
+    private void btnModificarRepuestoActionPerformed(java.awt.event.ActionEvent evt) {                                                     
+        try {
+            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && Pattern.matches("^\\d*$", txtKilometrajeRepuesto.getText().strip())){
+                stm.execute("UPDATE Repuesto SET TipoRepuesto;");
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
+            }
+        } catch (Exception e) {
+        }
+    }                                                    
+
+    private void btnLimpiarBuscadoresColectivoActionPerformed(java.awt.event.ActionEvent evt) {                                                              
+        txtBusquedaTablaColectivosMatricula.setText("");
+        txtBusquedaTablaColectivosRut.setText("");
+        refrescar();
+    }                                                             
+
+    private void btnLimpiarBuscadoresConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                              
+        txtBusquedaTablaConductorNombre.setText("");
+        txtBusquedaTablaConductorRut.setText("");
+        refrescar();
+    }                                                             
+
+    */
+    
+    public View() {  
+        initComponents();
+            
+        // Modificar Tamaño de las Columnas Jtables
+        tblColectivos.getColumnModel().getColumn(0).setMinWidth(100);
+        tblColectivos.getColumnModel().getColumn(1).setMinWidth(100);
+        tblColectivos.getColumnModel().getColumn(2).setMinWidth(100);
+        tblColectivos.getColumnModel().getColumn(3).setMinWidth(125);
+        tblColectivos.getColumnModel().getColumn(4).setMinWidth(130);
+        tblColectivos.getColumnModel().getColumn(5).setMinWidth(100);
+        tblColectivos.getColumnModel().getColumn(6).setMinWidth(100);
+        tblColectivos.getColumnModel().getColumn(7).setMinWidth(100);
+        tblColectivos.getColumnModel().getColumn(8).setMinWidth(100);
+            
     }
     
     @SuppressWarnings("unchecked")
@@ -188,6 +244,7 @@ public class View extends javax.swing.JFrame {
         pnlGanancias = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
+        btnReDo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Gestion de Flota de Colectivos");
@@ -231,11 +288,6 @@ public class View extends javax.swing.JFrame {
         txtMotorColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         btnAñadirColectivo.setText("Añadir");
-        btnAñadirColectivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAñadirColectivoActionPerformed(evt);
-            }
-        });
 
         scpColectivos.setViewportView(tblColectivos);
 
@@ -252,60 +304,25 @@ public class View extends javax.swing.JFrame {
         tblColectivos.setMinimumSize(new java.awt.Dimension(200, 0));
         tblColectivos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblColectivos.setShowGrid(true);
-        tblColectivos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblColectivosMouseClicked(evt);
-            }
-        });
         scpColectivos.setViewportView(tblColectivos);
 
         lblBusquedaTablaColectivosMatricula.setText("Buscar Matricula:");
 
         txtBusquedaTablaColectivosMatricula.setPreferredSize(new java.awt.Dimension(200, 22));
-        txtBusquedaTablaColectivosMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBusquedaTablaColectivosMatriculaKeyReleased(evt);
-            }
-        });
 
         lblMotorColectivo1.setText("Conductor:");
 
         btnModificarColectivo.setText("Modificar");
-        btnModificarColectivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarColectivoActionPerformed(evt);
-            }
-        });
 
         btnEliminarColectivo.setText("Eliminar");
-        btnEliminarColectivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarColectivoActionPerformed(evt);
-            }
-        });
 
         btnLimpiarColectivo.setText("Limpiar");
-        btnLimpiarColectivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarColectivoActionPerformed(evt);
-            }
-        });
 
         txtBusquedaTablaColectivosRut.setPreferredSize(new java.awt.Dimension(200, 22));
-        txtBusquedaTablaColectivosRut.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBusquedaTablaColectivosRutKeyReleased(evt);
-            }
-        });
 
         lblBusquedaTablaColectivosRut.setText("Buscar Rut:");
 
         btnLimpiarBuscadoresColectivo.setText("Limpiar Buscadores");
-        btnLimpiarBuscadoresColectivo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarBuscadoresColectivoActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlColectivoLayout = new javax.swing.GroupLayout(pnlColectivo);
         pnlColectivo.setLayout(pnlColectivoLayout);
@@ -379,8 +396,7 @@ public class View extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBusquedaTablaColectivosRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnLimpiarBuscadoresColectivo)
-                .addContainerGap())
+                .addComponent(btnLimpiarBuscadoresColectivo))
         );
         pnlColectivoLayout.setVerticalGroup(
             pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -477,67 +493,27 @@ public class View extends javax.swing.JFrame {
         tblConductores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         tblConductores.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         tblConductores.setShowGrid(true);
-        tblConductores.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblConductoresMouseClicked(evt);
-            }
-        });
         scpConductores.setViewportView(tblConductores);
 
         btnAñadirConductor.setText("Añadir");
-        btnAñadirConductor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAñadirConductorActionPerformed(evt);
-            }
-        });
 
         btnModificarConductor.setText("Modificar");
-        btnModificarConductor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarConductorActionPerformed(evt);
-            }
-        });
 
         btnEliminarConductor.setText("Eliminar");
-        btnEliminarConductor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarConductorActionPerformed(evt);
-            }
-        });
 
         lblBusquedaTablaConductorNombre.setText("Buscar Nombre:");
 
         txtBusquedaTablaConductorNombre.setPreferredSize(new java.awt.Dimension(200, 22));
-        txtBusquedaTablaConductorNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBusquedaTablaConductorNombreKeyReleased(evt);
-            }
-        });
 
         btnLimpiarConductor.setText("Limpiar");
-        btnLimpiarConductor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarConductorActionPerformed(evt);
-            }
-        });
 
         lblBusquedaTablaConductorRut.setText("Buscar Rut:");
 
         txtBusquedaTablaConductorRut.setPreferredSize(new java.awt.Dimension(200, 22));
-        txtBusquedaTablaConductorRut.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBusquedaTablaConductorRutKeyReleased(evt);
-            }
-        });
 
         lblColectivosConductor.setText("Colectivo:");
 
         btnLimpiarBuscadoresConductor.setText("Limpiar Buscadores");
-        btnLimpiarBuscadoresConductor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarBuscadoresConductorActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pnlConductorLayout = new javax.swing.GroupLayout(pnlConductor);
         pnlConductor.setLayout(pnlConductorLayout);
@@ -656,31 +632,16 @@ public class View extends javax.swing.JFrame {
         cmbTipoRepuesto.setToolTipText("");
 
         btnAñadirRepuesto.setText("Añadir");
-        btnAñadirRepuesto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAñadirRepuestoActionPerformed(evt);
-            }
-        });
 
         btnLimpiarRepuesto.setText("Limpiar");
 
         btnModificarRepuesto.setText("Modificar");
-        btnModificarRepuesto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnModificarRepuestoActionPerformed(evt);
-            }
-        });
 
         btnEliminarRepuesto.setText("Eliminar");
 
         lblBusquedaTablaRepuestoNombre.setText("Matricula:");
 
         txtBusquedaTablaRepuestoNombre.setPreferredSize(new java.awt.Dimension(200, 22));
-        txtBusquedaTablaRepuestoNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBusquedaTablaRepuestoNombreKeyReleased(evt);
-            }
-        });
 
         tblRepuestos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -897,27 +858,27 @@ public class View extends javax.swing.JFrame {
         jTabbedPane1.addTab("Ganancias", pnlGanancias);
 
         btnSalir.setText("Salir");
-        btnSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalirActionPerformed(evt);
-            }
-        });
 
         btnAñadirKilometraje.setText("Añadir Kilometraje");
+
+        btnReDo.setText("Re-Crear DB");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(btnReDo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAñadirKilometraje)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnSalir))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE))
+                        .addComponent(btnSalir)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -928,298 +889,16 @@ public class View extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
-                    .addComponent(btnAñadirKilometraje))
+                    .addComponent(btnAñadirKilometraje)
+                    .addComponent(btnReDo))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_btnSalirActionPerformed
-
-    private void btnAñadirColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirColectivoActionPerformed
-        valido = true;
-        try {
-            if (dchCompraColectivo.getDate() == null || dchRevisionColectivo.getDate() == null || 
-                    dchSeguroColectivo.getDate() == null || txtKilometrajeColectivo.getText().strip().equals("") || 
-                    txtMarcaColectivo.getText().strip().equals("") || txtVinColectivo.getText().strip().equals("") || 
-                    txtMotorColectivo.getText().strip().equals("") || !Pattern.matches("^\\d*$", txtKilometrajeColectivo.getText().strip())) {
-                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
-                valido = false;
-            }
-            if ((txtMatriculaColectivo.getText().strip().equals("") || txtMatriculaColectivo.getText().strip().length() != 6) && valido) {
-                JOptionPane.showMessageDialog(null, "Ingrese una matricula válida.");
-                valido = false;
-            }
-            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-            if (rs.next() && valido) {
-                JOptionPane.showMessageDialog(null, "Matricula duplicada.");
-                valido = false;
-            }
-            if (valido) {
-                stm.execute("INSERT INTO Colectivo VALUES ('" + txtMatriculaColectivo.getText().strip() + "', '" + cmbConductoresColectivos.getSelectedItem().toString() + "', '" + formato.format(dchCompraColectivo.getDate()) + "', '" 
-                        + formato.format(dchSeguroColectivo.getDate()) + "', '" + formato.format(dchRevisionColectivo.getDate()) + "', " + txtKilometrajeColectivo.getText().strip() 
-                        + ", '" + txtMarcaColectivo.getText().strip() + "', '" + txtVinColectivo.getText().strip() + "', '" + txtMotorColectivo.getText().strip() + "');");
-                if (cmbConductoresColectivos.getSelectedIndex() != 0) {
-                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
-                }
-                refrescar();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnAñadirColectivoActionPerformed
-
-    private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirConductorActionPerformed
-        valido = true;
-        try {
-            if (txtRutConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
-                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
-                valido = false;
-            }
-            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-            if (rs.next() && valido) {
-                JOptionPane.showMessageDialog(null, "Rut duplicado.");
-                valido = false;
-            }
-            if (valido) {   
-                stm.execute("INSERT INTO Conductor VALUES ('" + txtRutConductor.getText().strip() + "', '------', '" + txtNombreConductor.getText().strip() + "', '" + txtDireccionConductor.getText().strip() + "', '" + txtTelefonoConductor.getText().strip() + "');");
-                if (cmbColectivosConductor.getSelectedIndex() != 0) {
-                    stm.executeUpdate("UPDATE Conductor SET Matricula = '" + cmbColectivosConductor.getSelectedItem() + "' WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
-                }
-                refrescar();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnAñadirConductorActionPerformed
-
-    private void tblConductoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblConductoresMouseClicked
-        if (evt.getClickCount() == 1) {
-            JTable src = (JTable) evt.getSource();
-            txtRutConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 0).toString());
-            txtNombreConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 1).toString());
-            txtDireccionConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 2).toString());
-            txtTelefonoConductor.setText(src.getModel().getValueAt(src.getSelectedRow(), 3).toString());
-        }
-    }//GEN-LAST:event_tblConductoresMouseClicked
-
-    private void btnEliminarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarConductorActionPerformed
-        valido = true;
-        try {
-            if (txtRutConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
-                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
-                valido = false;
-            }
-            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-            if(!rs.next() && valido){
-                JOptionPane.showMessageDialog(null, "Rut no encontrado.");
-                valido = false;
-            }
-            if (valido) {
-                stm.execute("DELETE FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip()+ "';");
-                stm.executeUpdate("UPDATE Colectivo SET RutConductor = 'Sin Conductor' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                refrescar();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnEliminarConductorActionPerformed
-
-    private void btnModificarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarConductorActionPerformed
-        valido = true;
-        try {
-            if (txtRutConductor.getText().strip().equals("") || txtDireccionConductor.getText().strip().equals("") || txtNombreConductor.getText().strip().equals("") || txtTelefonoConductor.getText().strip().equals("") || !Pattern.matches("^[0-9]+-[0-9kK]{1}$", txtRutConductor.getText().strip()) || !Pattern.matches("^\\+\\d+$", txtTelefonoConductor.getText().strip())) {
-                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
-                valido = false;
-            }
-            rs = stm.executeQuery("SELECT RutConductor FROM Conductor WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-            if(!rs.next() && valido){
-                JOptionPane.showMessageDialog(null, "Rut no encontrado.");
-                valido = false;
-            }
-            if (valido) {   
-                stm.executeUpdate("UPDATE Conductor SET Nombre = '" + txtNombreConductor.getText().strip() + "', Matricula = '" + cmbColectivosConductor.getSelectedItem() + "', Direccion = '" + txtDireccionConductor.getText().strip() + "', Telefono = '" + txtTelefonoConductor.getText().strip() + "' WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = '" + txtRutConductor.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + txtRutConductor.getText().strip() + "' WHERE Matricula = '" + cmbColectivosConductor.getSelectedItem() + "';");
-                refrescar();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnModificarConductorActionPerformed
-
-    private void btnModificarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarColectivoActionPerformed
-        valido = true;
-        try {
-            if(dchCompraColectivo.getDate() == null || dchRevisionColectivo.getDate() == null || 
-                    dchSeguroColectivo.getDate() == null || txtKilometrajeColectivo.getText().strip().equals("") || 
-                    txtMarcaColectivo.getText().strip().equals("") || txtVinColectivo.getText().strip().equals("") || 
-                    txtMotorColectivo.getText().strip().equals("") || !Pattern.matches("^\\d*$", txtKilometrajeColectivo.getText().strip())) {
-                JOptionPane.showMessageDialog(null, "Ingrese datos validos en todos los campos.");
-                valido = false;
-            }
-            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-            if(!rs.next() && valido){
-                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
-                valido = false;
-            }
-            if (valido) {
-                stm.executeUpdate("UPDATE Colectivo SET RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "', Compra = '" + formato.format(dchCompraColectivo.getDate()) + "', Seguro = '" + formato.format(dchSeguroColectivo.getDate()) + "', RevisionTecnica = '" + formato.format(dchRevisionColectivo.getDate()) + "', KilometrajeActual = " + txtKilometrajeColectivo.getText().strip() + ", Marca = '" + txtMarcaColectivo.getText().strip() + "', Vin = '" + txtVinColectivo.getText().strip() + "', Motor = '" + txtMotorColectivo.getText().strip() + "' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Conductor SET Matricula = '" + txtMatriculaColectivo.getText().strip() + "' WHERE RutConductor = '" + cmbConductoresColectivos.getSelectedItem()+ "';");
-                refrescar();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnModificarColectivoActionPerformed
-
-    private void btnEliminarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarColectivoActionPerformed
-        valido = true;
-        try {
-            if (txtMatriculaColectivo.getText().strip().equals("") || txtMatriculaColectivo.getText().strip().length() != 6) {
-                JOptionPane.showMessageDialog(null, "Ingrese una matricula valida.");
-                valido = false;
-            }
-            rs = stm.executeQuery("SELECT Matricula FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-            if(!rs.next() && valido){
-                JOptionPane.showMessageDialog(null, "Matricula no encontrada.");
-                valido = false;
-            }
-            if (valido) {   
-                stm.execute("DELETE FROM Colectivo WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                stm.executeUpdate("UPDATE Conductor SET Matricula = '------' WHERE Matricula = '" + txtMatriculaColectivo.getText().strip() + "';");
-                refrescar();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_btnEliminarColectivoActionPerformed
-
-    private void tblColectivosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblColectivosMouseClicked
-        try {
-            if (evt.getClickCount() == 1) {
-                JTable src = (JTable) evt.getSource();
-                txtMatriculaColectivo.setText(src.getModel().getValueAt(src.getSelectedRow(), 0).toString());
-                cmbConductoresColectivos.setSelectedItem(src.getModel().getValueAt(src.getSelectedRow(), 1).toString());
-                dchCompraColectivo.setDate(formato.parse(src.getModel().getValueAt(src.getSelectedRow(), 2).toString()));
-                dchSeguroColectivo.setDate(formato.parse(src.getModel().getValueAt(src.getSelectedRow(), 3).toString()));
-                dchRevisionColectivo.setDate(formato.parse(src.getModel().getValueAt(src.getSelectedRow(), 4).toString()));
-                txtKilometrajeColectivo.setText(src.getModel().getValueAt(src.getSelectedRow(), 5).toString());
-                txtMarcaColectivo.setText(src.getModel().getValueAt(src.getSelectedRow(), 6).toString());
-                txtVinColectivo.setText(src.getModel().getValueAt(src.getSelectedRow(), 7).toString());
-                txtMotorColectivo.setText(src.getModel().getValueAt(src.getSelectedRow(), 8).toString());
-            }
-        } catch (ParseException parseException) {
-            parseException.printStackTrace();
-        }
-    }//GEN-LAST:event_tblColectivosMouseClicked
-
-    private void btnLimpiarColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarColectivoActionPerformed
-        txtMatriculaColectivo.setText("");
-        dchCompraColectivo.setCalendar(null);
-        dchSeguroColectivo.setCalendar(null);
-        dchRevisionColectivo.setCalendar(null);
-        txtKilometrajeColectivo.setText("");
-        txtMarcaColectivo.setText("");
-        txtVinColectivo.setText("");
-        txtMotorColectivo.setText("");
-        cmbConductoresColectivos.setSelectedIndex(0);
-    }//GEN-LAST:event_btnLimpiarColectivoActionPerformed
-
-    private void txtBusquedaTablaColectivosMatriculaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaColectivosMatriculaKeyReleased
-        refrescar();
-    }//GEN-LAST:event_txtBusquedaTablaColectivosMatriculaKeyReleased
-
-    private void btnLimpiarConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarConductorActionPerformed
-        txtRutConductor.setText("");
-        txtNombreConductor.setText("");
-        txtDireccionConductor.setText("");
-        txtTelefonoConductor.setText("");
-    }//GEN-LAST:event_btnLimpiarConductorActionPerformed
-
-    private void txtBusquedaTablaConductorRutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaConductorRutKeyReleased
-        refrescar();
-    }//GEN-LAST:event_txtBusquedaTablaConductorRutKeyReleased
-
-    private void txtBusquedaTablaConductorNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaConductorNombreKeyReleased
-        refrescar();
-    }//GEN-LAST:event_txtBusquedaTablaConductorNombreKeyReleased
-
-    private void txtBusquedaTablaRepuestoNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaRepuestoNombreKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBusquedaTablaRepuestoNombreKeyReleased
-
-    private void btnAñadirRepuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAñadirRepuestoActionPerformed
-        try {
-            valido = true;
-            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && Pattern.matches("^\\d*$", txtKilometrajeRepuesto.getText().strip())){
-                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
-            }
-            if (valido) {   
-                stm.execute("INSERT INTO Repuesto (tipoRepuesto, Compra, KilometrajeMax, KilometrajeActual, Matricula) VALUES ('" + cmbTipoRepuesto.getSelectedItem() + "', '" + formato.format(dchCompraRepuesto.getDate()) + "', " + txtKilometrajeRepuesto.getText().strip() + ", 0, '" + cmbMatriculaRepuesto.getSelectedItem() + "');");
-                refrescar();
-            }
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnAñadirRepuestoActionPerformed
-
-    private void btnModificarRepuestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarRepuestoActionPerformed
-        try {
-            if(dchCompraRepuesto.getDate() != null && !txtKilometrajeRepuesto.getText().equals("") && Pattern.matches("^\\d*$", txtKilometrajeRepuesto.getText().strip())){
-                stm.execute("UPDATE Repuesto SET TipoRepuesto;");
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
-            }
-        } catch (Exception e) {
-        }
-    }//GEN-LAST:event_btnModificarRepuestoActionPerformed
-
-    private void txtBusquedaTablaColectivosRutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBusquedaTablaColectivosRutKeyReleased
-        refrescar();
-    }//GEN-LAST:event_txtBusquedaTablaColectivosRutKeyReleased
-
-    private void btnLimpiarBuscadoresColectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarBuscadoresColectivoActionPerformed
-        txtBusquedaTablaColectivosMatricula.setText("");
-        txtBusquedaTablaColectivosRut.setText("");
-        refrescar();
-    }//GEN-LAST:event_btnLimpiarBuscadoresColectivoActionPerformed
-
-    private void btnLimpiarBuscadoresConductorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarBuscadoresConductorActionPerformed
-        txtBusquedaTablaConductorNombre.setText("");
-        txtBusquedaTablaConductorRut.setText("");
-        refrescar();
-    }//GEN-LAST:event_btnLimpiarBuscadoresConductorActionPerformed
-
     
-    public static void main(String args[]) {
-        
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(View.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new View().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton btnAñadirColectivo;
@@ -1240,6 +919,7 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JButton btnModificarConductor;
     public static javax.swing.JButton btnModificarEvento;
     public static javax.swing.JButton btnModificarRepuesto;
+    public static javax.swing.JButton btnReDo;
     public static javax.swing.JButton btnSalir;
     public static com.toedter.calendar.JCalendar cdrFechas;
     public static javax.swing.JComboBox<String> cmbColectivosConductor;

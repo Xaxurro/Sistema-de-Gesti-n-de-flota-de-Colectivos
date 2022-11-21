@@ -142,7 +142,7 @@ public class placeholder extends javax.swing.JFrame {
         }
     }
     
-    public Formulario() {
+    public placeholder() {
         try {
             con = conectar(usuario, contraseña);
             //stm = con.createStatement();
