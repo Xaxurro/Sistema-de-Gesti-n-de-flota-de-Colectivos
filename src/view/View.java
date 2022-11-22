@@ -8,6 +8,7 @@ public class View extends javax.swing.JFrame {
     
     boolean valido;
     
+    //
     /*
     
     private void btnAñadirConductorActionPerformed(java.awt.event.ActionEvent evt) {                                                   
@@ -135,6 +136,7 @@ public class View extends javax.swing.JFrame {
     }                                                             
 
     */
+    //
     
     public View() {  
         initComponents();
@@ -180,7 +182,7 @@ public class View extends javax.swing.JFrame {
         lblBusquedaTablaColectivosMatricula = new javax.swing.JLabel();
         txtBusquedaTablaColectivosMatricula = new javax.swing.JTextField();
         lblMotorColectivo1 = new javax.swing.JLabel();
-        cmbConductoresColectivos = new javax.swing.JComboBox<>();
+        cmbConductoresColectivo = new javax.swing.JComboBox<>();
         btnModificarColectivo = new javax.swing.JButton();
         btnEliminarColectivo = new javax.swing.JButton();
         btnLimpiarColectivo = new javax.swing.JButton();
@@ -227,10 +229,9 @@ public class View extends javax.swing.JFrame {
         scpRepuestos = new javax.swing.JScrollPane();
         tblRepuestos = new javax.swing.JTable();
         pnlEventos = new javax.swing.JPanel();
-        cdrFechas = new com.toedter.calendar.JCalendar();
         lblNombreEvento = new javax.swing.JLabel();
         txtNombreEvento = new javax.swing.JTextField();
-        jLabel22 = new javax.swing.JLabel();
+        lblDescripcionEvento = new javax.swing.JLabel();
         scpDescripcionEvento = new javax.swing.JScrollPane();
         txaDescripcionEvento = new javax.swing.JTextArea();
         lblBusquedaTablaEventos = new javax.swing.JLabel();
@@ -241,6 +242,7 @@ public class View extends javax.swing.JFrame {
         btnModificarEvento = new javax.swing.JButton();
         btnEliminarEvento = new javax.swing.JButton();
         lstEventos = new javax.swing.JList<>();
+        cldEvento = new com.toedter.calendar.JCalendar();
         pnlGanancias = new javax.swing.JPanel();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
@@ -257,34 +259,43 @@ public class View extends javax.swing.JFrame {
         lblMatriculaColectivo.setText("Matricula:");
 
         txtMatriculaColectivo.setToolTipText("Sin digito Verificador");
+        txtMatriculaColectivo.setName("Matricula"); // NOI18N
         txtMatriculaColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblCompraColectivo.setText("Fecha de Compra:");
 
         dchCompraColectivo.setDateFormatString("yyyy-MM-dd");
+        dchCompraColectivo.setName("Fecha de Compra"); // NOI18N
 
         lblSeguroColectivo.setText("Fecha Seguro:");
 
         dchSeguroColectivo.setDateFormatString("yyyy-MM-dd");
+        dchSeguroColectivo.setName("Fecha de Ultimo Seguro"); // NOI18N
 
         lblRevisionColectivo.setText("Revision Tecnica:");
 
         dchRevisionColectivo.setDateFormatString("yyyy-MM-dd");
+        dchRevisionColectivo.setName("Fecha de Ultima Revision Tecnica"); // NOI18N
 
         lblKilometrajeColectivo.setText("Kilometraje Actual:");
 
+        txtKilometrajeColectivo.setToolTipText("Solo números");
+        txtKilometrajeColectivo.setName("Kilometraje Actual"); // NOI18N
         txtKilometrajeColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblMarcaColectivo.setText("Marca:");
 
+        txtMarcaColectivo.setName("Marca"); // NOI18N
         txtMarcaColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblVinColectivo.setText("Vin:");
 
+        txtVinColectivo.setName("Vin"); // NOI18N
         txtVinColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblMotorColectivo.setText("Número de Motor:");
 
+        txtMotorColectivo.setName("Número de Motor"); // NOI18N
         txtMotorColectivo.setPreferredSize(new java.awt.Dimension(200, 22));
 
         btnAñadirColectivo.setText("Añadir");
@@ -311,6 +322,8 @@ public class View extends javax.swing.JFrame {
         txtBusquedaTablaColectivosMatricula.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblMotorColectivo1.setText("Conductor:");
+
+        cmbConductoresColectivo.setName("Conductor"); // NOI18N
 
         btnModificarColectivo.setText("Modificar");
 
@@ -342,7 +355,7 @@ public class View extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 329, Short.MAX_VALUE)
                         .addComponent(lblMotorColectivo1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cmbConductoresColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cmbConductoresColectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlColectivoLayout.createSequentialGroup()
                         .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -455,7 +468,7 @@ public class View extends javax.swing.JFrame {
                         .addComponent(btnLimpiarColectivo))
                     .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblMotorColectivo1)
-                        .addComponent(cmbConductoresColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbConductoresColectivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(10, 10, 10))
         );
 
@@ -466,19 +479,23 @@ public class View extends javax.swing.JFrame {
         lblRutConductor.setText("RUT:");
 
         txtRutConductor.setToolTipText("Siga el formato 12345678-9");
+        txtRutConductor.setName("Rut"); // NOI18N
         txtRutConductor.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblNombreConductor.setText("Nombre Completo:");
 
+        txtNombreConductor.setName("Nombre"); // NOI18N
         txtNombreConductor.setPreferredSize(new java.awt.Dimension(100, 22));
 
         lblDireccionConductor.setText("Direccion:");
 
+        txtDireccionConductor.setName("Dirección"); // NOI18N
         txtDireccionConductor.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblTelefonoConductor.setText("Telefono:");
 
         txtTelefonoConductor.setToolTipText("Siga el formato +12345678901");
+        txtTelefonoConductor.setName("Teléfono"); // NOI18N
         txtTelefonoConductor.setPreferredSize(new java.awt.Dimension(200, 22));
 
         tblConductores.setModel(new javax.swing.table.DefaultTableModel(
@@ -617,19 +634,23 @@ public class View extends javax.swing.JFrame {
         lblMatriculaRepuesto.setText("Matricula:");
 
         cmbMatriculaRepuesto.setToolTipText("");
+        cmbMatriculaRepuesto.setName("Matricula"); // NOI18N
 
         lblCompraRepuesto.setText("Fecha de Compra:");
 
         dchCompraRepuesto.setDateFormatString("yyyy-MM-dd");
+        dchCompraRepuesto.setName("Fecha de Compra"); // NOI18N
 
         lblKilometrajeRepuesto.setText("Kilometraje Máximo:");
 
+        txtKilometrajeRepuesto.setName("Kilometraje Máximo"); // NOI18N
         txtKilometrajeRepuesto.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblTipoRepuesto.setText("Tipo Repuesto:");
 
         cmbTipoRepuesto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pastilla de Freno" }));
         cmbTipoRepuesto.setToolTipText("");
+        cmbTipoRepuesto.setName("Tipo de Repuesto"); // NOI18N
 
         btnAñadirRepuesto.setText("Añadir");
 
@@ -735,20 +756,11 @@ public class View extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Repuestos", pnlRepuestos);
 
-        cdrFechas.setAlignmentX(0.1F);
-        cdrFechas.setAlignmentY(0.1F);
-        cdrFechas.setDecorationBackgroundColor(new java.awt.Color(204, 204, 204));
-        cdrFechas.setDecorationBordersVisible(true);
-        cdrFechas.setTodayButtonText("Dia Actual");
-        cdrFechas.setTodayButtonVisible(true);
-        cdrFechas.setWeekOfYearVisible(false);
-        cdrFechas.setWeekdayForeground(new java.awt.Color(0, 0, 0));
-
         lblNombreEvento.setText("Nombre Evento:");
 
         txtNombreEvento.setPreferredSize(new java.awt.Dimension(200, 22));
 
-        jLabel22.setText("Descripcion:");
+        lblDescripcionEvento.setText("Descripcion:");
 
         txaDescripcionEvento.setColumns(20);
         txaDescripcionEvento.setRows(5);
@@ -771,22 +783,24 @@ public class View extends javax.swing.JFrame {
 
         btnEliminarEvento.setText("Eliminar");
 
+        cldEvento.setDecorationBackgroundVisible(false);
+
         javax.swing.GroupLayout pnlEventosLayout = new javax.swing.GroupLayout(pnlEventos);
         pnlEventos.setLayout(pnlEventosLayout);
         pnlEventosLayout.setHorizontalGroup(
             pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlEventosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(pnlEventosLayout.createSequentialGroup()
-                        .addComponent(jLabel22)
+                        .addComponent(lblDescripcionEvento)
                         .addGap(45, 45, 45)
                         .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombreEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(scpDescripcionEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnAñadirEvento)))
                     .addComponent(lblNombreEvento)
-                    .addComponent(cdrFechas, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cldEvento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lvlNoEventos, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -816,12 +830,12 @@ public class View extends javax.swing.JFrame {
                             .addComponent(txtBusquedaTablaEventos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblBusquedaTablaEventos))
                         .addGap(18, 18, 18)
-                        .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(scpEventos)
                             .addGroup(pnlEventosLayout.createSequentialGroup()
                                 .addComponent(lvlNoEventos)
-                                .addGap(0, 0, Short.MAX_VALUE))))
-                    .addComponent(cdrFechas, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 174, Short.MAX_VALUE))))
+                    .addComponent(cldEvento, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombreEvento)
@@ -830,11 +844,11 @@ public class View extends javax.swing.JFrame {
                     .addComponent(btnEliminarEvento))
                 .addGap(18, 18, 18)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22)
+                    .addComponent(lblDescripcionEvento)
                     .addComponent(scpDescripcionEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnAñadirEvento)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
             .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(pnlEventosLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -921,16 +935,15 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JButton btnModificarRepuesto;
     public static javax.swing.JButton btnReDo;
     public static javax.swing.JButton btnSalir;
-    public static com.toedter.calendar.JCalendar cdrFechas;
+    private com.toedter.calendar.JCalendar cldEvento;
     public static javax.swing.JComboBox<String> cmbColectivosConductor;
-    public static javax.swing.JComboBox<String> cmbConductoresColectivos;
+    public static javax.swing.JComboBox<String> cmbConductoresColectivo;
     public static javax.swing.JComboBox<String> cmbMatriculaRepuesto;
     public static javax.swing.JComboBox<String> cmbTipoRepuesto;
     public static com.toedter.calendar.JDateChooser dchCompraColectivo;
     public static com.toedter.calendar.JDateChooser dchCompraRepuesto;
     public static com.toedter.calendar.JDateChooser dchRevisionColectivo;
     public static com.toedter.calendar.JDateChooser dchSeguroColectivo;
-    private javax.swing.JLabel jLabel22;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblBusquedaTablaColectivosMatricula;
     private javax.swing.JLabel lblBusquedaTablaColectivosRut;
@@ -941,6 +954,7 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel lblColectivosConductor;
     private javax.swing.JLabel lblCompraColectivo;
     private javax.swing.JLabel lblCompraRepuesto;
+    private javax.swing.JLabel lblDescripcionEvento;
     private javax.swing.JLabel lblDireccionConductor;
     private javax.swing.JLabel lblKilometrajeColectivo;
     private javax.swing.JLabel lblKilometrajeRepuesto;

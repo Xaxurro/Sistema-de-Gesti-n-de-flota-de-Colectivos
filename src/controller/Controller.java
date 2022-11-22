@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,11 +30,11 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
     private List<Object> buscadorConductor = new ArrayList<Object>();
     private List<Object> buscadorRepuesto = new ArrayList<Object>();
 
+    //LISTENERS
     public Controller(Model model, View view) {
         this.v = view;
         this.m = model;
         
-        //LISTENERS
         //GENERALES
         this.v.btnSalir.addActionListener(this);
         this.v.btnAñadirKilometraje.addActionListener(this);
@@ -68,16 +69,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         //EVENTO
     }
     
+    //AÑADIR A LAS LISTAS
     public void iniciar(){
         v.pack();
         v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         v.setLocationRelativeTo(null);
         v.setVisible(true);
         
-        //AÑADIR A LAS LISTAS
         //COLECTIVO
         inputColectivo.add(v.txtMatriculaColectivo);
-        inputColectivo.add(v.cmbConductoresColectivos);
+        inputColectivo.add(v.cmbConductoresColectivo);
         inputColectivo.add(v.dchCompraColectivo);
         inputColectivo.add(v.dchSeguroColectivo);
         inputColectivo.add(v.dchRevisionColectivo);
@@ -95,6 +96,9 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         inputConductor.add(v.txtNombreConductor);
         inputConductor.add(v.txtTelefonoConductor);
         
+        buscadorConductor.add(v.txtBusquedaTablaConductorNombre);
+        buscadorConductor.add(v.txtBusquedaTablaConductorRut);
+        
         //REPUESTO
         inputRepuesto.add(v.cmbMatriculaRepuesto);
         inputRepuesto.add(v.txtKilometrajeRepuesto);
@@ -102,29 +106,80 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         inputRepuesto.add(v.dchCompraRepuesto);
     }
     
+    //VALIDACIONES
     //TRUE = Es valido, FALSE = No es valido
     public boolean validarEmpty(List<Object> inputList){
         JTextField tf = null;
         JDateChooser dc = null;
+        String elementosVacios = "";
         
         for (Object input : inputList) {
             if (input instanceof JTextField) {
                 tf = (JTextField) input;
                 if (tf.getText().strip().equals("")) {
-                    JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
-                    return false;
+                    elementosVacios += "\n" + tf.getName();
                 }
             }
             if (input instanceof JDateChooser) {
                 dc = (JDateChooser) input;
                 if (dc.getDate() == null){
-                    JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos.");
-                    return false;
+                    elementosVacios += "\n" + dc.getName();
                 }
             }
         }
+        if (elementosVacios.equals("")) {
+            return true;
+        }
+        JOptionPane.showMessageDialog(null, "Ingrese datos en todos los campos:" + elementosVacios);
+        return false;
+    }
+    
+    public boolean validarRut(){
+        if(!Pattern.matches("^[0-9]+-[0-9kK]{1}$", v.txtRutConductor.getText().strip()) || !(v.txtRutConductor.getText().strip().length() >= 9)){
+            if (!(v.txtRutConductor.getText().strip().equals(""))) {
+                JOptionPane.showMessageDialog(null, "Ingrese el formato valido en Rut.\n(Coloque el mouse encima de este campo para ver el formato).");
+            }
+            return false;
+        }
+        String rut = v.txtRutConductor.getText().strip().toUpperCase();
+        int suma = 0;
+        char digitoV = 0;
+        int i = 2;
+        for (char digito : new StringBuilder(rut).reverse().substring(2).toString().toCharArray()) {
+            suma += i * (digito - '0');
+            i++;
+            if (i == 8) {
+                i = 2;
+            }
+        }
+        digitoV = (char) (11 - (suma - suma / 11 * 11));
+        switch (digitoV) {
+            case 10:
+                digitoV = 'K';
+            break;
+            case 11:
+                digitoV = '0';
+            break;
+            default:
+                digitoV += '0';
+        }
+        if(rut.charAt(rut.length()-1) != digitoV){
+            JOptionPane.showMessageDialog(null, "Rut no valido.");
+            return false;
+        }
         return true;
     }
+    
+    public boolean validarRegEx(JTextField input, String regex, String campo){
+        if(!Pattern.matches(regex, input.getText().strip())){
+            if (!(input.getText().strip().equals(""))) {
+                JOptionPane.showMessageDialog(null, "Ingrese el formato valido en " + campo + ".\n(Coloque el mouse encima de este campo para ver el formato).");
+            }
+            return false;
+        }
+        return true;
+    }
+    
     
     public void limpiarInput(List<Object> inputList){
         JComboBox cb = null;
@@ -165,7 +220,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         //COLECTIVO
         if (e == v.btnAñadirColectivo) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = v.txtMatriculaColectivo.getText().strip().length() == 6;
+            validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula") && validarRegEx(v.txtKilometrajeColectivo, "^\\d*$", "Kilometraje");
+            
             if (validoFormato && validoEmpty) {
                 m.insertarColectivo();
             }
@@ -175,14 +231,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         }
         if (e == v.btnModificarColectivo) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = v.txtMatriculaColectivo.getText().strip().length() == 6;
+            validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
                 m.modificarColectivo();
             }
         }
         if (e == v.btnEliminarColectivo) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = v.txtMatriculaColectivo.getText().strip().length() == 6;
+            validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
                 m.eliminarColectivo();
             }
@@ -190,10 +246,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         
         //CONDUCTOR
         if (e == v.btnAñadirConductor) {
-            
+            validoEmpty = validarEmpty(inputConductor);
+            validoFormato = validarRut() && validarRegEx(v.txtTelefonoConductor, "^\\+\\d+$", "Telefono");
+            if (validoEmpty && validoFormato) {
+                m.insertarConductor();
+            }
         }
         if (e == v.btnLimpiarConductor) {
-            
+            limpiarInput(inputConductor);
         }
         if (e == v.btnModificarConductor) {
             
@@ -218,10 +278,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         
         //LIMPIAR BUSCADORES
         if (e == v.btnLimpiarBuscadoresColectivo) {
-            
+            limpiarInput(buscadorColectivo);
         }
         if (e == v.btnLimpiarBuscadoresConductor) {
-            
+            limpiarInput(buscadorConductor);
         }
     }
 
@@ -230,7 +290,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         Object e = evt.getSource();
         
         if (e == v.tblColectivos) {
-            m.consultar(v.tblColectivos, v.tblColectivos.getSelectedRow(), inputColectivo);
+            m.consultarValores(v.tblColectivos, v.tblColectivos.getSelectedRow(), inputColectivo);
         }
     }
     
