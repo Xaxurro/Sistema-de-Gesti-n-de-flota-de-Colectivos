@@ -42,6 +42,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         //BUSCADORES
         this.v.txtBusquedaTablaColectivosMatricula.addKeyListener(this);
         this.v.txtBusquedaTablaColectivosRut.addKeyListener(this);
+        this.v.txtBusquedaTablaConductorNombre.addKeyListener(this);
+        this.v.txtBusquedaTablaConductorRut.addKeyListener(this);
         
         //DEBUG (BORRAR)
         this.v.btnReDo.addActionListener(this);
@@ -59,6 +61,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         this.v.btnLimpiarConductor.addActionListener(this);
         this.v.btnModificarConductor.addActionListener(this);
         this.v.btnEliminarConductor.addActionListener(this);
+        this.v.btnLimpiarBuscadoresConductor.addActionListener(this);
+        this.v.tblConductores.addMouseListener(this);
         
         //REPUESTO
         this.v.btnAñadirRepuesto.addActionListener(this);
@@ -92,9 +96,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         
         //CONDUCTOR
         inputConductor.add(v.txtRutConductor);
-        inputConductor.add(v.txtDireccionConductor);
         inputConductor.add(v.txtNombreConductor);
+        inputConductor.add(v.txtDireccionConductor);
         inputConductor.add(v.txtTelefonoConductor);
+        inputConductor.add(v.cmbColectivosConductor);
         
         buscadorConductor.add(v.txtBusquedaTablaConductorNombre);
         buscadorConductor.add(v.txtBusquedaTablaConductorRut);
@@ -200,6 +205,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
                 cb.setSelectedIndex(0);
             }
         }
+        
+        m.refrescar();
     }
     
     @Override
@@ -221,7 +228,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         if (e == v.btnAñadirColectivo) {
             validoEmpty = validarEmpty(inputColectivo);
             validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula") && validarRegEx(v.txtKilometrajeColectivo, "^\\d*$", "Kilometraje");
-            
             if (validoFormato && validoEmpty) {
                 m.insertarColectivo();
             }
@@ -256,10 +262,18 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
             limpiarInput(inputConductor);
         }
         if (e == v.btnModificarConductor) {
-            
+            validoEmpty = validarEmpty(inputConductor);
+            validoFormato = validarRut() && validarRegEx(v.txtTelefonoConductor, "^\\+\\d+$", "Telefono");
+            if (validoEmpty && validoFormato) {
+                m.modificarConductor();
+            }
         }
         if (e == v.btnEliminarConductor) {
-            
+            validoEmpty = validarEmpty(inputConductor);
+            validoFormato = validarRut() && validarRegEx(v.txtTelefonoConductor, "^\\+\\d+$", "Telefono");
+            if (validoEmpty && validoFormato) {
+                m.eliminarConductor();
+            }
         }
         
         //REPUESTO
@@ -290,7 +304,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         Object e = evt.getSource();
         
         if (e == v.tblColectivos) {
-            m.consultarValores(v.tblColectivos, v.tblColectivos.getSelectedRow(), inputColectivo);
+            m.consultarValores(v.tblColectivos, inputColectivo);
+        }
+        if (e == v.tblConductores) {
+            m.consultarValores(v.tblConductores, inputConductor);
         }
     }
     

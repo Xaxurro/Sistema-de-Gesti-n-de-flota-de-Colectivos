@@ -207,8 +207,10 @@ public class Model {
         }
     }
     
-    public void consultarValores(JTable tabla, int fila, List<Object> inputList){
+    public void consultarValores(JTable tabla, List<Object> inputList){
         try {
+            int fila = tabla.getSelectedRow();
+            
             JComboBox cb = null;
             JTextField tf = null;
             JDateChooser dc = null;
@@ -323,22 +325,24 @@ public class Model {
     }
     
     public void eliminarColectivo(){
-        if (existeMatricula(v.txtMatriculaColectivo.getText().strip())) {
-            try {
-                //Eliminar colectivo
-                ppt = con.prepareStatement("DELETE FROM Colectivo WHERE Matricula = ?;");
-                ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
-                ppt.execute();
-                
+        try {
+            if (existeMatricula(v.txtMatriculaColectivo.getText().strip())) {
                 //Quitarle matricula a conductor
                 ppt = con.prepareStatement("UPDATE Conductor SET Matricula = '------' WHERE Matricula = ?;");
                 ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
                 ppt.executeUpdate();
                 
+                //Eliminar colectivo
+                ppt = con.prepareStatement("DELETE FROM Colectivo WHERE Matricula = ?;");
+                ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
+                ppt.execute();
+                
                 refrescar();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } else {
+                JOptionPane.showMessageDialog(null, "No existe Matricula.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -347,7 +351,7 @@ public class Model {
             if (!existeRut(v.txtRutConductor.getText().strip())) {
                 //Insertar conductor nuevo sin matricula
                 ppt = con.prepareStatement("INSERT INTO Conductor VALUES (?, ?, ?, ?, ?);");
-                ppt.setString(1, v.txtRutConductor.getText().strip());
+                ppt.setString(1, v.txtRutConductor.getText().strip().toUpperCase());
                 ppt.setString(2, "------");
                 ppt.setString(3, capitalizar(v.txtNombreConductor.getText().strip()));
                 ppt.setString(4, capitalizar(v.txtDireccionConductor.getText().strip()));
@@ -365,7 +369,7 @@ public class Model {
                     //Colocarle conductor a colectivo
                     ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ? WHERE Matricula = ?;");
                     ppt.setString(1, v.txtRutConductor.getText().strip());
-                    ppt.setString(2, v.cmbConductoresColectivo.getSelectedItem().toString());
+                    ppt.setString(2, v.cmbColectivosConductor.getSelectedItem().toString());
                     ppt.executeUpdate();
                 }
                 
@@ -377,4 +381,68 @@ public class Model {
             e.printStackTrace();
         }
     }
+    
+    public void modificarConductor(){
+        try {
+            if (existeRut(v.txtRutConductor.getText().strip().toUpperCase())) {
+                //Actualizar conductor sin matricula
+                ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ?, Nombre = ?, Direccion = ?, Telefono= ? WHERE RutConductor = ?;");
+                ppt.setString(1, "------");
+                ppt.setString(2, capitalizar(v.txtNombreConductor.getText().strip()));
+                ppt.setString(3, capitalizar(v.txtDireccionConductor.getText().strip()));
+                ppt.setString(4, v.txtTelefonoConductor.getText().strip());
+                ppt.setString(5, v.txtRutConductor.getText().strip());
+                ppt.executeUpdate();
+                
+                //Quitar conductor de colectivo
+                ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = ?;");
+                ppt.setString(1, v.txtRutConductor.getText().strip());
+                ppt.executeUpdate();
+                
+                //Si se selecciono a un conductor
+                if (v.cmbColectivosConductor.getSelectedIndex() != 0) {
+                    //Colocarle la matricula al conductor
+                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ? WHERE RutConductor = ?;");
+                    ppt.setString(1, v.cmbColectivosConductor.getSelectedItem().toString());
+                    ppt.setString(2, v.txtRutConductor.getText().strip());
+                    ppt.executeUpdate();
+                    
+                    //Colocarle el conductor a la matricula
+                    ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ? WHERE Matricula = ?;");
+                    ppt.setString(1, v.txtRutConductor.getText().strip());
+                    ppt.setString(2, v.cmbColectivosConductor.getSelectedItem().toString());
+                    ppt.executeUpdate();
+                }
+                
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "No existe Rut.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void eliminarConductor(){
+        try {
+            if (existeRut(v.txtRutConductor.getText().strip().toUpperCase())) {
+                //Quitarle conductor a colectivo
+                ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = ?;");
+                ppt.setString(1, v.txtRutConductor.getText().strip());
+                ppt.executeUpdate();
+                
+                //Eliminar Conductor
+                ppt = con.prepareStatement("DELETE FROM Conductor WHERE RutConductor = ?;");
+                ppt.setString(1, v.txtRutConductor.getText().strip());
+                ppt.execute();
+                
+                refrescar();
+            } else {
+                JOptionPane.showMessageDialog(null, "No existe Rut.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
