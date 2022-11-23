@@ -15,10 +15,17 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import model.Colectivo;
+import model.Conductor;
+import model.Repuesto;
 
 public class Controller implements ActionListener, MouseListener, KeyListener{
     private View v;
     private Model m;
+    
+    private Colectivo colectivo;
+    private Conductor conductor;
+    private Repuesto repuesto;
     
     boolean validoEmpty = true;
     boolean validoFormato = true;
@@ -80,6 +87,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         v.setLocationRelativeTo(null);
         v.setVisible(true);
         
+        //AÑADIR A LAS LISTAS
         //COLECTIVO
         inputColectivo.add(v.txtMatriculaColectivo);
         inputColectivo.add(v.cmbConductoresColectivo);
@@ -109,6 +117,21 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         inputRepuesto.add(v.txtKilometrajeRepuesto);
         inputRepuesto.add(v.cmbTipoRepuesto);
         inputRepuesto.add(v.dchCompraRepuesto);
+        
+        
+        //CREAR OBJETOS
+        colectivo = m.crearColectivo(inputColectivo);
+        conductor = m.crearConductor(inputColectivo);
+        repuesto = m.crearRepuesto(inputColectivo);
+        
+        colectivo.conectarTabla(conductor);
+        colectivo.conectarTabla(repuesto);
+        
+        conductor.conectarTabla(colectivo);
+        conductor.conectarTabla(repuesto);
+        
+        repuesto.conectarTabla(colectivo);
+        repuesto.conectarTabla(conductor);
     }
     
     //VALIDACIONES
@@ -185,7 +208,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         return true;
     }
     
-    
+    //ACCIONES GENERALES
     public void limpiarInput(List<Object> inputList){
         JComboBox cb = null;
         JTextField tf = null;
@@ -205,8 +228,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
                 cb.setSelectedIndex(0);
             }
         }
-        
-        m.refrescar();
     }
     
     @Override
@@ -229,7 +250,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
             validoEmpty = validarEmpty(inputColectivo);
             validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula") && validarRegEx(v.txtKilometrajeColectivo, "^\\d*$", "Kilometraje");
             if (validoFormato && validoEmpty) {
-                m.insertarColectivo();
+                colectivo.insertar();
             }
         }
         if (e == v.btnLimpiarColectivo) {
@@ -239,14 +260,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
             validoEmpty = validarEmpty(inputColectivo);
             validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
-                m.modificarColectivo();
+                //m.modificarColectivo();
+                colectivo.modificar();
             }
         }
         if (e == v.btnEliminarColectivo) {
             validoEmpty = validarEmpty(inputColectivo);
             validoFormato = validarRegEx(v.txtMatriculaColectivo, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
-                m.eliminarColectivo();
+                //m.eliminarColectivo();
+                colectivo.eliminar();
             }
         }
         
@@ -255,7 +278,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
             validoEmpty = validarEmpty(inputConductor);
             validoFormato = validarRut() && validarRegEx(v.txtTelefonoConductor, "^\\+\\d+$", "Telefono");
             if (validoEmpty && validoFormato) {
-                m.insertarConductor();
+                conductor.insertar();
             }
         }
         if (e == v.btnLimpiarConductor) {
@@ -265,14 +288,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
             validoEmpty = validarEmpty(inputConductor);
             validoFormato = validarRut() && validarRegEx(v.txtTelefonoConductor, "^\\+\\d+$", "Telefono");
             if (validoEmpty && validoFormato) {
-                m.modificarConductor();
+                conductor.modificar();
             }
         }
         if (e == v.btnEliminarConductor) {
             validoEmpty = validarEmpty(inputConductor);
             validoFormato = validarRut() && validarRegEx(v.txtTelefonoConductor, "^\\+\\d+$", "Telefono");
             if (validoEmpty && validoFormato) {
-                m.eliminarConductor();
+                conductor.eliminar();
             }
         }
         
@@ -297,6 +320,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         if (e == v.btnLimpiarBuscadoresConductor) {
             limpiarInput(buscadorConductor);
         }
+        m.refrescar();
     }
 
     @Override
@@ -311,6 +335,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         }
     }
     
+    @Override
     public void keyReleased (KeyEvent evt){
         m.refrescar();
     }

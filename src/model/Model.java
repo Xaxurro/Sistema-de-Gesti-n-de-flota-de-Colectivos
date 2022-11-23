@@ -49,9 +49,18 @@ public class Model {
         refrescar();
     }
     
-    private String capitalizar(String s){
-        return s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+    public Colectivo crearColectivo(List<Object> input){
+        return new Colectivo(v, con);
     }
+    
+    public Conductor crearConductor(List<Object> input){
+        return new Conductor(v, con);
+    }
+    
+    public Repuesto crearRepuesto(List<Object> input){
+        return new Repuesto(v, con);
+    }
+    
     
     private Connection conectar(String usuario, String contraseña){
         try {
@@ -127,28 +136,6 @@ public class Model {
             stm.execute("DROP DATABASE Colectivos;");
         } catch (Exception e) {
         }
-    }
-    
-    public boolean existeMatricula(String matricula){
-        try {
-            ppt = con.prepareStatement("SELECT Matricula FROM Colectivo WHERE Matricula = ?;");
-            ppt.setString(1, matricula);
-            return ppt.executeQuery().next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    
-    public boolean existeRut(String rut){
-        try {
-            ppt = con.prepareStatement("SELECT RutConductor FROM Conductor WHERE RutConductor = ?;");
-            ppt.setString(1, rut);
-            return ppt.executeQuery().next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
     
     public void refrescar(){
@@ -237,115 +224,8 @@ public class Model {
             e.printStackTrace();
         }
     }
-    
-    public void insertarColectivo(){
-        try {
-            if (!existeMatricula(v.txtMatriculaColectivo.getText().strip())) {
-                //Insertar Colectivo nuevo
-                ppt = con.prepareStatement("INSERT INTO Colectivo VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-                ppt.setString(1, v.txtMatriculaColectivo.getText().strip().toUpperCase());
-                ppt.setString(2, "------");
-                ppt.setString(3, formato.format(View.dchCompraColectivo.getDate()));
-                ppt.setString(4, formato.format(View.dchSeguroColectivo.getDate()));
-                ppt.setString(5, formato.format(View.dchRevisionColectivo.getDate()));
-                ppt.setInt(6, Integer.valueOf(v.txtKilometrajeColectivo.getText().strip()));
-                ppt.setString(7, capitalizar(v.txtMarcaColectivo.getText().strip()));
-                ppt.setString(8, v.txtVinColectivo.getText().strip().toUpperCase());
-                ppt.setString(9, v.txtMotorColectivo.getText().strip().toUpperCase());
-                ppt.execute();
-                
-                //Si se selecciono un conductor
-                if (v.cmbConductoresColectivo.getSelectedIndex() != 0) {
-                    //Colocarle conductor a nueva matricula
-                    ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ? WHERE Matricula = ?;");
-                    ppt.setString(1, v.cmbConductoresColectivo.getSelectedItem().toString());
-                    ppt.setString(2, v.txtMatriculaColectivo.getText().strip());
-                    ppt.executeUpdate();
-                    
-                    //Colocarle matricula a conductor
-                    System.out.println("model.Model.InsertarColectivo()");
-                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ? WHERE RutConductor = ?;");
-                    ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
-                    ppt.setString(2, v.cmbConductoresColectivo.getSelectedItem().toString());
-                    ppt.executeUpdate();
-                }
-                
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Matricula Duplicada.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void modificarColectivo(){
-        try {
-            if (existeMatricula(v.txtMatriculaColectivo.getText().strip())) {
-                //Actualizar matricula sin conductor
-                ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ?, Compra = ?, Seguro = ?, RevisionTecnica = ?, KilometrajeActual = ?, Marca = ?, Vin = ?, Motor = ? WHERE Matricula = ?;");
-                ppt.setString(1, "------");
-                ppt.setString(2, formato.format(View.dchCompraColectivo.getDate()));
-                ppt.setString(3, formato.format(View.dchSeguroColectivo.getDate()));
-                ppt.setString(4, formato.format(View.dchRevisionColectivo.getDate()));
-                ppt.setInt(5, Integer.valueOf(v.txtKilometrajeColectivo.getText().strip()));
-                ppt.setString(6, capitalizar(v.txtMarcaColectivo.getText().strip()));
-                ppt.setString(7, v.txtVinColectivo.getText().strip().toUpperCase());
-                ppt.setString(8, v.txtMotorColectivo.getText().strip().toUpperCase());
-                ppt.setString(9, v.txtMatriculaColectivo.getText().strip());
-                ppt.executeUpdate();
-                
-                //Quitar conductor
-                ppt = con.prepareStatement("UPDATE Conductor SET Matricula = '------' WHERE Matricula = ?;");
-                ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
-                ppt.executeUpdate();
-                
-                //Si se selecciono a un conductor
-                if (v.cmbConductoresColectivo.getSelectedIndex() != 0) {
-                    //Colocarle el conductor a la matricula
-                    ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ? WHERE Matricula = ?;");
-                    ppt.setString(1, v.cmbConductoresColectivo.getSelectedItem().toString());
-                    ppt.setString(2, v.txtMatriculaColectivo.getText().strip());
-                    ppt.executeUpdate();
-                    
-                    //Colocarle la matricula al conductor
-                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ? WHERE RutConductor = ?;");
-                    ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
-                    ppt.setString(2, v.cmbConductoresColectivo.getSelectedItem().toString());
-                    ppt.executeUpdate();
-                }
-                
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe Matricula.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void eliminarColectivo(){
-        try {
-            if (existeMatricula(v.txtMatriculaColectivo.getText().strip())) {
-                //Quitarle matricula a conductor
-                ppt = con.prepareStatement("UPDATE Conductor SET Matricula = '------' WHERE Matricula = ?;");
-                ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
-                ppt.executeUpdate();
-                
-                //Eliminar colectivo
-                ppt = con.prepareStatement("DELETE FROM Colectivo WHERE Matricula = ?;");
-                ppt.setString(1, v.txtMatriculaColectivo.getText().strip());
-                ppt.execute();
-                
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe Matricula.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+      
+    /*
     public void insertarConductor(){
         try {
             if (!existeRut(v.txtRutConductor.getText().strip())) {
@@ -401,6 +281,11 @@ public class Model {
                 
                 //Si se selecciono a un conductor
                 if (v.cmbColectivosConductor.getSelectedIndex() != 0) {
+                    //Quitar colectivo de conductor
+                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = '------' WHERE Matricula = ?;");
+                    ppt.setString(1, v.cmbColectivosConductor.getSelectedItem().toString());
+                    ppt.executeUpdate();
+                    
                     //Colocarle la matricula al conductor
                     ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ? WHERE RutConductor = ?;");
                     ppt.setString(1, v.cmbColectivosConductor.getSelectedItem().toString());
@@ -444,5 +329,5 @@ public class Model {
             e.printStackTrace();
         }
     }
-
+    */
 }
