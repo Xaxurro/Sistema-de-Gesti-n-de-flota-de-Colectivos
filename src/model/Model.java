@@ -109,22 +109,125 @@ public class Model {
             stm.execute("USE Colectivos;");
 
             //TABLAS
-            stm.execute("CREATE TABLE Colectivo(Matricula Char(6) NOT NULL, RutConductor VarChar(13) NOT NULL, Compra Date, Seguro Date, RevisionTecnica Date, KilometrajeActual Int(7), Marca VarChar(15), Vin VarChar(17), Motor VarChar(12), PRIMARY KEY (Matricula));");
-            stm.execute("INSERT INTO Colectivo VALUES ('------', '------', NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
-            stm.execute("CREATE TABLE Conductor(RutConductor Char(10) NOT NULL, Matricula Char(6) NOT NULL, Nombre VarChar(50), Direccion VarChar(150), Telefono VarChar(12), PRIMARY KEY (RutConductor));");
-            stm.execute("INSERT INTO Conductor VALUES ('------', '------', NULL, NULL, NULL);");
-            stm.execute("CREATE TABLE Repuesto(IdRepuesto int(3) NOT NULL AUTO_INCREMENT, TipoRepuesto VarChar(50), Compra Date, KilometrajeMax Int(7), KilometrajeActual Int(7), Matricula Char(6), PRIMARY KEY (IdRepuesto, TipoRepuesto));");
-            stm.execute("CREATE TABLE Evento(IdEvento int(3) NOT NULL AUTO_INCREMENT, Fecha Date, NombreEvento VarChar(50), Descripcion VarChar(250), Beneficio Int(7), PRIMARY KEY (IdEvento, Fecha));");
-            stm.execute("CREATE TABLE Ganancia(Fecha Date NOT NULL, Matricula Char(6) NOT NULL, Ganancia Int(7), PRIMARY KEY (Fecha, Matricula));");
-            stm.execute("CREATE TABLE Administrador(Usuario VarChar(30) NOT NULL, Contraseña VarChar(30) NOT NULL, PRIMARY KEY (Usuario));");
+            //Colectivo
+            stm.execute("CREATE TABLE Colectivo("
+                    + "Matricula Char(6) NOT NULL, "
+                    + "Compra Date, "
+                    + "KilometrajeActual Int(7), "
+                    + "Marca VarChar(15), "
+                    + "Vin VarChar(17), "
+                    + "Motor VarChar(12), "
+                    + "PRIMARY KEY (Matricula));");
+            
+            //Colectivo-Conductor
+            stm.execute("CREATE TABLE ColectivoConductor("
+                    + "Matricula Char(6) NOT NULL, "
+                    + "RutConductor Char(10) NOT NULL, "
+                    + "Descripcion VarChar(50), "
+                    + "Estado TinyInt(1) NOT NULL, "
+                    + "PRIMARY KEY (Matricula, RutConductor));");
+            
+            //Conductor
+            stm.execute("CREATE TABLE Conductor("
+                    + "RutConductor Char(10) NOT NULL, "
+                    + "Nombre VarChar(50), "
+                    + "Direccion VarChar(150), "
+                    + "Telefono VarChar(12), "
+                    + "PRIMARY KEY (RutConductor));");
+            
+            //Colectivo-Repuesto
+            stm.execute("CREATE TABLE ColectivoRepuesto("
+                    + "Matricula Char(6) NOT NULL, "
+                    + "IdRepuesto Int(3) NOT NULL, "
+                    + "Compra Date, "
+                    + "Cantidad Int(3), "
+                    + "Observacion VarChar(50), "
+                    + "PRIMARY KEY (Matricula, IdRepuesto));");
+            
+            //Repuesto
+            stm.execute("CREATE TABLE Repuesto("
+                    + "IdRepuesto Int(3) NOT NULL AUTO_INCREMENT, "
+                    + "TipoRepuesto VarChar(30), "
+                    + "KilometrajeMax Int(7), "
+                    + "KilometrajeDeUso Int(7), "
+                    + "Stock Int(3), "
+                    + "PRIMARY KEY (IdRepuesto));");
+            
+            //Repuesto-Compra
+            stm.execute("CREATE TABLE RepuestoCompra("
+                    + "IdRepuesto Int(3) NOT NULL,"
+                    + "IdCompra Int(3) NOT NULL,"
+                    + "Cantidad Int(3),"
+                    + "Precio Int(7),"
+                    + "PRIMARY KEY (IdRepuesto, IdCompra));");
+            
+            //Compra
+            stm.execute("CREATE TABLE Compra("
+                    + "IdCompra Int(3) NOT NULL AUTO_INCREMENT,"
+                    + "Compra Date,"
+                    + "PRIMARY KEY (IdCompra));");
+            
+            //Colectivo-Evento
+            stm.execute("CREATE TABLE ColectivoEvento("
+                    + "Matricula Char(6) NOT NULL,"
+                    + "IdEvento Int(3) NOT NULL,"
+                    + "PRIMARY KEY (Matricula, IdEvento));");
+            
+            //Evento
+            stm.execute("CREATE TABLE Evento("
+                    + "IdEvento Int(3) NOT NULL AUTO_INCREMENT, "
+                    + "Fecha Date, "
+                    + "TipoEvento VarChar(30), "
+                    + "NombreEvento VarChar(50), "
+                    + "Descripcion VarChar(150), "
+                    + "Beneficio Int(7), "
+                    + "PRIMARY KEY (IdEvento));");
+            
+            //Ajuste
+            stm.execute("CREATE TABLE Ajuste("
+                    + "IdAjuste Int(3) NOT NULL AUTO_INCREMENT,"
+                    + "Fecha Date,"
+                    + "TipoAjuste VarChar(30),"
+                    + "Motivo VarChar(150), "
+                    + "Cantidad Int(3), "
+                    + "PRIMARY KEY (IdAjuste));");
+            
+            //Ganancia
+            stm.execute("CREATE TABLE Ganancia("
+                    + "Fecha Date NOT NULL, "
+                    + "Matricula Char(6) NOT NULL, "
+                    + "Ganancia Int(7), "
+                    + "PRIMARY KEY (Fecha, Matricula));");
+            
+            //Administrador
+            stm.execute("CREATE TABLE Administrador("
+                    + "Usuario VarChar(30) NOT NULL, "
+                    + "Contraseña VarChar(30) NOT NULL, "
+                    + "PRIMARY KEY (Usuario));");
+            
             
             //CLAVES FORANEAS
-            stm.execute("ALTER TABLE Colectivo ADD CONSTRAINT FK_COLECTIVO_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor);");
-            stm.execute("ALTER TABLE Conductor ADD CONSTRAINT FK_CONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE Repuesto ADD CONSTRAINT FK_REPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
+            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
+            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor);");
+            
+            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
+            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto);");
+            
+            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto);");
+            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_COMPRA FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra);");
+            
+            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
+            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_EVENTO FOREIGN KEY (IdEvento) REFERENCES Evento(IdEvento);");
+            
             stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
             
             //INSERTAR DATOS INICIALES
+            /*
+            stm.execute("INSERT INTO Colectivo VALUES ('------', NULL, NULL, NULL, NULL, NULL);");
+            */
+            /*
+            stm.execute("INSERT INTO Conductor VALUES ('------', '------', NULL, NULL, NULL);");
+            */
             stm.execute("INSERT INTO Administrador VALUES ('admin', '12345');");
         } catch (SQLException e) {
             e.printStackTrace();
