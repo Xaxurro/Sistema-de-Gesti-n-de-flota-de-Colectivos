@@ -92,8 +92,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         inputColectivo.add(v.txtMatriculaColectivo);
         inputColectivo.add(v.cmbConductoresColectivo);
         inputColectivo.add(v.dchCompraColectivo);
-        inputColectivo.add(v.dchSeguroColectivo);
-        inputColectivo.add(v.dchRevisionColectivo);
         inputColectivo.add(v.txtKilometrajeColectivo);
         inputColectivo.add(v.txtMarcaColectivo);
         inputColectivo.add(v.txtVinColectivo);
@@ -104,10 +102,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         
         //CONDUCTOR
         inputConductor.add(v.txtRutConductor);
+        inputConductor.add(v.cmbColectivosConductor);
         inputConductor.add(v.txtNombreConductor);
         inputConductor.add(v.txtDireccionConductor);
         inputConductor.add(v.txtTelefonoConductor);
-        inputConductor.add(v.cmbColectivosConductor);
         
         buscadorConductor.add(v.txtBusquedaTablaConductorNombre);
         buscadorConductor.add(v.txtBusquedaTablaConductorRut);
@@ -124,6 +122,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         conductor = m.crearConductor(inputColectivo);
         repuesto = m.crearRepuesto(inputColectivo);
         
+        m.refrescar();
+        /*
         colectivo.conectarTabla(conductor);
         colectivo.conectarTabla(repuesto);
         
@@ -132,6 +132,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
         
         repuesto.conectarTabla(colectivo);
         repuesto.conectarTabla(conductor);
+        */
     }
     
     //VALIDACIONES
@@ -345,5 +346,5 @@ public class Controller implements ActionListener, MouseListener, KeyListener{
     public void mouseEntered(MouseEvent eve){};
     public void mouseExited(MouseEvent eve){};
     public void keyPressed (KeyEvent e){}
-    public void keyTyped (KeyEvent e){};    
+    public void keyTyped (KeyEvent e){};
 }

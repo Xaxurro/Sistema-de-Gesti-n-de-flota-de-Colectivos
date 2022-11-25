@@ -24,8 +24,6 @@ public class Colectivo extends Tabla{
     private String matricula;
     private String rutConductor;
     private String compra;
-    private String seguro;
-    private String revisionTecnica;
     private int kilometrajeActual;
     private String marca;
     private String vin;
@@ -33,11 +31,14 @@ public class Colectivo extends Tabla{
     
     public Colectivo(View v, Connection con){
         super(v, con);
-        this.tabla = "Colectivo";
-        this.columna_pk = "Matricula";
-        this.campos = new String[] {"Matricula", "RutConductor", "Compra", "Seguro", "RevisionTecnica", "KilometrajeActual", "Marca", "Vin", "Motor"};
-        this.sqlInsertar = "INSERT INTO Colectivo VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        this.sqlModificar = "UPDATE Colectivo SET RutConductor = ?, Compra = ?, Seguro = ?, RevisionTecnica = ?, KilometrajeActual = ?, Marca = ?, Vin = ?, Motor = ? WHERE Matricula = ?";
+        this.nombre = "Colectivo";
+        this.pk = "Matricula";
+        //this.fk = "RutConductor";
+        this.campos = new String[] {"Matricula", "Compra", "KilometrajeActual", "Marca", "Vin", "Motor"};
+        //this.buscadores = new JTextField[] {v.txtBusquedaTablaColectivosMatricula, v.txtBusquedaTablaColectivosRut};
+        
+        this.sqlInsertar = "INSERT INTO Colectivo VALUES (?, ?, ?, ?, ?, ?);";
+        this.sqlModificar = "UPDATE Colectivo SET Compra = ?, KilometrajeActual = ?, Marca = ?, Vin = ?, Motor = ? WHERE Matricula = ?";
         this.sqlEliminar = "DELETE FROM Colectivo WHERE Matricula = ?;";
     }
     
@@ -45,57 +46,77 @@ public class Colectivo extends Tabla{
         matricula = v.txtMatriculaColectivo.getText().strip().toUpperCase();
         rutConductor = v.cmbConductoresColectivo.getSelectedItem().toString();
         compra = formato.format(v.dchCompraColectivo.getDate());
-        seguro = formato.format(v.dchSeguroColectivo.getDate());
-        revisionTecnica = formato.format(v.dchRevisionColectivo.getDate());
         kilometrajeActual = Integer.valueOf(v.txtKilometrajeColectivo.getText().strip());
         marca = capitalizar(v.txtMarcaColectivo.getText().strip());
         vin = v.txtVinColectivo.getText().strip().toUpperCase();
         motor = v.txtMotorColectivo.getText().strip().toUpperCase();
     }
     
-    public void enlazar(){
-        conductor.quitar(COL_MATRICULA, matricula);
-        quitar(COL_RUT_CONDUCTOR, rutConductor);
-        conductor.añadir(COL_MATRICULA, matricula, COL_RUT_CONDUCTOR, rutConductor);
-        añadir(COL_RUT_CONDUCTOR, rutConductor, COL_MATRICULA, matricula);
+    private void quitarConductor(){
+        try {
+            ppt = con.prepareStatement("UPDATE ColectivoConductor SET Estado = 0 WHERE Matricula = ? OR RutConductor = ?;");
+            ppt.setString(1, matricula);
+            ppt.setString(2, rutConductor);
+            ppt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
+    private void añadirConductor() {
+        try {
+            quitarConductor();
+            if (!rutConductor.equals("------")) {
+                ppt = con.prepareStatement("SELECT Estado FROM ColectivoConductor WHERE Matricula = ? AND RutConductor = ?;");
+                ppt.setString(1, matricula);
+                ppt.setString(2, rutConductor);
+                rs = ppt.executeQuery();
+                if(rs.next()){
+                    ppt = con.prepareStatement("UPDATE ColectivoConductor SET Estado = 1 WHERE Matricula = ? AND RutConductor = ?;");
+                    ppt.setString(1, matricula);
+                    ppt.setString(2, rutConductor);
+                    ppt.executeUpdate();
+                } else {
+                    ppt = con.prepareStatement("INSERT INTO ColectivoConductor(Matricula, RutConductor, Estado) VALUES (?, ?, 1);");
+                    ppt.setString(1, matricula);
+                    ppt.setString(2, rutConductor);
+                    ppt.execute();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //OK
     public void insertar(){
         getInput();
         if (!existe(matricula)) {
-            super.insertar(new Object[] {matricula, "------", compra, seguro, revisionTecnica, kilometrajeActual, marca, vin, motor});
-
-            //Si se selecciono un conductor, se quita del colectivo actual, de la tabla conductores, ingresa al colectivo nuevo, y de la tabla conductores
-            if (!rutConductor.equals("------")) {
-                enlazar();
-            }
+            asignarDatos(sqlInsertar, new Object[] {matricula, compra, kilometrajeActual, marca, vin, motor});
+            
+            añadirConductor();
         } else {
             JOptionPane.showMessageDialog(null, "Matricula Duplicada.");
         }
     }
     
+    //OK
     public void modificar(){
         getInput();
         if (existe(matricula)) {
-            //Actualizar matricula sin conductor
-            super.modificar(new Object[] {rutConductor, compra, seguro, revisionTecnica, kilometrajeActual, marca, vin, motor, matricula});
-            //Quitar Matricula a conductor
-            conductor.quitar(COL_MATRICULA, matricula);
-
-            //Si se selecciono a un conductor
-            if (!rutConductor.equals("------")) {
-                enlazar();
-            }
+            asignarDatos(sqlModificar, new Object[] {compra, kilometrajeActual, marca, vin, motor, matricula});
+            
+            añadirConductor();
         } else {
             JOptionPane.showMessageDialog(null, "No existe Matricula.");
         }
     }
     
+    //OK
     public void eliminar(){
         getInput();
         if (existe(matricula)) {
-            conductor.quitar(COL_MATRICULA, matricula);
-            super.eliminar(matricula);
+            asignarDatos(sqlEliminar, new Object[] {matricula});
         }
     }
 }

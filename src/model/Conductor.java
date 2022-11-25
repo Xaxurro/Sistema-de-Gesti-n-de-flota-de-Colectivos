@@ -23,66 +23,82 @@ import view.View;
 public class Conductor extends Tabla{
     private String rutConductor;
     private String matricula;
-    private String nombre;
+    private String nombreConductor;
     private String direccion;
     private String telefono;
     
     public Conductor(View v, Connection con){
         super(v, con);
-        this.tabla = "Conductor";
-        this.columna_pk = "RutConductor";
+        this.nombre = "Conductor";
+        this.pk = "RutConductor";
         this.campos = new String[] {"RutConductor", "Matricula", "Nombre", "Direccion", "Telefono"};
         
         this.sqlInsertar = "INSERT INTO Conductor VALUES (?, ?, ?, ?);";
-        this.sqlModificar = "UPDATE Conductor SET Matricula = ?, Nombre = ?, Direccion = ?, Telefono = ? WHERE RutConductor = ?";
+        this.sqlModificar = "UPDATE Conductor SET Nombre = ?, Direccion = ?, Telefono = ? WHERE RutConductor = ?";
         this.sqlEliminar = "DELETE FROM Conductor WHERE RutConductor = ?;";
     }
     
     public void getInput(){
         rutConductor = v.txtRutConductor.getText().strip();
         matricula = v.cmbColectivosConductor.getSelectedItem().toString();
-        nombre = capitalizar(v.txtNombreConductor.getText().strip());
+        nombreConductor = capitalizar(v.txtNombreConductor.getText().strip());
         direccion = capitalizar(v.txtDireccionConductor.getText().strip());
         telefono = v.txtTelefonoConductor.getText().strip();
     }
     
-    public void enlazar(){
-        colectivo.quitar(COL_RUT_CONDUCTOR, rutConductor);
-        quitar(COL_MATRICULA, matricula);
-        colectivo.añadir(COL_RUT_CONDUCTOR, rutConductor, COL_MATRICULA, matricula);
-        añadir(COL_MATRICULA, matricula, COL_RUT_CONDUCTOR, rutConductor);
+    private void quitarColectivo(){
+        try {
+            ppt = con.prepareStatement("UPDATE ColectivoConductor SET Estado = 0 WHERE Matricula = ? OR RutConductor = ?;");
+            ppt.setString(1, matricula);
+            ppt.setString(2, rutConductor);
+            ppt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void añadirColectivo() {
+        try {
+            quitarColectivo();
+            if (!rutConductor.equals("------")) {
+                ppt = con.prepareStatement("SELECT Estado FROM ColectivoConductor WHERE Matricula = ? AND RutConductor = ?;");
+                ppt.setString(1, matricula);
+                ppt.setString(2, rutConductor);
+                rs = ppt.executeQuery();
+                if(rs.next()){
+                    ppt = con.prepareStatement("UPDATE ColectivoConductor SET Estado = 1 WHERE Matricula = ? AND RutConductor = ?;");
+                    ppt.setString(1, matricula);
+                    ppt.setString(2, rutConductor);
+                    ppt.executeUpdate();
+                } else {
+                    ppt = con.prepareStatement("INSERT INTO ColectivoConductor(Matricula, RutConductor, Estado) VALUES (?, ?, 1);");
+                    ppt.setString(1, matricula);
+                    ppt.setString(2, rutConductor);
+                    ppt.execute();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     public void insertar(){
         getInput();
         if (!existe(rutConductor)) {
-            super.insertar(new Object[] {rutConductor, "------", nombre, direccion, telefono});
+            asignarDatos(sqlInsertar, new Object[] {rutConductor, nombreConductor, direccion, telefono});
 
-            //Si se selecciono un Colectivo, se enlaza
-            if (!matricula.equals("------")) {
-                enlazar();
-            }
+            añadirColectivo();
         } else {
             JOptionPane.showMessageDialog(null, "Rut Duplicado.");
         }
     }
     
-    //TERMINAR
     public void modificar(){
         getInput();
         if (existe(rutConductor)) {
-            //Actualizar Conductor sin Colectivo
-            super.modificar(new Object[] {matricula, nombre, direccion, telefono, rutConductor});
-
-            //Quitar Matricula a conductor
-            quitar(COL_MATRICULA, matricula);
+            asignarDatos(sqlModificar, new Object[] {nombreConductor, direccion, telefono, rutConductor});
             
-            //Si se selecciono a un conductor
-            if (!matricula.equals("------")) {
-                enlazar();
-            }
-
-            //ACTUALIZAR VISTA
+            añadirColectivo();
         } else {
             JOptionPane.showMessageDialog(null, "No existe Rut.");
         }
@@ -91,8 +107,7 @@ public class Conductor extends Tabla{
     public void eliminar(){
         getInput();
         if (existe(rutConductor)) {
-            colectivo.quitar(COL_RUT_CONDUCTOR, rutConductor);
-            super.eliminar(matricula);
+            asignarDatos(sqlEliminar, new Object[] {rutConductor});
         }
     }
 }

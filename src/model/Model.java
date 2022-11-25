@@ -46,18 +46,29 @@ public class Model {
             e.printStackTrace();
         }
         this.v = v;
-        refrescar();
     }
     
     public Colectivo crearColectivo(List<Object> input){
+        /*
+        this.colectivo = new Colectivo(v, con);
+        return this.colectivo;
+        */
         return new Colectivo(v, con);
     }
     
     public Conductor crearConductor(List<Object> input){
+        /*
+        this.conductor = new Conductor(v, con);
+        return this.conductor;
+        */
         return new Conductor(v, con);
     }
     
     public Repuesto crearRepuesto(List<Object> input){
+        /*
+        this.repuesto = new Repuesto(v, con);
+        return this.repuesto;
+        */
         return new Repuesto(v, con);
     }
     
@@ -80,9 +91,9 @@ public class Model {
                 System.exit(0);
             }
             return con;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e){
+            System.exit(0);
         }
         return null;
     }
@@ -186,6 +197,7 @@ public class Model {
             //Ajuste
             stm.execute("CREATE TABLE Ajuste("
                     + "IdAjuste Int(3) NOT NULL AUTO_INCREMENT,"
+                    + "IdRepuesto Int(3) NOT NULL, "
                     + "Fecha Date,"
                     + "TipoAjuste VarChar(30),"
                     + "Motivo VarChar(150), "
@@ -207,19 +219,21 @@ public class Model {
             
             
             //CLAVES FORANEAS
-            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor);");
+            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor) ON DELETE CASCADE;");
             
-            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto);");
+            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
             
-            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto);");
-            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_COMPRA FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra);");
+            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_COMPRA FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra) ON DELETE CASCADE;");
             
-            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
-            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_EVENTO FOREIGN KEY (IdEvento) REFERENCES Evento(IdEvento);");
+            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_EVENTO FOREIGN KEY (IdEvento) REFERENCES Evento(IdEvento) ON DELETE CASCADE;");
             
-            stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula);");
+            stm.execute("ALTER TABLE Ajuste ADD CONSTRAINT FK_AJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
+            
+            stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
             
             //INSERTAR DATOS INICIALES
             /*
@@ -246,24 +260,29 @@ public class Model {
             // Colectivos
             v.cmbMatriculaRepuesto.removeAllItems();
             v.cmbMatriculaRepuesto.addItem("------");
-            v.cmbMatriculaRepuesto.setSelectedIndex(0);
             v.cmbColectivosConductor.removeAllItems();
             v.cmbColectivosConductor.addItem("------");
-            v.cmbColectivosConductor.setSelectedIndex(0);
             DefaultTableModel tmColectivos = (DefaultTableModel) v.tblColectivos.getModel();
             tmColectivos.setRowCount(0);
-            ppt = con.prepareStatement("SELECT * FROM Colectivo WHERE Matricula LIKE ? AND RutConductor LIKE ? AND Matricula != ? ORDER BY Matricula ASC;");
+            ppt = con.prepareStatement("SELECT * FROM Colectivo WHERE Matricula LIKE ? ORDER BY Matricula ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaColectivosMatricula.getText().strip() + '%');
-            ppt.setString(2, '%' + v.txtBusquedaTablaColectivosRut.getText().strip() + '%');
-            ppt.setString(3, "------");
             rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("Matricula"), rs.getString("RutConductor"), rs.getString("Compra"), rs.getString("Seguro"), rs.getString("RevisionTecnica"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
+                Object [] fila = {rs.getString("Matricula"), "------", rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
                 v.cmbMatriculaRepuesto.addItem(rs.getString("Matricula"));
                 v.cmbColectivosConductor.addItem(rs.getString("Matricula"));
             }
+            for (int row = 0; row < tmColectivos.getRowCount(); row++) {
+                ppt = con.prepareStatement("SELECT RutConductor FROM ColectivoConductor WHERE Matricula = ? AND Estado = 1 ORDER BY Matricula ASC;");
+                ppt.setString(1, tmColectivos.getValueAt(row, 0).toString());
+                rs = ppt.executeQuery();
+                if (rs.next()) {
+                    tmColectivos.setValueAt(rs.getString("RutConductor"), row, 1);
+                }
+            }
             v.tblColectivos.setModel(tmColectivos);
+            
             
             // Conductores 
             v.cmbConductoresColectivo.removeAllItems();
@@ -271,22 +290,29 @@ public class Model {
             v.cmbConductoresColectivo.setSelectedIndex(0);
             DefaultTableModel tmConductores = (DefaultTableModel) v.tblConductores.getModel();
             tmConductores.setRowCount(0);
-            ppt = con.prepareStatement("SELECT * FROM Conductor WHERE Nombre LIKE ? AND RutConductor LIKE ? AND RutConductor != ? ORDER BY RutConductor ASC;");
+            ppt = con.prepareStatement("SELECT * FROM Conductor WHERE Nombre LIKE ? AND RutConductor LIKE ? ORDER BY RutConductor ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaConductorNombre.getText().strip() + '%');
             ppt.setString(2, '%' + v.txtBusquedaTablaConductorRut.getText().strip() + '%');
-            ppt.setString(3, "------");
             rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("RutConductor"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono"), rs.getString("Matricula")};
+                Object [] fila = {rs.getString("RutConductor"), "------", rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
                 tmConductores.addRow(fila);
                 v.cmbConductoresColectivo.addItem(rs.getString("RutConductor"));
+            }
+            for (int row = 0; row < tmConductores.getRowCount(); row++) {
+                ppt = con.prepareStatement("SELECT Matricula FROM ColectivoConductor WHERE RutConductor = ? AND Estado = 1 ORDER BY RutConductor ASC;");
+                ppt.setString(1, tmConductores.getValueAt(row, 0).toString());
+                rs = ppt.executeQuery();
+                if (rs.next()) {
+                    tmConductores.setValueAt(rs.getString("Matricula"), row, 1);
+                }
             }
             v.tblConductores.setModel(tmConductores);
             
             // Repuestos
             DefaultTableModel tmRepuestos = (DefaultTableModel) v.tblRepuestos.getModel();
             tmRepuestos.setRowCount(0);
-            rs = stm.executeQuery("SELECT * FROM Repuesto ORDER BY Matricula ASC;");
+            rs = stm.executeQuery("SELECT * FROM Repuesto ORDER BY IdRepuesto ASC;");
             while (rs.next()) {
                 Object [] fila = {rs.getString("TipoRepuesto"), rs.getString("Matricula"), rs.getString("Compra"), rs.getString("KilometrajeMax"), rs.getString("KilometrajeActual")};
                 tmRepuestos.addRow(fila);
@@ -327,110 +353,4 @@ public class Model {
             e.printStackTrace();
         }
     }
-      
-    /*
-    public void insertarConductor(){
-        try {
-            if (!existeRut(v.txtRutConductor.getText().strip())) {
-                //Insertar conductor nuevo sin matricula
-                ppt = con.prepareStatement("INSERT INTO Conductor VALUES (?, ?, ?, ?, ?);");
-                ppt.setString(1, v.txtRutConductor.getText().strip().toUpperCase());
-                ppt.setString(2, "------");
-                ppt.setString(3, capitalizar(v.txtNombreConductor.getText().strip()));
-                ppt.setString(4, capitalizar(v.txtDireccionConductor.getText().strip()));
-                ppt.setString(5, v.txtTelefonoConductor.getText().strip());
-                ppt.execute();
-                
-                //Si se selecciono un colectivo
-                if (v.cmbColectivosConductor.getSelectedIndex() != 0) {
-                    //Colocarle colectivo a conductor
-                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ? WHERE RutConductor = ?;");
-                    ppt.setString(1, v.cmbColectivosConductor.getSelectedItem().toString());
-                    ppt.setString(2, v.txtRutConductor.getText().strip());
-                    ppt.executeUpdate();
-
-                    //Colocarle conductor a colectivo
-                    ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ? WHERE Matricula = ?;");
-                    ppt.setString(1, v.txtRutConductor.getText().strip());
-                    ppt.setString(2, v.cmbColectivosConductor.getSelectedItem().toString());
-                    ppt.executeUpdate();
-                }
-                
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "Rut Duplicado.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void modificarConductor(){
-        try {
-            if (existeRut(v.txtRutConductor.getText().strip().toUpperCase())) {
-                //Actualizar conductor sin matricula
-                ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ?, Nombre = ?, Direccion = ?, Telefono= ? WHERE RutConductor = ?;");
-                ppt.setString(1, "------");
-                ppt.setString(2, capitalizar(v.txtNombreConductor.getText().strip()));
-                ppt.setString(3, capitalizar(v.txtDireccionConductor.getText().strip()));
-                ppt.setString(4, v.txtTelefonoConductor.getText().strip());
-                ppt.setString(5, v.txtRutConductor.getText().strip());
-                ppt.executeUpdate();
-                
-                //Quitar conductor de colectivo
-                ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = ?;");
-                ppt.setString(1, v.txtRutConductor.getText().strip());
-                ppt.executeUpdate();
-                
-                //Si se selecciono a un conductor
-                if (v.cmbColectivosConductor.getSelectedIndex() != 0) {
-                    //Quitar colectivo de conductor
-                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = '------' WHERE Matricula = ?;");
-                    ppt.setString(1, v.cmbColectivosConductor.getSelectedItem().toString());
-                    ppt.executeUpdate();
-                    
-                    //Colocarle la matricula al conductor
-                    ppt = con.prepareStatement("UPDATE Conductor SET Matricula = ? WHERE RutConductor = ?;");
-                    ppt.setString(1, v.cmbColectivosConductor.getSelectedItem().toString());
-                    ppt.setString(2, v.txtRutConductor.getText().strip());
-                    ppt.executeUpdate();
-                    
-                    //Colocarle el conductor a la matricula
-                    ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = ? WHERE Matricula = ?;");
-                    ppt.setString(1, v.txtRutConductor.getText().strip());
-                    ppt.setString(2, v.cmbColectivosConductor.getSelectedItem().toString());
-                    ppt.executeUpdate();
-                }
-                
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe Rut.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void eliminarConductor(){
-        try {
-            if (existeRut(v.txtRutConductor.getText().strip().toUpperCase())) {
-                //Quitarle conductor a colectivo
-                ppt = con.prepareStatement("UPDATE Colectivo SET RutConductor = '------' WHERE RutConductor = ?;");
-                ppt.setString(1, v.txtRutConductor.getText().strip());
-                ppt.executeUpdate();
-                
-                //Eliminar Conductor
-                ppt = con.prepareStatement("DELETE FROM Conductor WHERE RutConductor = ?;");
-                ppt.setString(1, v.txtRutConductor.getText().strip());
-                ppt.execute();
-                
-                refrescar();
-            } else {
-                JOptionPane.showMessageDialog(null, "No existe Rut.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 }

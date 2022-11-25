@@ -32,10 +32,12 @@ public class Tabla {
     
     public SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
     
-    public String tabla = "";
-    public String columna_pk = "";
-    public String valor_pk = "";
+    public String nombre = "";
+    public String pk = "";
+    //public String fk = "";
     public String[] campos = null;
+    
+    //public JTextField[] buscadores = null;
     
     public final String COL_MATRICULA = "Matricula";
     public final String COL_RUT_CONDUCTOR = "RutConductor";
@@ -74,7 +76,7 @@ public class Tabla {
     
     public boolean existe(String registro){
         try {
-            ppt = con.prepareStatement("SELECT " + columna_pk + " FROM " + tabla + " WHERE " + columna_pk + " = ?;");
+            ppt = con.prepareStatement("SELECT " + pk + " FROM " + nombre + " WHERE " + pk + " = ?;");
             ppt.setString(1, registro);
             return ppt.executeQuery().next();
         } catch (SQLException e) {
@@ -83,28 +85,9 @@ public class Tabla {
         return false;
     }
     
-    public String asignarEspacios(int length){
-        String sql = "(?";
-        for (int i = 1; i < length; i++) {
-            sql += ", ?";
-        }
-        sql += ");";
-        return sql;
-    }
-    
-    public String asignarUpdate(int length){
-        String sql = "";
-        for (int i = 0; i < length; i++) {
-            sql += campos[i] + " = ?";
-            if (i != length - 1) {
-                sql += ", ";
-            }
-        }
-        return sql;
-    }
-    
-    public void asignarDatos(Object[] datos){
+    public void asignarDatos(String sql, Object[] datos){
         try {
+            ppt = con.prepareStatement(sql);
             for (int i = 0; i < datos.length; i++) {
                 if (datos[i] instanceof String) {
                     ppt.setString(i+1, datos[i].toString());
@@ -113,6 +96,7 @@ public class Tabla {
                     ppt.setInt(i+1, (int)datos[i]);
                 }
             }
+            ppt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -120,7 +104,7 @@ public class Tabla {
     
     public void quitar(String columna, String registro){
         try {
-            ppt = con.prepareStatement("UPDATE " + tabla + " SET " + columna + " = '------' WHERE " + columna + " = ?;");
+            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columna + " = '------' WHERE " + columna + " = ?;");
             ppt.setString(1, registro);
             ppt.executeUpdate();
         } catch (SQLException e) {
@@ -128,9 +112,10 @@ public class Tabla {
         }
     }
     
+    
     public void añadir(String columnaAModificar, String registroAAñadir, String columnaABuscar, String registroABuscar){
         try {
-            ppt = con.prepareStatement("UPDATE " + tabla + " SET " + columnaAModificar + " = ? WHERE " + columnaABuscar + " = ?;");
+            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columnaAModificar + " = ? WHERE " + columnaABuscar + " = ?;");
             ppt.setString(1, registroAAñadir);
             ppt.setString(2, registroABuscar);
             ppt.executeUpdate();
@@ -139,11 +124,11 @@ public class Tabla {
         }
     }
     
+    /*
     public void insertar(Object[] datos){
         try {
             ppt = con.prepareStatement(sqlInsertar);
             asignarDatos(datos);
-            System.out.println(ppt);
             ppt.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,4 +154,5 @@ public class Tabla {
             e.printStackTrace();
         }
     }
+    */
 }
