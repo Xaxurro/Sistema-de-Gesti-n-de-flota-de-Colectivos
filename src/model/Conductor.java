@@ -31,7 +31,7 @@ public class Conductor extends Tabla{
         super(v, con);
         this.nombre = "Conductor";
         this.pk = "RutConductor";
-        this.campos = new String[] {"RutConductor", "Matricula", "Nombre", "Direccion", "Telefono"};
+        //this.campos = new String[] {"RutConductor", "Matricula", "Nombre", "Direccion", "Telefono"};
         
         this.sqlInsertar = "INSERT INTO Conductor VALUES (?, ?, ?, ?);";
         this.sqlModificar = "UPDATE Conductor SET Nombre = ?, Direccion = ?, Telefono = ? WHERE RutConductor = ?";
@@ -39,11 +39,11 @@ public class Conductor extends Tabla{
     }
     
     public void getInput(){
-        rutConductor = v.txtRutConductor.getText().strip();
-        matricula = v.cmbColectivosConductor.getSelectedItem().toString();
-        nombreConductor = capitalizar(v.txtNombreConductor.getText().strip());
-        direccion = capitalizar(v.txtDireccionConductor.getText().strip());
-        telefono = v.txtTelefonoConductor.getText().strip();
+        rutConductor = v.txtConductorRut.getText().strip();
+        matricula = v.cmbConductorColectivos.getSelectedItem().toString();
+        nombreConductor = capitalizar(v.txtConductorNombre.getText().strip());
+        direccion = capitalizar(v.txtConductorDireccion.getText().strip());
+        telefono = v.txtConductorTelefono.getText().strip();
     }
     
     private void quitarColectivo(){

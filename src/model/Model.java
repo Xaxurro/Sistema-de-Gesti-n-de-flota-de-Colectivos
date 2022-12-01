@@ -9,8 +9,10 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -70,6 +72,14 @@ public class Model {
         return this.repuesto;
         */
         return new Repuesto(v, con);
+    }
+    
+    public Evento crearEvento(List<Object> input){
+        /*
+        this.repuesto = new Repuesto(v, con);
+        return this.repuesto;
+        */
+        return new Evento(v, con);
     }
     
     
@@ -258,20 +268,22 @@ public class Model {
     public void refrescar(){
         try {  
             // Colectivos
+            /*
             v.cmbMatriculaRepuesto.removeAllItems();
             v.cmbMatriculaRepuesto.addItem("------");
-            v.cmbColectivosConductor.removeAllItems();
-            v.cmbColectivosConductor.addItem("------");
+            */
+            v.cmbConductorColectivos.removeAllItems();
+            v.cmbConductorColectivos.addItem("------");
             DefaultTableModel tmColectivos = (DefaultTableModel) v.tblColectivos.getModel();
             tmColectivos.setRowCount(0);
             ppt = con.prepareStatement("SELECT * FROM Colectivo WHERE Matricula LIKE ? ORDER BY Matricula ASC;");
-            ppt.setString(1, '%' + v.txtBusquedaTablaColectivosMatricula.getText().strip() + '%');
+            ppt.setString(1, '%' + v.txtBusquedaTablaColectivoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
                 Object [] fila = {rs.getString("Matricula"), "------", rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
-                v.cmbMatriculaRepuesto.addItem(rs.getString("Matricula"));
-                v.cmbColectivosConductor.addItem(rs.getString("Matricula"));
+                //v.cmbMatriculaRepuesto.addItem(rs.getString("Matricula"));
+                v.cmbConductorColectivos.addItem(rs.getString("Matricula"));
             }
             for (int row = 0; row < tmColectivos.getRowCount(); row++) {
                 ppt = con.prepareStatement("SELECT RutConductor FROM ColectivoConductor WHERE Matricula = ? AND Estado = 1 ORDER BY Matricula ASC;");
@@ -285,9 +297,9 @@ public class Model {
             
             
             // Conductores 
-            v.cmbConductoresColectivo.removeAllItems();
-            v.cmbConductoresColectivo.addItem("------");
-            v.cmbConductoresColectivo.setSelectedIndex(0);
+            v.cmbColectivoConductores.removeAllItems();
+            v.cmbColectivoConductores.addItem("------");
+            v.cmbColectivoConductores.setSelectedIndex(0);
             DefaultTableModel tmConductores = (DefaultTableModel) v.tblConductores.getModel();
             tmConductores.setRowCount(0);
             ppt = con.prepareStatement("SELECT * FROM Conductor WHERE Nombre LIKE ? AND RutConductor LIKE ? ORDER BY RutConductor ASC;");
@@ -297,7 +309,7 @@ public class Model {
             while (rs.next()) {
                 Object [] fila = {rs.getString("RutConductor"), "------", rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
                 tmConductores.addRow(fila);
-                v.cmbConductoresColectivo.addItem(rs.getString("RutConductor"));
+                v.cmbColectivoConductores.addItem(rs.getString("RutConductor"));
             }
             for (int row = 0; row < tmConductores.getRowCount(); row++) {
                 ppt = con.prepareStatement("SELECT Matricula FROM ColectivoConductor WHERE RutConductor = ? AND Estado = 1 ORDER BY RutConductor ASC;");
@@ -318,6 +330,26 @@ public class Model {
                 tmRepuestos.addRow(fila);
             }
             v.tblRepuestos.setModel(tmRepuestos);
+            
+            //Eventos
+            DefaultTableModel tmEventos = (DefaultTableModel) v.tblEventos.getModel();
+            tmEventos.setRowCount(0);
+            if (v.cmbBusquedaTablaEventoTipo.getSelectedIndex() == 0) {
+                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND NombreEvento LIKE ? ORDER BY Fecha DESC;");
+                ppt.setString(2, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
+            } else {
+                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND TipoEvento = ? AND NombreEvento LIKE ? ORDER BY Fecha DESC;");
+                ppt.setString(2, v.cmbBusquedaTablaEventoTipo.getSelectedItem().toString());
+                ppt.setString(3, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
+            }
+            ppt.setString(1, formato.format((v.dchBusquedaTablaEventoFecha.getDate() == null) ? new Date(1000000L) : v.dchBusquedaTablaEventoFecha.getDate()));
+            rs = ppt.executeQuery();
+            while (rs.next()) {
+                Object [] fila = {rs.getInt("IdEvento"), rs.getDate("Fecha"), rs.getString("TipoEvento"), rs.getString("NombreEvento"), rs.getInt("Beneficio")};
+                tmEventos.addRow(fila);
+            }
+            v.tblRepuestos.setModel(tmRepuestos);
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -326,14 +358,15 @@ public class Model {
     public void consultarValores(JTable tabla, List<Object> inputList){
         try {
             int fila = tabla.getSelectedRow();
+            Object input = null;
+            Object valor = null;
             
             JComboBox cb = null;
             JTextField tf = null;
             JDateChooser dc = null;
-            Object input = null;
-            Object valor = null;
+            JLabel lbl = null;
             
-            for (int i = 0; i < inputList.size(); i++) {
+            for (int i = 0; i < tabla.getColumnCount(); i++) {
                 input = inputList.get(i);
                 valor = tabla.getValueAt(fila, i);
                 if (input instanceof JTextField) {
@@ -347,6 +380,10 @@ public class Model {
                 if (input instanceof JComboBox) {
                     cb = (JComboBox) input;
                     cb.setSelectedItem(valor);
+                }
+                if (input instanceof JLabel) {
+                    lbl = (JLabel) input;
+                    lbl.setText(valor.toString());
                 }
             }
         } catch (ParseException e) {

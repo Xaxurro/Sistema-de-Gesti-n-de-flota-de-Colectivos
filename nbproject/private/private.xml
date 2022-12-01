@@ -5,14 +5,12 @@
         <group>
             <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Model.java</file>
             <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Repuesto.java</file>
-            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/test/PLACEHOLDER/placeholder.java</file>
-            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/test/PLACEHOLDER/Test.java</file>
-            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Conductor.java</file>
+            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Evento.java</file>
             <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/controller/Controller.java</file>
-            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/principal/Principal.java</file>
-            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Colectivo.java</file>
-            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Tabla.java</file>
+            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Conductor.java</file>
             <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/view/View.java</file>
+            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Tabla.java</file>
+            <file>file:/C:/Users/Admn/OneDrive/Escritorio/Programas%20(Clase)/Java/Sistema-de-Gestion-de-flota-de-Colectivos/src/model/Colectivo.java</file>
         </group>
     </open-files>
 </project-private>

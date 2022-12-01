@@ -34,8 +34,8 @@ public class Colectivo extends Tabla{
         this.nombre = "Colectivo";
         this.pk = "Matricula";
         //this.fk = "RutConductor";
-        this.campos = new String[] {"Matricula", "Compra", "KilometrajeActual", "Marca", "Vin", "Motor"};
-        //this.buscadores = new JTextField[] {v.txtBusquedaTablaColectivosMatricula, v.txtBusquedaTablaColectivosRut};
+        //this.campos = new String[] {"Matricula", "Compra", "KilometrajeActual", "Marca", "Vin", "Motor"};
+        //this.buscadores = new JTextField[] {v.txtBusquedaTablaColectivoMatricula, v.txtBusquedaTablaColectivoRut};
         
         this.sqlInsertar = "INSERT INTO Colectivo VALUES (?, ?, ?, ?, ?, ?);";
         this.sqlModificar = "UPDATE Colectivo SET Compra = ?, KilometrajeActual = ?, Marca = ?, Vin = ?, Motor = ? WHERE Matricula = ?";
@@ -43,13 +43,13 @@ public class Colectivo extends Tabla{
     }
     
     public void getInput(){
-        matricula = v.txtMatriculaColectivo.getText().strip().toUpperCase();
-        rutConductor = v.cmbConductoresColectivo.getSelectedItem().toString();
-        compra = formato.format(v.dchCompraColectivo.getDate());
-        kilometrajeActual = Integer.valueOf(v.txtKilometrajeColectivo.getText().strip());
-        marca = capitalizar(v.txtMarcaColectivo.getText().strip());
-        vin = v.txtVinColectivo.getText().strip().toUpperCase();
-        motor = v.txtMotorColectivo.getText().strip().toUpperCase();
+        matricula = v.txtColectivoMatricula.getText().strip().toUpperCase();
+        rutConductor = v.cmbColectivoConductores.getSelectedItem().toString();
+        compra = formato.format(v.dchColectivoCompra.getDate());
+        kilometrajeActual = Integer.valueOf(v.txtColectivoKilometraje.getText().strip());
+        marca = capitalizar(v.txtColectivoMarca.getText().strip());
+        vin = v.txtColectivoVin.getText().strip().toUpperCase();
+        motor = v.txtColectivoMotor.getText().strip().toUpperCase();
     }
     
     private void quitarConductor(){

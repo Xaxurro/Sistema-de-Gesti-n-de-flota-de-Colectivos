@@ -35,7 +35,7 @@ public class Tabla {
     public String nombre = "";
     public String pk = "";
     //public String fk = "";
-    public String[] campos = null;
+    //public String[] campos = null;
     
     //public JTextField[] buscadores = null;
     
@@ -56,18 +56,6 @@ public class Tabla {
     public Tabla(View v, Connection con){
         this.v = v;
         this.con = con;
-    }
-    
-    public void conectarTabla(Object tabla){
-        if (tabla instanceof Colectivo) {
-            this.colectivo = (Colectivo) tabla;
-        }
-        if (tabla instanceof Conductor) {
-            this.conductor = (Conductor) tabla;
-        }
-        if (tabla instanceof Repuesto) {
-            this.repuesto = (Repuesto) tabla;
-        }
     }
     
     public String capitalizar(String s){
@@ -112,7 +100,6 @@ public class Tabla {
         }
     }
     
-    
     public void añadir(String columnaAModificar, String registroAAñadir, String columnaABuscar, String registroABuscar){
         try {
             ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columnaAModificar + " = ? WHERE " + columnaABuscar + " = ?;");
@@ -124,6 +111,19 @@ public class Tabla {
         }
     }
     
+    /*
+    public void conectarTabla(Object tabla){
+        if (tabla instanceof Colectivo) {
+            this.colectivo = (Colectivo) tabla;
+        }
+        if (tabla instanceof Conductor) {
+            this.conductor = (Conductor) tabla;
+        }
+        if (tabla instanceof Repuesto) {
+            this.repuesto = (Repuesto) tabla;
+        }
+    }
+    */
     /*
     public void insertar(Object[] datos){
         try {

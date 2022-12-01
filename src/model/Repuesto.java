@@ -32,13 +32,13 @@ public class Repuesto extends Tabla{
         super(v, con);
         this.nombre = "Repuesto";
         this.pk = "IdRepuesto";
-        this.campos = new String[] {"IdRepuesto", "TipoRepuesto", "KilometrajeMaxc", "KilometrajeDeUso", "Stock"};
+        //this.campos = new String[] {"IdRepuesto", "TipoRepuesto", "KilometrajeMaxc", "KilometrajeDeUso", "Stock"};
     }
     
     public void getInput(){
     }
     
-    
+    /*
     private void quitarColectivo(){
         try {
             ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Estado = 0 WHERE Matricula = ? OR IdRepuesto = ?;");
@@ -103,4 +103,5 @@ public class Repuesto extends Tabla{
             asignarDatos(sqlEliminar, new Object[] {rutConductor});
         }
     }
+    */
 }
