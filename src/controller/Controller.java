@@ -148,7 +148,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         colectivo = m.crearColectivo(inputColectivo);
         conductor = m.crearConductor(inputColectivo);
         repuesto = m.crearRepuesto(inputColectivo);
-        evento = m.crearEvento(inputEvento);
+        evento = m.crearEvento(inputColectivo);
         
         m.refrescar();
         /*
