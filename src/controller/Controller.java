@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import model.Colectivo;
@@ -128,9 +129,9 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //REPUESTO
         /*
         inputRepuesto.add(v.cmbRepuesto1Colectivos);
-        inputRepuesto.add(v.txtRepuestoKilometraje);
+        inputRepuesto.add(v.txtStockKilometrajeMax);
         inputRepuesto.add(v.cmbTipoRepuesto);
-        inputRepuesto.add(v.dchRepuestoCompra);
+        inputRepuesto.add(v.dchStockCompra);
         */
         
         //Evento
@@ -242,6 +243,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         JComboBox cb = null;
         JTextField tf = null;
         JDateChooser dc = null;
+        JLabel lbl = null;
         
         for (Object input : inputList){
             if (input instanceof JTextField) {
@@ -255,6 +257,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             if (input instanceof JComboBox) {
                 cb = (JComboBox) input;
                 cb.setSelectedIndex(0);
+            }
+            if (input instanceof JLabel) {
+                lbl = (JLabel) input;
+                lbl.setText("");
             }
         }
     }
@@ -345,7 +351,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //EVENTO
         if (e == v.btnEventoAñadir) {
             validoEmpty = validarEmpty(inputEvento);
-            validoFormato = validarRegEx(v.txtEventoBeneficio, "^\\d*$", "Beneficio");
+            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
             if (validoEmpty && validoFormato) {
                 evento.insertar();
             }
@@ -355,14 +361,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         }
         if (e == v.btnEventoModificar) {
             validoEmpty = validarEmpty(inputEvento);
-            validoFormato = validarRegEx(v.txtEventoBeneficio, "^\\d*$", "Beneficio");
+            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
             if (validoEmpty && validoFormato) {
                 evento.modificar();
             }
         }
         if (e == v.btnEventoEliminar) {
             validoEmpty = validarEmpty(inputEvento);
-            validoFormato = validarRegEx(v.txtEventoBeneficio, "^\\d*$", "Beneficio");
+            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
             if (validoEmpty && validoFormato) {
                 evento.eliminar();
             }
@@ -385,14 +391,20 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     public void mouseClicked(MouseEvent evt){
         Object e = evt.getSource();
         
-        if (e == v.tblColectivos) {
-            m.consultarValores(v.tblColectivos, inputColectivo);
-        }
-        if (e == v.tblConductores) {
-            m.consultarValores(v.tblConductores, inputConductor);
-        }
-        if (e == v.tblEventos) {
-            m.consultarValores(v.tblEventos, inputEvento);
+        //TODO HACER QUE CUANDO SE DE DOBLE CLICK QUE SALGA UN POP UP PARA 
+        //MODIFICAR VALORES DE LA TABLA EN VEZ DE USAR LOS INPUTS
+        if (evt.getClickCount() == 1) {
+            if (e == v.tblColectivos) {
+                m.consultarValores(v.tblColectivos, inputColectivo);
+            }
+            if (e == v.tblConductores) {
+                m.consultarValores(v.tblConductores, inputConductor);
+            }
+            if (e == v.tblEventos) {
+                m.consultarValores(v.tblEventos, inputEvento);
+            }
+        } else {
+            
         }
     }
     

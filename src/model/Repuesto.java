@@ -32,7 +32,7 @@ public class Repuesto extends Tabla{
         super(v, con);
         this.nombre = "Repuesto";
         this.pk = "IdRepuesto";
-        //this.campos = new String[] {"IdRepuesto", "TipoRepuesto", "KilometrajeMaxc", "KilometrajeDeUso", "Stock"};
+        //this.campos = new String[] {"IdRepuesto", "TipoRepuesto", "KilometrajeMaxc", "KilometrajeDeUso", "Repuesto"};
     }
     
     public void getInput(){

@@ -96,10 +96,12 @@ public class Model {
             ppt.setString(2, contraseña);
             rs = ppt.executeQuery();
             
+            /*
             if (!rs.next()) {
                 JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta.");
                 System.exit(0);
             }
+            */
             return con;
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,21 +173,20 @@ public class Model {
                     + "TipoRepuesto VarChar(30), "
                     + "KilometrajeMax Int(7), "
                     + "KilometrajeDeUso Int(7), "
-                    + "Stock Int(3), "
                     + "PRIMARY KEY (IdRepuesto));");
             
             //Repuesto-Compra
             stm.execute("CREATE TABLE RepuestoCompra("
                     + "IdRepuesto Int(3) NOT NULL,"
                     + "IdCompra Int(3) NOT NULL,"
-                    + "Cantidad Int(3),"
-                    + "Precio Int(7),"
                     + "PRIMARY KEY (IdRepuesto, IdCompra));");
             
             //Compra
             stm.execute("CREATE TABLE Compra("
                     + "IdCompra Int(3) NOT NULL AUTO_INCREMENT,"
                     + "Compra Date,"
+                    + "Cantidad Int(3),"
+                    + "Precio Int(7),"
                     + "PRIMARY KEY (IdCompra));");
             
             //Colectivo-Evento
@@ -204,10 +205,15 @@ public class Model {
                     + "Beneficio Int(7), "
                     + "PRIMARY KEY (IdEvento));");
             
+            //Repuesto-Ajuste
+            stm.execute("CREATE TABLE RepuestoAjuste("
+                    + "IdAjuste Int(3) NOT NULL,"
+                    + "IdRepuesto Int(3) NOT NULL, "
+                    + "PRIMARY KEY (IdRepuesto, IdAjuste));");
+            
             //Ajuste
             stm.execute("CREATE TABLE Ajuste("
                     + "IdAjuste Int(3) NOT NULL AUTO_INCREMENT,"
-                    + "IdRepuesto Int(3) NOT NULL, "
                     + "Fecha Date,"
                     + "TipoAjuste VarChar(30),"
                     + "Motivo VarChar(150), "
@@ -241,7 +247,10 @@ public class Model {
             stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
             stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_EVENTO FOREIGN KEY (IdEvento) REFERENCES Evento(IdEvento) ON DELETE CASCADE;");
             
-            stm.execute("ALTER TABLE Ajuste ADD CONSTRAINT FK_AJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE RepuestoAjuste ADD CONSTRAINT FK_REPUESTOAJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE RepuestoAjuste ADD CONSTRAINT FK_REPUESTOAJUSTE_AJUSTE FOREIGN KEY (IdAjuste) REFERENCES Ajuste(IdAjuste) ON DELETE CASCADE;");
+            
+            //stm.execute("ALTER TABLE Ajuste ADD CONSTRAINT FK_AJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
             
             stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
             
@@ -268,30 +277,20 @@ public class Model {
     public void refrescar(){
         try {  
             // Colectivos
-            /*
-            v.cmbMatriculaRepuesto.removeAllItems();
-            v.cmbMatriculaRepuesto.addItem("------");
-            */
+            v.cmbRepuestoColectivos.removeAllItems();
+            v.cmbRepuestoColectivos.addItem("------");
             v.cmbConductorColectivos.removeAllItems();
             v.cmbConductorColectivos.addItem("------");
             DefaultTableModel tmColectivos = (DefaultTableModel) v.tblColectivos.getModel();
             tmColectivos.setRowCount(0);
-            ppt = con.prepareStatement("SELECT * FROM Colectivo WHERE Matricula LIKE ? ORDER BY Matricula ASC;");
+            ppt = con.prepareStatement("SELECT c.Matricula, cc.RutConductor, c.Compra, c.KilometrajeActual, c.Marca, c.Vin, c.Motor FROM Colectivo c LEFT JOIN ColectivoConductor cc ON c.Matricula = cc.Matricula AND cc.Estado = 1 AND c.Matricula LIKE ? ORDER BY c.Matricula ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaColectivoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("Matricula"), "------", rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
+                Object [] fila = {rs.getString("Matricula"), rs.getString("RutConductor"), rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
-                //v.cmbMatriculaRepuesto.addItem(rs.getString("Matricula"));
+                v.cmbRepuestoColectivos.addItem(rs.getString("Matricula"));
                 v.cmbConductorColectivos.addItem(rs.getString("Matricula"));
-            }
-            for (int row = 0; row < tmColectivos.getRowCount(); row++) {
-                ppt = con.prepareStatement("SELECT RutConductor FROM ColectivoConductor WHERE Matricula = ? AND Estado = 1 ORDER BY Matricula ASC;");
-                ppt.setString(1, tmColectivos.getValueAt(row, 0).toString());
-                rs = ppt.executeQuery();
-                if (rs.next()) {
-                    tmColectivos.setValueAt(rs.getString("RutConductor"), row, 1);
-                }
             }
             v.tblColectivos.setModel(tmColectivos);
             
@@ -299,56 +298,48 @@ public class Model {
             // Conductores 
             v.cmbColectivoConductores.removeAllItems();
             v.cmbColectivoConductores.addItem("------");
-            v.cmbColectivoConductores.setSelectedIndex(0);
+            //v.cmbColectivoConductores.setSelectedIndex(0);
             DefaultTableModel tmConductores = (DefaultTableModel) v.tblConductores.getModel();
             tmConductores.setRowCount(0);
-            ppt = con.prepareStatement("SELECT * FROM Conductor WHERE Nombre LIKE ? AND RutConductor LIKE ? ORDER BY RutConductor ASC;");
+            ppt = con.prepareStatement("SELECT c.RutConductor, cc.Matricula, c.Nombre, c.Direccion, c.Telefono FROM Conductor c LEFT JOIN ColectivoConductor cc ON c.RutConductor = cc.RutConductor AND cc.Estado = 1 AND c.Nombre LIKE ? AND c.RutConductor LIKE ? ORDER BY c.RutConductor ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaConductorNombre.getText().strip() + '%');
             ppt.setString(2, '%' + v.txtBusquedaTablaConductorRut.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("RutConductor"), "------", rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
+                Object [] fila = {rs.getString("RutConductor"), rs.getString("Matricula"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
                 tmConductores.addRow(fila);
                 v.cmbColectivoConductores.addItem(rs.getString("RutConductor"));
-            }
-            for (int row = 0; row < tmConductores.getRowCount(); row++) {
-                ppt = con.prepareStatement("SELECT Matricula FROM ColectivoConductor WHERE RutConductor = ? AND Estado = 1 ORDER BY RutConductor ASC;");
-                ppt.setString(1, tmConductores.getValueAt(row, 0).toString());
-                rs = ppt.executeQuery();
-                if (rs.next()) {
-                    tmConductores.setValueAt(rs.getString("Matricula"), row, 1);
-                }
             }
             v.tblConductores.setModel(tmConductores);
             
             // Repuestos
-            DefaultTableModel tmRepuestos = (DefaultTableModel) v.tblRepuestos.getModel();
-            tmRepuestos.setRowCount(0);
+            DefaultTableModel tmRepuesto = (DefaultTableModel) v.tblRepuestos.getModel();
+            tmRepuesto.setRowCount(0);
             rs = stm.executeQuery("SELECT * FROM Repuesto ORDER BY IdRepuesto ASC;");
             while (rs.next()) {
-                Object [] fila = {rs.getString("TipoRepuesto"), rs.getString("Matricula"), rs.getString("Compra"), rs.getString("KilometrajeMax"), rs.getString("KilometrajeActual")};
-                tmRepuestos.addRow(fila);
+                Object [] fila = {rs.getString("TipoRepuesto"), rs.getInt("KilometrajeMax"), rs.getInt("KilometrajeDeUso"), rs.getInt("Stock")};
+                tmRepuesto.addRow(fila);
             }
-            v.tblRepuestos.setModel(tmRepuestos);
+            v.tblRepuestos.setModel(tmRepuesto);
             
             //Eventos
             DefaultTableModel tmEventos = (DefaultTableModel) v.tblEventos.getModel();
             tmEventos.setRowCount(0);
             if (v.cmbBusquedaTablaEventoTipo.getSelectedIndex() == 0) {
-                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND NombreEvento LIKE ? ORDER BY Fecha DESC;");
+                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND NombreEvento LIKE ? ORDER BY Fecha ASC;");
                 ppt.setString(2, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
             } else {
-                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND TipoEvento = ? AND NombreEvento LIKE ? ORDER BY Fecha DESC;");
+                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND TipoEvento = ? AND NombreEvento LIKE ? ORDER BY Fecha ASC;");
                 ppt.setString(2, v.cmbBusquedaTablaEventoTipo.getSelectedItem().toString());
                 ppt.setString(3, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
             }
-            ppt.setString(1, formato.format((v.dchBusquedaTablaEventoFecha.getDate() == null) ? new Date(1000000L) : v.dchBusquedaTablaEventoFecha.getDate()));
+            ppt.setString(1, formato.format((v.dchBusquedaTablaEventoFecha.getDate() == null) ? new Date(1L) : v.dchBusquedaTablaEventoFecha.getDate()));
             rs = ppt.executeQuery();
             while (rs.next()) {
                 Object [] fila = {rs.getInt("IdEvento"), rs.getDate("Fecha"), rs.getString("TipoEvento"), rs.getString("NombreEvento"), rs.getInt("Beneficio")};
                 tmEventos.addRow(fila);
             }
-            v.tblRepuestos.setModel(tmRepuestos);
+            v.tblEventos.setModel(tmEventos);
             
         } catch (SQLException e) {
             e.printStackTrace();
