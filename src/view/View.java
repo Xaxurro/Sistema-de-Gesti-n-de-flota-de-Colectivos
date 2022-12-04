@@ -22,7 +22,6 @@ public class View extends javax.swing.JFrame {
         lblColectivoCompra = new javax.swing.JLabel();
         dchColectivoCompra = new com.toedter.calendar.JDateChooser();
         lblColectivoKilometraje = new javax.swing.JLabel();
-        txtColectivoKilometraje = new javax.swing.JTextField();
         lblColectivoMarca = new javax.swing.JLabel();
         txtColectivoMarca = new javax.swing.JTextField();
         lblColectivoVin = new javax.swing.JLabel();
@@ -42,6 +41,7 @@ public class View extends javax.swing.JFrame {
         btnColectivoLimpiarBuscadores = new javax.swing.JButton();
         scpColectivos = new javax.swing.JScrollPane();
         tblColectivos = new javax.swing.JTable();
+        spnColectivoKilometraje = new javax.swing.JSpinner();
         pnlConductor = new javax.swing.JPanel();
         lblConductorRut = new javax.swing.JLabel();
         txtConductorRut = new javax.swing.JTextField();
@@ -67,12 +67,10 @@ public class View extends javax.swing.JFrame {
         pnlRepuesto = new javax.swing.JPanel();
         lblRepuestoTipo = new javax.swing.JLabel();
         txtRepuestoTipo = new javax.swing.JTextField();
-        lblRepuestoCompra = new javax.swing.JLabel();
-        dchRepuestoCompra = new com.toedter.calendar.JDateChooser();
+        lblRepuestoCambio = new javax.swing.JLabel();
+        dchRepuestoCambio = new com.toedter.calendar.JDateChooser();
         lblRepuestoKilometrajeMax = new javax.swing.JLabel();
-        txtRepuestoKilometrajeMax = new javax.swing.JTextField();
         lblRepuestoKilometrajeUsado = new javax.swing.JLabel();
-        txtRepuestoKilometrajeUsado = new javax.swing.JTextField();
         lblRepuestoColectivos = new javax.swing.JLabel();
         cmbRepuestoColectivos = new javax.swing.JComboBox<>();
         btnRepuestoAñadir = new javax.swing.JButton();
@@ -90,7 +88,9 @@ public class View extends javax.swing.JFrame {
         lblRepuestoCantidadTipo = new javax.swing.JLabel();
         lblRepuestoCantidad = new javax.swing.JLabel();
         lblRepuestoKilometrajeUsado1 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        spnRepuestoCantidad = new javax.swing.JSpinner();
+        spnRepuestoKilometrajeActual = new javax.swing.JSpinner();
+        spnRepuestoKilometrajeMax = new javax.swing.JSpinner();
         pnlEventos = new javax.swing.JPanel();
         lblBusquedaTablaEventoFecha = new javax.swing.JLabel();
         dchBusquedaTablaEventoFecha = new com.toedter.calendar.JDateChooser();
@@ -112,9 +112,9 @@ public class View extends javax.swing.JFrame {
         lblEventoTipo = new javax.swing.JLabel();
         cmbEventoTipo = new javax.swing.JComboBox<>();
         lblEventoBeneficio = new javax.swing.JLabel();
-        txtEventoBeneficio = new javax.swing.JTextField();
         lblEventoID = new javax.swing.JLabel();
         lblEventoIDActual = new javax.swing.JLabel();
+        spnEventoBeneficio = new javax.swing.JSpinner();
         pnlGanancias = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -126,8 +126,7 @@ public class View extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
-        jSpinner6 = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
+        spnGanancias = new javax.swing.JSpinner();
         btnEventoAñadir1 = new javax.swing.JButton();
         btnEventoLimpiar1 = new javax.swing.JButton();
         btnEventoModificar1 = new javax.swing.JButton();
@@ -141,7 +140,7 @@ public class View extends javax.swing.JFrame {
         jDateChooser3 = new com.toedter.calendar.JDateChooser();
         jDateChooser4 = new com.toedter.calendar.JDateChooser();
         jLabel10 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnEventoLimpiarBuscadores1 = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
         btnReDo = new javax.swing.JButton();
@@ -166,10 +165,6 @@ public class View extends javax.swing.JFrame {
         dchColectivoCompra.setName("Fecha de Compra"); // NOI18N
 
         lblColectivoKilometraje.setText("Kilometraje Actual:");
-
-        txtColectivoKilometraje.setToolTipText("Solo números");
-        txtColectivoKilometraje.setName("Kilometraje Actual"); // NOI18N
-        txtColectivoKilometraje.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblColectivoMarca.setText("Marca:");
 
@@ -222,7 +217,7 @@ public class View extends javax.swing.JFrame {
         tblColectivos.setShowGrid(true);
         scpColectivos.setViewportView(tblColectivos);
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnColectivoKilometraje.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
         javax.swing.GroupLayout pnlColectivoLayout = new javax.swing.GroupLayout(pnlColectivo);
         pnlColectivo.setLayout(pnlColectivoLayout);
@@ -239,7 +234,7 @@ public class View extends javax.swing.JFrame {
                         .addComponent(btnColectivoModificar)
                         .addGap(18, 18, 18)
                         .addComponent(btnColectivoEliminar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 359, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 369, Short.MAX_VALUE)
                         .addComponent(lblColectivo1Motor)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cmbColectivoConductores, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -255,9 +250,9 @@ public class View extends javax.swing.JFrame {
                                 .addComponent(dchColectivoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlColectivoLayout.createSequentialGroup()
                                 .addComponent(lblColectivoKilometraje)
-                                .addGap(12, 12, 12)
-                                .addComponent(txtColectivoKilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 365, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(spnColectivoKilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
                         .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlColectivoLayout.createSequentialGroup()
                                 .addComponent(lblColectivoMarca)
@@ -306,18 +301,6 @@ public class View extends javax.swing.JFrame {
                 .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlColectivoLayout.createSequentialGroup()
                         .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblColectivoMatricula)
-                            .addComponent(txtColectivoMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dchColectivoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblColectivoCompra))
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblColectivoKilometraje)
-                            .addComponent(txtColectivoKilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlColectivoLayout.createSequentialGroup()
-                        .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblColectivoMarca)
                             .addComponent(txtColectivoMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
@@ -327,8 +310,20 @@ public class View extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtColectivoMotor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblColectivoMotor))))
-                .addGap(58, 58, 58)
+                            .addComponent(lblColectivoMotor)))
+                    .addGroup(pnlColectivoLayout.createSequentialGroup()
+                        .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblColectivoMatricula)
+                            .addComponent(txtColectivoMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dchColectivoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblColectivoCompra))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblColectivoKilometraje)
+                            .addComponent(spnColectivoKilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(50, 50, 50)
                 .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlColectivoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnColectivoAñadir)
@@ -423,7 +418,7 @@ public class View extends javax.swing.JFrame {
                                 .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtConductorRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtConductorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 391, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 407, Short.MAX_VALUE)
                                 .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblConductorDireccion)
                                     .addComponent(lblConductorTelefono)))
@@ -506,20 +501,14 @@ public class View extends javax.swing.JFrame {
         txtRepuestoTipo.setName("Kilometraje Máximo"); // NOI18N
         txtRepuestoTipo.setPreferredSize(new java.awt.Dimension(200, 22));
 
-        lblRepuestoCompra.setText("Fecha de Compra:");
+        lblRepuestoCambio.setText("Fecha de Cambio:");
 
-        dchRepuestoCompra.setDateFormatString("yyyy-MM-dd");
-        dchRepuestoCompra.setName("Fecha de Compra"); // NOI18N
+        dchRepuestoCambio.setDateFormatString("yyyy-MM-dd");
+        dchRepuestoCambio.setName("Fecha de Compra"); // NOI18N
 
         lblRepuestoKilometrajeMax.setText("Kilometraje Máximo:");
 
-        txtRepuestoKilometrajeMax.setName("Kilometraje Máximo"); // NOI18N
-        txtRepuestoKilometrajeMax.setPreferredSize(new java.awt.Dimension(200, 22));
-
         lblRepuestoKilometrajeUsado.setText("Kilometraje Actual:");
-
-        txtRepuestoKilometrajeUsado.setName("Kilometraje Máximo"); // NOI18N
-        txtRepuestoKilometrajeUsado.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblRepuestoColectivos.setText("Matricula:");
 
@@ -539,7 +528,7 @@ public class View extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Tipo de Repuesto", "Patente auto asociado", "Fecha de Compra", "Kilometraje Repuesto Máximo", "Kilometraje Repuesto Actual"
+                "Tipo de Repuesto", "Patente auto asociado", "Fecha de Cambio", "Kilometraje Máximo", "Kilometraje Actual"
             }
         ));
         scpRepuestos.setViewportView(tblRepuestos);
@@ -557,15 +546,15 @@ public class View extends javax.swing.JFrame {
         cmbRepuestoCantidadTipo.setToolTipText("");
         cmbRepuestoCantidadTipo.setName("Matricula"); // NOI18N
 
-        lblRepuestoCantidadTipo.setText("Cantidad a buscar:");
+        lblRepuestoCantidadTipo.setText("Tipo de repuesto a contar:");
 
         lblRepuestoKilometrajeUsado1.setText("Cantidad:");
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnRepuestoCantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
-        jSpinner3.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnRepuestoKilometrajeActual.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
 
-        jSpinner4.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spnRepuestoKilometrajeMax.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         javax.swing.GroupLayout pnlRepuestoLayout = new javax.swing.GroupLayout(pnlRepuesto);
         pnlRepuesto.setLayout(pnlRepuestoLayout);
@@ -582,7 +571,7 @@ public class View extends javax.swing.JFrame {
                         .addComponent(lblBusquedaTablaRepuestoMatricula)
                         .addGap(6, 6, 6)
                         .addComponent(txtBusquedaTablaRepuestoMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 307, Short.MAX_VALUE)
                         .addComponent(btnRepuestoLimpiarBuscadores))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -592,19 +581,26 @@ public class View extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlRepuestoLayout.createSequentialGroup()
-                                .addComponent(lblRepuestoCompra)
+                                .addComponent(lblRepuestoCambio)
                                 .addGap(12, 12, 12)
-                                .addComponent(dchRepuestoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(dchRepuestoCambio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblRepuestoKilometrajeUsado, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblRepuestoKilometrajeUsado1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblRepuestoKilometrajeMax))
-                        .addGap(12, 12, 12)
-                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSpinner4)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                            .addComponent(jSpinner3)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
+                                .addComponent(lblRepuestoKilometrajeMax)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(spnRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
+                                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblRepuestoKilometrajeUsado)
+                                    .addComponent(lblRepuestoKilometrajeUsado1))
+                                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(spnRepuestoCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(spnRepuestoKilometrajeActual, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(pnlRepuestoLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(btnRepuestoAñadir)
@@ -650,24 +646,25 @@ public class View extends javax.swing.JFrame {
                         .addGap(8, 8, 8)
                         .addComponent(lblRepuestoCantidad)))
                 .addGap(12, 12, 12)
-                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblRepuestoKilometrajeMax)
-                        .addComponent(lblRepuestoTipo)
-                        .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txtRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblRepuestoKilometrajeMax)
+                    .addComponent(lblRepuestoTipo)
+                    .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spnRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblRepuestoCompra)
-                    .addComponent(dchRepuestoCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(lblRepuestoKilometrajeUsado, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(txtRepuestoKilometrajeUsado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lblRepuestoCambio)
+                    .addComponent(dchRepuestoCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRepuestoKilometrajeUsado)
+                            .addComponent(spnRepuestoKilometrajeActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblRepuestoKilometrajeUsado1)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                    .addComponent(spnRepuestoCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnRepuestoAñadir)
                     .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -742,13 +739,9 @@ public class View extends javax.swing.JFrame {
 
         lblEventoBeneficio.setText("Beneficio:");
 
-        txtEventoBeneficio.setToolTipText("Sin digito Verificador");
-        txtEventoBeneficio.setName("Beneficio"); // NOI18N
-        txtEventoBeneficio.setPreferredSize(new java.awt.Dimension(200, 22));
-
         lblEventoID.setText("ID:");
 
-        jSpinner5.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnEventoBeneficio.setModel(new javax.swing.SpinnerNumberModel());
 
         javax.swing.GroupLayout pnlEventosLayout = new javax.swing.GroupLayout(pnlEventos);
         pnlEventos.setLayout(pnlEventosLayout);
@@ -769,7 +762,7 @@ public class View extends javax.swing.JFrame {
                         .addComponent(lblBusquedaTablaEventoTipo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbBusquedaTablaEventoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                         .addComponent(btnEventoLimpiarBuscadores))
                     .addGroup(pnlEventosLayout.createSequentialGroup()
                         .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -798,20 +791,21 @@ public class View extends javax.swing.JFrame {
                                     .addComponent(lblEventoIDActual)
                                     .addGroup(pnlEventosLayout.createSequentialGroup()
                                         .addComponent(cmbEventoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(449, 449, 449)
                                         .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(pnlEventosLayout.createSequentialGroup()
+                                                .addGap(449, 449, 449)
                                                 .addComponent(lblEventoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(txtEventoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(pnlEventosLayout.createSequentialGroup()
+                                                .addGap(443, 443, 443)
                                                 .addComponent(lblEventoBeneficio)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtEventoBeneficio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                                .addComponent(spnEventoBeneficio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                             .addGroup(pnlEventosLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(scpEventos, javax.swing.GroupLayout.PREFERRED_SIZE, 994, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 23, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlEventosLayout.setVerticalGroup(
@@ -844,9 +838,9 @@ public class View extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEventoTipo)
-                    .addComponent(txtEventoBeneficio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbEventoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEventoBeneficio))
+                    .addComponent(lblEventoBeneficio)
+                    .addComponent(spnEventoBeneficio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(67, 67, 67)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEventoAñadir)
@@ -887,14 +881,7 @@ public class View extends javax.swing.JFrame {
 
         jLabel5.setText("Ganancia:");
 
-        jSpinner6.setModel(new javax.swing.SpinnerNumberModel(1, 0, null, 1));
-
-        jButton1.setText("Agregar Ganancia");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        spnGanancias.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         btnEventoAñadir1.setText("Añadir");
 
@@ -910,8 +897,6 @@ public class View extends javax.swing.JFrame {
 
         jLabel8.setText("Ultima Fecha");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel9.setText("Ganancia:");
 
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
@@ -922,13 +907,7 @@ public class View extends javax.swing.JFrame {
 
         jLabel10.setText("*Ganancia*");
 
-        jButton2.setText("Limpiar Buscador");
-        jButton2.setActionCommand("Limpiar Buscador");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        btnEventoLimpiarBuscadores1.setText("Limpiar Buscadores");
 
         javax.swing.GroupLayout pnlGananciasLayout = new javax.swing.GroupLayout(pnlGanancias);
         pnlGanancias.setLayout(pnlGananciasLayout);
@@ -938,50 +917,48 @@ public class View extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addGap(70, 70, 70)
+                        .addComponent(jScrollPane1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlGananciasLayout.createSequentialGroup()
-                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(26, 26, 26)
-                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jSpinner6)
-                                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 730, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(pnlGananciasLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(54, 54, 54)
-                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(pnlGananciasLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
                                 .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlGananciasLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlGananciasLayout.createSequentialGroup()
-                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(60, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel10))))
+                    .addGroup(pnlGananciasLayout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(26, 26, 26)
+                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(spnGanancias)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlGananciasLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 395, Short.MAX_VALUE)
+                        .addComponent(btnEventoLimpiarBuscadores1)))
+                .addContainerGap())
             .addGroup(pnlGananciasLayout.createSequentialGroup()
                 .addComponent(btnEventoAñadir1)
                 .addGap(18, 18, 18)
@@ -1000,10 +977,10 @@ public class View extends javax.swing.JFrame {
                     .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jLabel2)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEventoLimpiarBuscadores1))
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
@@ -1033,10 +1010,8 @@ public class View extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(jSpinner6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(spnGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEventoAñadir1)
                     .addComponent(btnEventoLimpiar1)
@@ -1065,14 +1040,14 @@ public class View extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSalir)
                 .addContainerGap())
-            .addComponent(Vista, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+            .addComponent(Vista, javax.swing.GroupLayout.DEFAULT_SIZE, 1029, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Vista, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalir)
                     .addComponent(btnAñadirKilometraje)
@@ -1086,14 +1061,6 @@ public class View extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
@@ -1122,6 +1089,7 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JButton btnEventoLimpiar;
     public static javax.swing.JButton btnEventoLimpiar1;
     public static javax.swing.JButton btnEventoLimpiarBuscadores;
+    public static javax.swing.JButton btnEventoLimpiarBuscadores1;
     public static javax.swing.JButton btnEventoModificar;
     public static javax.swing.JButton btnEventoModificar1;
     public static javax.swing.JButton btnReDo;
@@ -1140,9 +1108,7 @@ public class View extends javax.swing.JFrame {
     public static com.toedter.calendar.JDateChooser dchBusquedaTablaEventoFecha;
     public static com.toedter.calendar.JDateChooser dchColectivoCompra;
     public static com.toedter.calendar.JDateChooser dchEventoFecha;
-    public static com.toedter.calendar.JDateChooser dchRepuestoCompra;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    public static com.toedter.calendar.JDateChooser dchRepuestoCambio;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox3;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -1160,12 +1126,6 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
-    private javax.swing.JSpinner jSpinner5;
-    private javax.swing.JSpinner jSpinner6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblBusquedaTablaColectivoMatricula;
@@ -1195,10 +1155,10 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JLabel lblEventoIDActual;
     private javax.swing.JLabel lblEventoNombre;
     private javax.swing.JLabel lblEventoTipo;
-    private javax.swing.JLabel lblRepuestoCantidad;
+    private javax.swing.JLabel lblRepuestoCambio;
+    public static javax.swing.JLabel lblRepuestoCantidad;
     private javax.swing.JLabel lblRepuestoCantidadTipo;
     private javax.swing.JLabel lblRepuestoColectivos;
-    private javax.swing.JLabel lblRepuestoCompra;
     private javax.swing.JLabel lblRepuestoKilometrajeMax;
     private javax.swing.JLabel lblRepuestoKilometrajeUsado;
     private javax.swing.JLabel lblRepuestoKilometrajeUsado1;
@@ -1212,6 +1172,12 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JScrollPane scpConductores;
     private javax.swing.JScrollPane scpEventos;
     private javax.swing.JScrollPane scpRepuestos;
+    public static javax.swing.JSpinner spnColectivoKilometraje;
+    public static javax.swing.JSpinner spnEventoBeneficio;
+    public static javax.swing.JSpinner spnGanancias;
+    public static javax.swing.JSpinner spnRepuestoCantidad;
+    public static javax.swing.JSpinner spnRepuestoKilometrajeActual;
+    public static javax.swing.JSpinner spnRepuestoKilometrajeMax;
     public static javax.swing.JTable tblColectivos;
     public static javax.swing.JTable tblConductores;
     public static javax.swing.JTable tblEventos;
@@ -1223,7 +1189,6 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JTextField txtBusquedaTablaEventoNombre;
     public static javax.swing.JTextField txtBusquedaTablaRepuestoMatricula;
     public static javax.swing.JTextField txtBusquedaTablaRepuestoTipo;
-    public static javax.swing.JTextField txtColectivoKilometraje;
     public static javax.swing.JTextField txtColectivoMarca;
     public static javax.swing.JTextField txtColectivoMatricula;
     public static javax.swing.JTextField txtColectivoMotor;
@@ -1232,10 +1197,7 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JTextField txtConductorNombre;
     public static javax.swing.JTextField txtConductorRut;
     public static javax.swing.JTextField txtConductorTelefono;
-    public static javax.swing.JTextField txtEventoBeneficio;
     public static javax.swing.JTextField txtEventoNombre;
-    public static javax.swing.JTextField txtRepuestoKilometrajeMax;
-    public static javax.swing.JTextField txtRepuestoKilometrajeUsado;
     public static javax.swing.JTextField txtRepuestoTipo;
     // End of variables declaration//GEN-END:variables
 }

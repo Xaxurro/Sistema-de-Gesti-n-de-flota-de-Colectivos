@@ -46,7 +46,7 @@ public class Colectivo extends Tabla{
         matricula = v.txtColectivoMatricula.getText().strip().toUpperCase();
         rutConductor = v.cmbColectivoConductores.getSelectedItem().toString();
         compra = formato.format(v.dchColectivoCompra.getDate());
-        kilometrajeActual = Integer.valueOf(v.txtColectivoKilometraje.getText().strip());
+        kilometrajeActual = (Integer) v.spnColectivoKilometraje.getValue();
         marca = capitalizar(v.txtColectivoMarca.getText().strip());
         vin = v.txtColectivoVin.getText().strip().toUpperCase();
         motor = v.txtColectivoMotor.getText().strip().toUpperCase();

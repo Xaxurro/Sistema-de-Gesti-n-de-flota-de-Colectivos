@@ -31,7 +31,7 @@ public class Evento extends Tabla{
         fecha = formato.format(v.dchEventoFecha.getDate());
         tipo = v.cmbEventoTipo.getSelectedItem().toString();
         nombre = capitalizar(v.txtEventoNombre.getText().strip());
-        beneficio = Integer.valueOf(v.txtEventoBeneficio.getText().strip());
+        beneficio = (Integer) v.spnEventoBeneficio.getValue();
     }
     
     public void añadirColectivo(){

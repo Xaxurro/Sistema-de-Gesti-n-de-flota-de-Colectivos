@@ -13,18 +13,21 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import model.Colectivo;
 import model.Conductor;
 import model.Repuesto;
 import model.Evento;
 
-public class Controller implements ActionListener, MouseListener, KeyListener, , ItemListener{
+public class Controller implements ActionListener, MouseListener, KeyListener, PropertyChangeListener, ItemListener{
     private View v;
     private Model m;
     
@@ -88,6 +91,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         v.btnRepuestoModificar.addActionListener(this);
         v.btnRepuestoEliminar.addActionListener(this);
         v.cmbRepuestoCantidadTipo.addItemListener(this);
+        v.tblRepuestos.addMouseListener(this);
         
         //EVENTO
         v.btnEventoAñadir.addActionListener(this);
@@ -110,7 +114,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         inputColectivo.add(v.txtColectivoMatricula);
         inputColectivo.add(v.cmbColectivoConductores);
         inputColectivo.add(v.dchColectivoCompra);
-        inputColectivo.add(v.txtColectivoKilometraje);
+        inputColectivo.add(v.spnColectivoKilometraje);
         inputColectivo.add(v.txtColectivoMarca);
         inputColectivo.add(v.txtColectivoVin);
         inputColectivo.add(v.txtColectivoMotor);
@@ -129,19 +133,18 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         buscadorConductor.add(v.txtBusquedaTablaConductorRut);
         
         //REPUESTO
-        /*
-        inputRepuesto.add(v.cmbRepuesto1Colectivos);
-        inputRepuesto.add(v.txtStockKilometrajeMax);
-        inputRepuesto.add(v.cmbTipoRepuesto);
-        inputRepuesto.add(v.dchStockCompra);
-        */
+        inputRepuesto.add(v.txtRepuestoTipo);
+        inputRepuesto.add(v.cmbRepuestoColectivos);
+        inputRepuesto.add(v.dchRepuestoCambio);
+        inputRepuesto.add(v.spnRepuestoKilometrajeMax);
+        inputRepuesto.add(v.spnRepuestoKilometrajeActual);
         
         //Evento
         inputEvento.add(v.lblEventoIDActual);
         inputEvento.add(v.dchEventoFecha);
         inputEvento.add(v.cmbEventoTipo);
         inputEvento.add(v.txtEventoNombre);
-        inputEvento.add(v.txtEventoBeneficio);
+        inputEvento.add(v.spnEventoBeneficio);
         
         buscadorEvento.add(v.dchBusquedaTablaEventoFecha);
         buscadorEvento.add(v.txtBusquedaTablaEventoNombre);
@@ -246,6 +249,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         JTextField tf = null;
         JDateChooser dc = null;
         JLabel lbl = null;
+        JSpinner spn = null;
         
         for (Object input : inputList){
             if (input instanceof JTextField) {
@@ -263,6 +267,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
             if (input instanceof JLabel) {
                 lbl = (JLabel) input;
                 lbl.setText("");
+            }
+            if (input instanceof JSpinner) {
+                spn = (JSpinner) input;
+                if (((SpinnerNumberModel) spn.getModel()).getMinimum() == null) {
+                    spn.setValue(0);
+                } else {
+                    spn.setValue(((SpinnerNumberModel) spn.getModel()).getMinimum());
+                }
             }
         }
     }
@@ -285,7 +297,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         //COLECTIVO
         if (e == v.btnColectivoAñadir) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula") && validarRegEx(v.txtColectivoKilometraje, "^\\d*$", "Kilometraje");
+//            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula") && validarRegEx(v.txtColectivoKilometraje, "^\\d*$", "Kilometraje");
             if (validoFormato && validoEmpty) {
                 colectivo.insertar();
             }
@@ -356,8 +368,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         //EVENTO
         if (e == v.btnEventoAñadir) {
             validoEmpty = validarEmpty(inputEvento);
-            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
-            if (validoEmpty && validoFormato) {
+            if (validoEmpty) {
                 evento.insertar();
             }
         }
@@ -366,14 +377,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
         }
         if (e == v.btnEventoModificar) {
             validoEmpty = validarEmpty(inputEvento);
-            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
+//            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
             if (validoEmpty && validoFormato) {
                 evento.modificar();
             }
         }
         if (e == v.btnEventoEliminar) {
             validoEmpty = validarEmpty(inputEvento);
-            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
+//            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
             if (validoEmpty && validoFormato) {
                 evento.eliminar();
             }
@@ -406,6 +417,9 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
             if (e == v.tblConductores) {
                 m.consultarValores(v.tblConductores, inputConductor);
             }
+            if (e == v.tblRepuestos) {
+                m.consultarValores(v.tblRepuestos, inputRepuesto);
+            }
             if (e == v.tblEventos) {
                 m.consultarValores(v.tblEventos, inputEvento);
             }
@@ -420,8 +434,15 @@ public class Controller implements ActionListener, MouseListener, KeyListener, ,
     }
     
     @Override
+    public void propertyChange (PropertyChangeEvent evt){
+        m.refrescar();
+    }
+    
+    @Override
     public void itemStateChanged (ItemEvent evt){
-        repuesto.buscarCantidad();
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            repuesto.buscarCantidad();
+        }
     }
     
     public void mousePressed(MouseEvent eve){};

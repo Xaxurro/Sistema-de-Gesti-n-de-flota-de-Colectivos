@@ -22,11 +22,11 @@ import view.View;
 
 public class Repuesto extends Tabla{
     private String idRepuesto;
-    private String matricula;
     private String tipoRepuesto;
+    private String matricula;
+    private String cambio;
     private String kilometrajeMaxc;
     private String kilometrajeDeUso;
-    private int stock;
     
     public Repuesto(View v, Connection con){
         super(v, con);
@@ -37,7 +37,21 @@ public class Repuesto extends Tabla{
     
     public void getInput(){
     }
-    
+
+    public void buscarCantidad() {
+        try {
+            String sql = "SELECT Count(TipoRepuesto) FROM Repuesto";
+            if (!v.cmbRepuestoCantidadTipo.getSelectedItem().toString().equals("Todos")) {
+                sql += " WHERE TipoRepuesto = '" + v.cmbRepuestoCantidadTipo.getSelectedItem().toString() + "'";
+            }
+            rs = stm.executeQuery(sql + ";");
+            if (rs.next()) {
+                v.lblRepuestoCantidad.setText(String.valueOf(rs.getInt(1)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /*
     private void quitarColectivo(){
         try {

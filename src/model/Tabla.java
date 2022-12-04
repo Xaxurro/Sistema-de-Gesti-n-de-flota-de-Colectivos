@@ -54,8 +54,13 @@ public class Tabla {
     public String sqlEliminar = "";
     
     public Tabla(View v, Connection con){
-        this.v = v;
-        this.con = con;
+        try {
+            this.v = v;
+            this.con = con;
+            this.stm = con.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     public String capitalizar(String s){

@@ -1,6 +1,7 @@
 package model;
 
 import com.toedter.calendar.JDateChooser;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -50,35 +52,19 @@ public class Model {
         this.v = v;
     }
     
-    public Colectivo crearColectivo(List<Object> input){
-        /*
-        this.colectivo = new Colectivo(v, con);
-        return this.colectivo;
-        */
+    public Colectivo crearColectivo(){
         return new Colectivo(v, con);
     }
     
-    public Conductor crearConductor(List<Object> input){
-        /*
-        this.conductor = new Conductor(v, con);
-        return this.conductor;
-        */
+    public Conductor crearConductor(){
         return new Conductor(v, con);
     }
     
-    public Repuesto crearRepuesto(List<Object> input){
-        /*
-        this.repuesto = new Repuesto(v, con);
-        return this.repuesto;
-        */
+    public Repuesto crearRepuesto(){
         return new Repuesto(v, con);
     }
     
-    public Evento crearEvento(List<Object> input){
-        /*
-        this.repuesto = new Repuesto(v, con);
-        return this.repuesto;
-        */
+    public Evento crearEvento(){
         return new Evento(v, con);
     }
     
@@ -88,7 +74,7 @@ public class Model {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "");
             stm = con.createStatement();
-            if(!existeDB(con, rs, nombreDB)){
+            if(!existeDB(nombreDB)){
                 crearDB();
             }
             ppt = con.prepareStatement("SELECT * FROM Administrador WHERE Usuario = ? AND Contraseña = ?;");
@@ -96,12 +82,10 @@ public class Model {
             ppt.setString(2, contraseña);
             rs = ppt.executeQuery();
             
-            /*
             if (!rs.next()) {
                 JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta.");
                 System.exit(0);
             }
-            */
             return con;
         } catch (Exception e) {
             e.printStackTrace();
@@ -110,7 +94,7 @@ public class Model {
         return null;
     }
     
-    private boolean existeDB(Connection con, ResultSet rs, String nombreDB){
+    private boolean existeDB(String nombreDB){
         try {
             rs = con.getMetaData().getCatalogs();
             while (rs.next()) {
@@ -162,9 +146,9 @@ public class Model {
             stm.execute("CREATE TABLE ColectivoRepuesto("
                     + "Matricula Char(6) NOT NULL, "
                     + "IdRepuesto Int(3) NOT NULL, "
-                    + "Compra Date, "
-                    + "Cantidad Int(3), "
+                    + "Cambio Date NOT NULL, "
                     + "Observacion VarChar(50), "
+                    + "Estado TinyInt(1) NOT NULL, "
                     + "PRIMARY KEY (Matricula, IdRepuesto));");
             
             //Repuesto
@@ -175,6 +159,7 @@ public class Model {
                     + "KilometrajeDeUso Int(7), "
                     + "PRIMARY KEY (IdRepuesto));");
             
+            /*
             //Repuesto-Compra
             stm.execute("CREATE TABLE RepuestoCompra("
                     + "IdRepuesto Int(3) NOT NULL,"
@@ -185,9 +170,9 @@ public class Model {
             stm.execute("CREATE TABLE Compra("
                     + "IdCompra Int(3) NOT NULL AUTO_INCREMENT,"
                     + "Compra Date,"
-                    + "Cantidad Int(3),"
                     + "Precio Int(7),"
                     + "PRIMARY KEY (IdCompra));");
+            */
             
             //Colectivo-Evento
             stm.execute("CREATE TABLE ColectivoEvento("
@@ -217,7 +202,6 @@ public class Model {
                     + "Fecha Date,"
                     + "TipoAjuste VarChar(30),"
                     + "Motivo VarChar(150), "
-                    + "Cantidad Int(3), "
                     + "PRIMARY KEY (IdAjuste));");
             
             //Ganancia
@@ -255,12 +239,6 @@ public class Model {
             stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
             
             //INSERTAR DATOS INICIALES
-            /*
-            stm.execute("INSERT INTO Colectivo VALUES ('------', NULL, NULL, NULL, NULL, NULL);");
-            */
-            /*
-            stm.execute("INSERT INTO Conductor VALUES ('------', '------', NULL, NULL, NULL);");
-            */
             stm.execute("INSERT INTO Administrador VALUES ('admin', '12345');");
         } catch (SQLException e) {
             e.printStackTrace();
@@ -276,6 +254,7 @@ public class Model {
     
     public void refrescar(){
         try {  
+            System.out.println(Array.get(Thread.currentThread().getStackTrace(), 2));
             // Colectivos
             v.cmbRepuestoColectivos.removeAllItems();
             v.cmbRepuestoColectivos.addItem("------");
@@ -287,10 +266,12 @@ public class Model {
             ppt.setString(1, '%' + v.txtBusquedaTablaColectivoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("Matricula"), rs.getString("RutConductor"), rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
+                String matricula = (rs.getString("Matricula") != null) ? rs.getString("Matricula") : "------";
+                String rutConductor = (rs.getString("RutConductor") != null) ? rs.getString("RutConductor") : "------";
+                Object [] fila = {matricula, rutConductor, rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
-                v.cmbRepuestoColectivos.addItem(rs.getString("Matricula"));
-                v.cmbConductorColectivos.addItem(rs.getString("Matricula"));
+                v.cmbRepuestoColectivos.addItem(matricula);
+                v.cmbConductorColectivos.addItem(matricula);
             }
             v.tblColectivos.setModel(tmColectivos);
             
@@ -298,7 +279,6 @@ public class Model {
             // Conductores 
             v.cmbColectivoConductores.removeAllItems();
             v.cmbColectivoConductores.addItem("------");
-            //v.cmbColectivoConductores.setSelectedIndex(0);
             DefaultTableModel tmConductores = (DefaultTableModel) v.tblConductores.getModel();
             tmConductores.setRowCount(0);
             ppt = con.prepareStatement("SELECT c.RutConductor, cc.Matricula, c.Nombre, c.Direccion, c.Telefono FROM Conductor c LEFT JOIN ColectivoConductor cc ON c.RutConductor = cc.RutConductor AND cc.Estado = 1 AND c.Nombre LIKE ? AND c.RutConductor LIKE ? ORDER BY c.RutConductor ASC;");
@@ -306,19 +286,32 @@ public class Model {
             ppt.setString(2, '%' + v.txtBusquedaTablaConductorRut.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("RutConductor"), rs.getString("Matricula"), rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
+                String rutConductor = (rs.getString("RutConductor") != null) ? rs.getString("RutConductor") : "------";
+                String matricula = (rs.getString("Matricula") != null) ? rs.getString("Matricula") : "------";
+                Object [] fila = {rutConductor, matricula, rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
                 tmConductores.addRow(fila);
-                v.cmbColectivoConductores.addItem(rs.getString("RutConductor"));
+                v.cmbColectivoConductores.addItem(rutConductor);
             }
             v.tblConductores.setModel(tmConductores);
             
             // Repuestos
+            v.cmbRepuestoCantidadTipo.removeAllItems();
+            v.cmbRepuestoCantidadTipo.addItem("Todos");
             DefaultTableModel tmRepuesto = (DefaultTableModel) v.tblRepuestos.getModel();
             tmRepuesto.setRowCount(0);
-            rs = stm.executeQuery("SELECT * FROM Repuesto ORDER BY IdRepuesto ASC;");
+            ppt = con.prepareStatement("SELECT r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1 AND r.TipoRepuesto LIKE ? AND cr.Matricula LIKE ? ORDER BY r.TipoRepuesto ASC;");
+            ppt.setString(1, '%' + v.txtBusquedaTablaRepuestoTipo.getText().strip() + '%');
+            ppt.setString(2, '%' + v.txtBusquedaTablaRepuestoMatricula.getText().strip() + '%');
+            rs = ppt.executeQuery();
             while (rs.next()) {
-                Object [] fila = {rs.getString("TipoRepuesto"), rs.getInt("KilometrajeMax"), rs.getInt("KilometrajeDeUso"), rs.getInt("Stock")};
+                String matricula = (rs.getString("Matricula") != null) ? rs.getString("Matricula") : "------";
+                String cambio = (rs.getDate("Cambio") != null) ? rs.getDate("Cambio").toString() : "------";
+                Object [] fila = {rs.getString("TipoRepuesto"), matricula, cambio,  rs.getInt("KilometrajeMax"), rs.getInt("KilometrajeDeUso")};
                 tmRepuesto.addRow(fila);
+            }
+            rs = stm.executeQuery("SELECT DISTINCT(TipoRepuesto) FROM Repuesto;");
+            while (rs.next()) {
+                v.cmbRepuestoCantidadTipo.addItem(rs.getString("TipoRepuesto"));
             }
             v.tblRepuestos.setModel(tmRepuesto);
             
@@ -356,6 +349,7 @@ public class Model {
             JTextField tf = null;
             JDateChooser dc = null;
             JLabel lbl = null;
+            JSpinner spn = null;
             
             for (int i = 0; i < tabla.getColumnCount(); i++) {
                 input = inputList.get(i);
@@ -366,7 +360,7 @@ public class Model {
                 }
                 if (input instanceof JDateChooser) {
                     dc = (JDateChooser) input;
-                    dc.setDate(formato.parse(valor.toString()));
+                    dc.setDate((valor != "------") ? formato.parse(valor.toString()) : null);
                 }
                 if (input instanceof JComboBox) {
                     cb = (JComboBox) input;
@@ -375,6 +369,10 @@ public class Model {
                 if (input instanceof JLabel) {
                     lbl = (JLabel) input;
                     lbl.setText(valor.toString());
+                }
+                if (input instanceof JSpinner) {
+                    spn = (JSpinner) input;
+                    spn.setValue(Integer.valueOf(valor.toString()));
                 }
             }
         } catch (ParseException e) {
