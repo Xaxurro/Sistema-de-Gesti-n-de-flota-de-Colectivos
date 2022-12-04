@@ -6,12 +6,13 @@ import model.Model;
 import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.regex.Pattern;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -23,7 +24,7 @@ import model.Conductor;
 import model.Repuesto;
 import model.Evento;
 
-public class Controller implements ActionListener, MouseListener, KeyListener, PropertyChangeListener{
+public class Controller implements ActionListener, MouseListener, KeyListener, , ItemListener{
     private View v;
     private Model m;
     
@@ -86,6 +87,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.btnRepuestoLimpiar.addActionListener(this);
         v.btnRepuestoModificar.addActionListener(this);
         v.btnRepuestoEliminar.addActionListener(this);
+        v.cmbRepuestoCantidadTipo.addItemListener(this);
         
         //EVENTO
         v.btnEventoAñadir.addActionListener(this);
@@ -146,10 +148,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         buscadorEvento.add(v.cmbBusquedaTablaEventoTipo);
         
         //CREAR OBJETOS
-        colectivo = m.crearColectivo(inputColectivo);
-        conductor = m.crearConductor(inputColectivo);
-        repuesto = m.crearRepuesto(inputColectivo);
-        evento = m.crearEvento(inputColectivo);
+        colectivo = m.crearColectivo();
+        conductor = m.crearConductor();
+        repuesto = m.crearRepuesto();
+        evento = m.crearEvento();
         
         m.refrescar();
         /*
@@ -347,6 +349,9 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         if (e == v.btnRepuestoEliminar) {
             
         }
+        if (e == v.cmbRepuestoCantidadTipo) {
+            repuesto.buscarCantidad();
+        }
         
         //EVENTO
         if (e == v.btnEventoAñadir) {
@@ -384,6 +389,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         if (e == v.btnEventoLimpiarBuscadores) {
             limpiarInput(buscadorEvento);
         }
+        
         m.refrescar();
     }
 
@@ -414,8 +420,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     }
     
     @Override
-    public void propertyChange (PropertyChangeEvent evt){
-        m.refrescar();
+    public void itemStateChanged (ItemEvent evt){
+        repuesto.buscarCantidad();
     }
     
     public void mousePressed(MouseEvent eve){};
