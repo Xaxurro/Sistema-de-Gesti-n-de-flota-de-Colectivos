@@ -298,7 +298,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //COLECTIVO
         if (e == v.btnColectivoAñadir) {
             validoEmpty = validarEmpty(inputColectivo);
-//            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula") && validarRegEx(v.txtColectivoKilometraje, "^\\d*$", "Kilometraje");
+            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
                 colectivo.insertar();
             }
