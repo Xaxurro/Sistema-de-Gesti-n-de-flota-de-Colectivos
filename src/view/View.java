@@ -131,14 +131,14 @@ public class View extends javax.swing.JFrame {
         dchGananciaMatricula = new com.toedter.calendar.JDateChooser();
         lblGananciaGanancia = new javax.swing.JLabel();
         spnGananciaGanancia = new javax.swing.JSpinner();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        jDateChooser3 = new com.toedter.calendar.JDateChooser();
-        jDateChooser4 = new com.toedter.calendar.JDateChooser();
-        jLabel10 = new javax.swing.JLabel();
+        lblGananciaBusquedaMatricula = new javax.swing.JLabel();
+        txtGananciaBusquedaMatricula = new javax.swing.JComboBox<>();
+        lblGananciaBusquedaFechaInicial = new javax.swing.JLabel();
+        dchGananciaBusquedaFechaInicial = new com.toedter.calendar.JDateChooser();
+        lblGananciaBusquedaFechaFinal = new javax.swing.JLabel();
+        dchGananciaBusquedaFechaFinal = new com.toedter.calendar.JDateChooser();
+        lblGananciaBusquedaTotal = new javax.swing.JLabel();
+        lblGananciaTotal = new javax.swing.JLabel();
         btnGananciaAñadir = new javax.swing.JButton();
         btnGananciaLimpiar = new javax.swing.JButton();
         btnGananciaModificar = new javax.swing.JButton();
@@ -219,7 +219,7 @@ public class View extends javax.swing.JFrame {
         tblColectivos.setShowGrid(true);
         scpColectivos.setViewportView(tblColectivos);
 
-        spnColectivoKilometraje.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnColectivoKilometraje.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9999999, 1));
 
         javax.swing.GroupLayout pnlColectivoLayout = new javax.swing.GroupLayout(pnlColectivo);
         pnlColectivo.setLayout(pnlColectivoLayout);
@@ -900,13 +900,13 @@ public class View extends javax.swing.JFrame {
 
         spnGananciaGanancia.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
-        jLabel6.setText("Matricula:");
+        lblGananciaBusquedaMatricula.setText("Matricula:");
 
-        jLabel7.setText("Primera fecha:");
+        lblGananciaBusquedaFechaInicial.setText("Primera fecha:");
 
-        jLabel8.setText("Ultima Fecha:");
+        lblGananciaBusquedaFechaFinal.setText("Ultima Fecha:");
 
-        jLabel9.setText("Ganancia:");
+        lblGananciaBusquedaTotal.setText("Ganancia:");
 
         btnGananciaAñadir.setText("Añadir");
 
@@ -961,16 +961,16 @@ public class View extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8))
+                                .addComponent(lblGananciaBusquedaMatricula, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblGananciaBusquedaFechaInicial))
+                            .addComponent(lblGananciaBusquedaTotal)
+                            .addComponent(lblGananciaBusquedaFechaFinal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jDateChooser4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))))
+                            .addComponent(dchGananciaBusquedaFechaFinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dchGananciaBusquedaFechaInicial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtGananciaBusquedaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblGananciaTotal))))
                 .addContainerGap())
         );
         pnlGananciasLayout.setVerticalGroup(
@@ -989,20 +989,20 @@ public class View extends javax.swing.JFrame {
                     .addComponent(scpGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblGananciaBusquedaMatricula)
+                            .addComponent(txtGananciaBusquedaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblGananciaBusquedaFechaInicial)
+                            .addComponent(dchGananciaBusquedaFechaInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblGananciaBusquedaFechaFinal)
+                            .addComponent(dchGananciaBusquedaFechaFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10))))
+                            .addComponent(lblGananciaBusquedaTotal)
+                            .addComponent(lblGananciaTotal))))
                 .addGap(18, 18, 18)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1105,16 +1105,10 @@ public class View extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dchBusquedaTablaGananciaFecha;
     public static com.toedter.calendar.JDateChooser dchColectivoCompra;
     public static com.toedter.calendar.JDateChooser dchEventoFecha;
+    private com.toedter.calendar.JDateChooser dchGananciaBusquedaFechaFinal;
+    private com.toedter.calendar.JDateChooser dchGananciaBusquedaFechaInicial;
     private com.toedter.calendar.JDateChooser dchGananciaMatricula;
     public static com.toedter.calendar.JDateChooser dchRepuestoCambio;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
-    private com.toedter.calendar.JDateChooser jDateChooser4;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel lblBusquedaTablaColectivoMatricula;
     private javax.swing.JLabel lblBusquedaTablaColectivoRut;
     private javax.swing.JLabel lblBusquedaTablaConductorNombre;
@@ -1144,9 +1138,14 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JLabel lblEventoIDActual;
     private javax.swing.JLabel lblEventoNombre;
     private javax.swing.JLabel lblEventoTipo;
+    private javax.swing.JLabel lblGananciaBusquedaFechaFinal;
+    private javax.swing.JLabel lblGananciaBusquedaFechaInicial;
+    private javax.swing.JLabel lblGananciaBusquedaMatricula;
+    private javax.swing.JLabel lblGananciaBusquedaTotal;
     private javax.swing.JLabel lblGananciaFecha;
     private javax.swing.JLabel lblGananciaGanancia;
     private javax.swing.JLabel lblGananciaMatricula;
+    private javax.swing.JLabel lblGananciaTotal;
     private javax.swing.JLabel lblRepuestoCambio;
     public static javax.swing.JLabel lblRepuestoCantidad;
     private javax.swing.JLabel lblRepuestoCantidadTipo;
@@ -1195,6 +1194,7 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JTextField txtConductorRut;
     public static javax.swing.JTextField txtConductorTelefono;
     public static javax.swing.JTextField txtEventoNombre;
+    private javax.swing.JComboBox<String> txtGananciaBusquedaMatricula;
     private javax.swing.JComboBox<String> txtGananciaMatricula;
     public static javax.swing.JTextField txtRepuestoTipo;
     // End of variables declaration//GEN-END:variables
