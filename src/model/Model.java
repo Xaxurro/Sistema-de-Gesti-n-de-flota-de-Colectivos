@@ -259,6 +259,10 @@ public class Model {
             v.cmbRepuestoColectivos.addItem("------");
             v.cmbConductorColectivos.removeAllItems();
             v.cmbConductorColectivos.addItem("------");
+            v.cmbGananciaBusquedaMatricula.removeAllItems();
+            v.cmbGananciaBusquedaMatricula.addItem("------");
+            v.cmbGananciaMatricula.removeAllItems();
+            v.cmbGananciaMatricula.addItem("------");
             DefaultTableModel tmColectivos = (DefaultTableModel) v.tblColectivos.getModel();
             tmColectivos.setRowCount(0);
             
@@ -276,6 +280,8 @@ public class Model {
                 tmColectivos.addRow(fila);
                 v.cmbRepuestoColectivos.addItem(matricula);
                 v.cmbConductorColectivos.addItem(matricula);
+                v.cmbGananciaBusquedaMatricula.addItem(matricula);
+                v.cmbGananciaMatricula.addItem(matricula);
             }
             v.tblColectivos.setModel(tmColectivos);
             
@@ -305,9 +311,12 @@ public class Model {
             DefaultTableModel tmRepuesto = (DefaultTableModel) v.tblRepuestos.getModel();
             tmRepuesto.setRowCount(0);
             
-            ppt = con.prepareStatement("SELECT * FROM (SELECT r.IdRepuesto, r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1)TB WHERE TipoRepuesto LIKE ? AND Matricula LIKE ? ORDER BY TipoRepuesto ASC;");
+            sql = "SELECT * FROM (SELECT r.IdRepuesto, r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1)TB WHERE TipoRepuesto LIKE ? ";
+            if (!v.txtBusquedaTablaRepuestoMatricula.getText().strip().equals("")) {
+                sql += "AND Matricula LIKE '%" + v.txtBusquedaTablaRepuestoMatricula.getText().strip() + "%' ";
+            }
+            ppt = con.prepareStatement(sql + "ORDER BY TipoRepuesto ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaRepuestoTipo.getText().strip() + '%');
-            ppt.setString(2, '%' + v.txtBusquedaTablaRepuestoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
                 String matricula = (rs.getString("Matricula") != null) ? rs.getString("Matricula") : "------";
@@ -383,5 +392,9 @@ public class Model {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public void añadirKilometraje() {
+        
     }
 }

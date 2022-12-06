@@ -64,6 +64,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.txtBusquedaTablaColectivoRut.addKeyListener(this);
         v.txtBusquedaTablaConductorNombre.addKeyListener(this);
         v.txtBusquedaTablaConductorRut.addKeyListener(this);
+        v.txtBusquedaTablaRepuestoTipo.addKeyListener(this);
+        v.txtBusquedaTablaRepuestoMatricula.addKeyListener(this);
         v.dchBusquedaTablaEventoFecha.addPropertyChangeListener(this);
         v.txtBusquedaTablaEventoNombre.addKeyListener(this);
         v.cmbBusquedaTablaEventoTipo.addActionListener(this);
@@ -102,6 +104,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.btnEventoModificar.addActionListener(this);
         v.btnEventoEliminar.addActionListener(this);
         v.btnEventoLimpiarBuscadores.addActionListener(this);
+        v.cmbEventoTipo.addItemListener(this);
         v.tblEventos.addMouseListener(this);
     }
     
@@ -247,6 +250,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         return true;
     }
     
+    public boolean validarRegEx(String input){
+        if(!Pattern.matches("^\\d{1,7}$", input.strip())){
+            if (!(input.strip().equals(""))) {
+                JOptionPane.showMessageDialog(null, "Ingrese el un número valido.");
+            }
+            return false;
+        }
+        return true;
+    }
+    
     //ACCIONES GENERALES
     public void limpiarInput(List<Object> inputList){
         JComboBox cb = null;
@@ -291,7 +304,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             System.exit(0);
         }
         if (e == v.btnAñadirKilometraje) {
-            
+            String kilometraje = JOptionPane.showInputDialog(null, "Ingrese un numero");
+            if (validarRegEx(kilometraje)) {
+                m.añadirKilometraje();
+            }
         }
         if (e == v.btnReDo) {
             m.eliminarDB();
@@ -440,8 +456,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     
     @Override
     public void itemStateChanged (ItemEvent evt){
+        Object e = evt.getSource();
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            repuesto.buscarCantidad();
+            if (e == v.cmbRepuestoCantidadTipo) {
+                repuesto.buscarCantidad();
+            }
+            if (e == v.cmbEventoTipo) {
+                if (v.cmbEventoTipo.getSelectedItem() == "Robo" || v.cmbEventoTipo.getSelectedItem() == "Accidente") {
+                    System.out.println("controller.Controller.itemStateChanged()");
+                }
+            }
         }
     }
     
