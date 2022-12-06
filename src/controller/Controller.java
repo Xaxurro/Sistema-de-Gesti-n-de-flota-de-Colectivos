@@ -310,7 +310,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             validoEmpty = validarEmpty(inputColectivo);
             validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
-                //m.modificarColectivo();
                 colectivo.modificar();
             }
         }
@@ -318,7 +317,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             validoEmpty = validarEmpty(inputColectivo);
             validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula");
             if (validoFormato && validoEmpty) {
-                //m.eliminarColectivo();
                 colectivo.eliminar();
             }
         }
@@ -378,15 +376,13 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         }
         if (e == v.btnEventoModificar) {
             validoEmpty = validarEmpty(inputEvento);
-//            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
-            if (validoEmpty && validoFormato) {
+            if (validoEmpty) {
                 evento.modificar();
             }
         }
         if (e == v.btnEventoEliminar) {
             validoEmpty = validarEmpty(inputEvento);
-//            validoFormato = validarRegEx(v.txtEventoBeneficio, "^-?\\d*$", "Beneficio");
-            if (validoEmpty && validoFormato) {
+            if (validoEmpty) {
                 evento.eliminar();
             }
         }
