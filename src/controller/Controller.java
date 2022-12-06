@@ -22,12 +22,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import model.Colectivo;
 import model.Conductor;
 import model.Repuesto;
 import model.Evento;
 
-public class Controller implements ActionListener, MouseListener, KeyListener, PropertyChangeListener, ItemListener{
+public class Controller implements ActionListener, MouseListener, KeyListener, PropertyChangeListener, ItemListener, ChangeListener{
     private View v;
     private Model m;
     
@@ -91,6 +93,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.btnRepuestoModificar.addActionListener(this);
         v.btnRepuestoEliminar.addActionListener(this);
         v.cmbRepuestoCantidadTipo.addItemListener(this);
+        v.spnRepuestoKilometrajeMax.addChangeListener(this);
         v.tblRepuestos.addMouseListener(this);
         
         //EVENTO
@@ -440,6 +443,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             repuesto.buscarCantidad();
         }
+    }
+    
+    public void stateChanged(ChangeEvent evt){
+        System.out.println("controller.Controller.stateChanged()");
+        SpinnerNumberModel spnModel = (SpinnerNumberModel) v.spnRepuestoKilometrajeActual.getModel();
+        int max = (int) v.spnRepuestoKilometrajeMax.getValue();
+        if ((int) spnModel.getValue() >= max) {
+            spnModel.setValue(max - 1);
+        }
+        spnModel.setMaximum(max - 1);
     }
     
     public void mousePressed(MouseEvent eve){};

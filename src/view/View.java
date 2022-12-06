@@ -553,9 +553,9 @@ public class View extends javax.swing.JFrame {
 
         spnRepuestoCantidad.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
-        spnRepuestoKilometrajeActual.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnRepuestoKilometrajeActual.setModel(new javax.swing.SpinnerNumberModel(0, 0, 0, 1));
 
-        spnRepuestoKilometrajeMax.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spnRepuestoKilometrajeMax.setModel(new javax.swing.SpinnerNumberModel(1, 1, 9999999, 1));
 
         lblRepuestoID.setText("ID:");
 
