@@ -133,6 +133,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         buscadorConductor.add(v.txtBusquedaTablaConductorRut);
         
         //REPUESTO
+        inputRepuesto.add(v.lblRepuestoIDActual);
         inputRepuesto.add(v.txtRepuestoTipo);
         inputRepuesto.add(v.cmbRepuestoColectivos);
         inputRepuesto.add(v.dchRepuestoCambio);

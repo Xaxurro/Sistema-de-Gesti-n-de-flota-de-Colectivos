@@ -91,6 +91,8 @@ public class View extends javax.swing.JFrame {
         spnRepuestoCantidad = new javax.swing.JSpinner();
         spnRepuestoKilometrajeActual = new javax.swing.JSpinner();
         spnRepuestoKilometrajeMax = new javax.swing.JSpinner();
+        lblRepuestoID = new javax.swing.JLabel();
+        lblRepuestoIDActual = new javax.swing.JLabel();
         pnlEventos = new javax.swing.JPanel();
         lblBusquedaTablaEventoFecha = new javax.swing.JLabel();
         dchBusquedaTablaEventoFecha = new com.toedter.calendar.JDateChooser();
@@ -116,31 +118,31 @@ public class View extends javax.swing.JFrame {
         lblEventoIDActual = new javax.swing.JLabel();
         spnEventoBeneficio = new javax.swing.JSpinner();
         pnlGanancias = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
-        jLabel5 = new javax.swing.JLabel();
-        spnGanancias = new javax.swing.JSpinner();
-        btnEventoAñadir1 = new javax.swing.JButton();
-        btnEventoLimpiar1 = new javax.swing.JButton();
-        btnEventoModificar1 = new javax.swing.JButton();
-        btnEventoEliminar1 = new javax.swing.JButton();
+        lblBusquedaTablaGananciaFecha = new javax.swing.JLabel();
+        dchBusquedaTablaGananciaFecha = new com.toedter.calendar.JDateChooser();
+        lblBusquedaTablaGananciaMatricula = new javax.swing.JLabel();
+        txtBusquedaTablaGananciaMatricula = new javax.swing.JTextField();
+        btnGananciaLimpiarBuscadores = new javax.swing.JButton();
+        scpGanancias = new javax.swing.JScrollPane();
+        tblGanancias = new javax.swing.JTable();
+        lblGananciaMatricula = new javax.swing.JLabel();
+        txtGananciaMatricula = new javax.swing.JComboBox<>();
+        lblGananciaFecha = new javax.swing.JLabel();
+        dchGananciaMatricula = new com.toedter.calendar.JDateChooser();
+        lblGananciaGanancia = new javax.swing.JLabel();
+        spnGananciaGanancia = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jDateChooser3 = new com.toedter.calendar.JDateChooser();
         jDateChooser4 = new com.toedter.calendar.JDateChooser();
         jLabel10 = new javax.swing.JLabel();
-        btnEventoLimpiarBuscadores1 = new javax.swing.JButton();
+        btnGananciaAñadir = new javax.swing.JButton();
+        btnGananciaLimpiar = new javax.swing.JButton();
+        btnGananciaModificar = new javax.swing.JButton();
+        btnGananciaEliminar = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
         btnReDo = new javax.swing.JButton();
@@ -268,7 +270,7 @@ public class View extends javax.swing.JFrame {
                                 .addComponent(txtColectivoMotor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(18, 18, 18))
             .addGroup(pnlColectivoLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addComponent(lblBusquedaTablaColectivoMatricula)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtBusquedaTablaColectivoMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -437,19 +439,18 @@ public class View extends javax.swing.JFrame {
                             .addComponent(txtConductorDireccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtConductorTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbConductorColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))))
-            .addGroup(pnlConductorLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(lblBusquedaTablaConductorNombre)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBusquedaTablaConductorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblBusquedaTablaConductorRut)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBusquedaTablaConductorRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnConductorLimpiarBuscadores)
-                .addContainerGap())
+                        .addGap(18, 18, 18))
+                    .addGroup(pnlConductorLayout.createSequentialGroup()
+                        .addComponent(lblBusquedaTablaConductorNombre)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBusquedaTablaConductorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblBusquedaTablaConductorRut)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBusquedaTablaConductorRut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConductorLimpiarBuscadores)
+                        .addContainerGap())))
         );
         pnlConductorLayout.setVerticalGroup(
             pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -483,7 +484,7 @@ public class View extends javax.swing.JFrame {
                         .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblConductorTelefono)
                             .addComponent(txtConductorTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addGroup(pnlConductorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnConductorAñadir)
                     .addComponent(btnConductorLimpiar)
@@ -528,7 +529,7 @@ public class View extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Tipo de Repuesto", "Patente auto asociado", "Fecha de Cambio", "Kilometraje Máximo", "Kilometraje Actual"
+                "ID", "Tipo de Repuesto", "Patente auto asociado", "Fecha de Cambio", "Kilometraje Máximo", "Kilometraje Actual"
             }
         ));
         scpRepuestos.setViewportView(tblRepuestos);
@@ -556,6 +557,8 @@ public class View extends javax.swing.JFrame {
 
         spnRepuestoKilometrajeMax.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
+        lblRepuestoID.setText("ID:");
+
         javax.swing.GroupLayout pnlRepuestoLayout = new javax.swing.GroupLayout(pnlRepuesto);
         pnlRepuesto.setLayout(pnlRepuestoLayout);
         pnlRepuestoLayout.setHorizontalGroup(
@@ -574,23 +577,37 @@ public class View extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 307, Short.MAX_VALUE)
                         .addComponent(btnRepuestoLimpiarBuscadores))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblRepuestoKilometrajeMax)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(spnRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(scpRepuestos, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pnlRepuestoLayout.createSequentialGroup()
-                                .addComponent(lblRepuestoTipo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlRepuestoLayout.createSequentialGroup()
-                                .addComponent(lblRepuestoCambio)
-                                .addGap(12, 12, 12)
-                                .addComponent(dchRepuestoCambio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
-                                .addComponent(lblRepuestoKilometrajeMax)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(spnRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
+                            .addComponent(lblRepuestoCantidadTipo)
+                            .addComponent(cmbRepuestoCantidadTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblRepuestoCantidad))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                                        .addComponent(lblRepuestoCambio)
+                                        .addGap(12, 12, 12)
+                                        .addComponent(dchRepuestoCambio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblRepuestoID)
+                                            .addComponent(lblRepuestoTipo))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lblRepuestoIDActual))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblRepuestoKilometrajeUsado)
                                     .addComponent(lblRepuestoKilometrajeUsado1))
@@ -600,28 +617,19 @@ public class View extends javax.swing.JFrame {
                                         .addComponent(spnRepuestoCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlRepuestoLayout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(spnRepuestoKilometrajeActual, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRepuestoAñadir)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRepuestoLimpiar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRepuestoModificar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRepuestoEliminar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblRepuestoColectivos)
-                        .addGap(12, 12, 12)
-                        .addComponent(cmbRepuestoColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(scpRepuestos, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblRepuestoCantidadTipo)
-                            .addComponent(cmbRepuestoCantidadTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblRepuestoCantidad))))
+                                        .addComponent(spnRepuestoKilometrajeActual, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                                .addComponent(btnRepuestoAñadir)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRepuestoLimpiar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRepuestoModificar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRepuestoEliminar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblRepuestoColectivos)
+                                .addGap(12, 12, 12)
+                                .addComponent(cmbRepuestoColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         pnlRepuestoLayout.setVerticalGroup(
@@ -645,35 +653,46 @@ public class View extends javax.swing.JFrame {
                         .addComponent(cmbRepuestoCantidadTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
                         .addComponent(lblRepuestoCantidad)))
-                .addGap(12, 12, 12)
-                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRepuestoKilometrajeMax)
-                    .addComponent(lblRepuestoTipo)
-                    .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spnRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblRepuestoCambio)
-                    .addComponent(dchRepuestoCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlRepuestoLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
+                        .addGap(12, 12, 12)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRepuestoKilometrajeMax)
+                            .addComponent(spnRepuestoKilometrajeMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRepuestoID)
+                            .addComponent(lblRepuestoIDActual))))
+                .addGap(21, 21, 21)
+                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
                         .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblRepuestoKilometrajeUsado)
-                            .addComponent(spnRepuestoKilometrajeActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRepuestoKilometrajeUsado1)
-                    .addComponent(spnRepuestoCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRepuestoAñadir)
-                    .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnRepuestoEliminar)
-                        .addComponent(btnRepuestoLimpiar)
-                        .addComponent(btnRepuestoModificar)
-                        .addComponent(lblRepuestoColectivos)
-                        .addComponent(cmbRepuestoColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10))
+                            .addComponent(spnRepuestoKilometrajeActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRepuestoKilometrajeUsado1)
+                            .addComponent(spnRepuestoCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRepuestoAñadir)
+                            .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnRepuestoEliminar)
+                                .addComponent(btnRepuestoLimpiar)
+                                .addComponent(btnRepuestoModificar)
+                                .addComponent(lblRepuestoColectivos)
+                                .addComponent(cmbRepuestoColectivos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10))
+                    .addGroup(pnlRepuestoLayout.createSequentialGroup()
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblRepuestoTipo)
+                            .addComponent(txtRepuestoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlRepuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblRepuestoCambio)
+                            .addComponent(dchRepuestoCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         Vista.addTab("Repuestos en Uso", pnlRepuesto);
@@ -768,7 +787,7 @@ public class View extends javax.swing.JFrame {
                         .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlEventosLayout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(pnlEventosLayout.createSequentialGroup()
                                         .addComponent(btnEventoAñadir)
                                         .addGap(18, 18, 18)
@@ -779,8 +798,9 @@ public class View extends javax.swing.JFrame {
                                         .addComponent(btnEventoEliminar))
                                     .addGroup(pnlEventosLayout.createSequentialGroup()
                                         .addComponent(lblEventoFecha)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(dchEventoFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(dchEventoFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(111, 111, 111))))
                             .addGroup(pnlEventosLayout.createSequentialGroup()
                                 .addGap(27, 27, 27)
                                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -790,7 +810,7 @@ public class View extends javax.swing.JFrame {
                                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblEventoIDActual)
                                     .addGroup(pnlEventosLayout.createSequentialGroup()
-                                        .addComponent(cmbEventoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cmbEventoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(pnlEventosLayout.createSequentialGroup()
                                                 .addGap(449, 449, 449)
@@ -828,33 +848,41 @@ public class View extends javax.swing.JFrame {
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEventoID)
                     .addComponent(lblEventoIDActual))
-                .addGap(10, 10, 10)
+                .addGap(18, 18, 18)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dchEventoFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(lblEventoFecha)
                         .addComponent(lblEventoNombre)
                         .addComponent(txtEventoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(15, 15, 15)
+                .addGap(18, 18, 18)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblEventoTipo)
                     .addComponent(cmbEventoTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblEventoBeneficio)
                     .addComponent(spnEventoBeneficio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(67, 67, 67)
+                .addGap(60, 60, 60)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEventoAñadir)
                     .addComponent(btnEventoLimpiar)
                     .addComponent(btnEventoModificar)
                     .addComponent(btnEventoEliminar))
-                .addGap(138, 138, 138))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         Vista.addTab("Eventos", pnlEventos);
 
         pnlGanancias.setToolTipText("");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        lblBusquedaTablaGananciaFecha.setText("Buscar Fecha:");
+
+        lblBusquedaTablaGananciaMatricula.setText("Buscar Matricula:");
+
+        txtBusquedaTablaGananciaMatricula.setPreferredSize(new java.awt.Dimension(200, 22));
+
+        btnGananciaLimpiarBuscadores.setText("Limpiar Buscadores");
+
+        tblGanancias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -862,52 +890,31 @@ public class View extends javax.swing.JFrame {
                 "Fecha", "Matricula", "Ganancia"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        scpGanancias.setViewportView(tblGanancias);
 
-        jLabel1.setText("Buscar Fecha:");
+        lblGananciaMatricula.setText("Matricula:");
 
-        jLabel2.setText("Buscar Matricula:");
+        lblGananciaFecha.setText("Fecha:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
+        lblGananciaGanancia.setText("Ganancia:");
 
-        jLabel3.setText("Matricula:");
-
-        jLabel4.setText("Fecha:");
-
-        jLabel5.setText("Ganancia:");
-
-        spnGanancias.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
-
-        btnEventoAñadir1.setText("Añadir");
-
-        btnEventoLimpiar1.setText("Limpiar");
-
-        btnEventoModificar1.setText("Modificar");
-
-        btnEventoEliminar1.setText("Eliminar");
+        spnGananciaGanancia.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         jLabel6.setText("Matricula:");
 
         jLabel7.setText("Primera fecha:");
 
-        jLabel8.setText("Ultima Fecha");
+        jLabel8.setText("Ultima Fecha:");
 
         jLabel9.setText("Ganancia:");
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
+        btnGananciaAñadir.setText("Añadir");
 
-        jLabel10.setText("*Ganancia*");
+        btnGananciaLimpiar.setText("Limpiar");
 
-        btnEventoLimpiarBuscadores1.setText("Limpiar Buscadores");
+        btnGananciaModificar.setText("Modificar");
+
+        btnGananciaEliminar.setText("Eliminar");
 
         javax.swing.GroupLayout pnlGananciasLayout = new javax.swing.GroupLayout(pnlGanancias);
         pnlGanancias.setLayout(pnlGananciasLayout);
@@ -917,57 +924,54 @@ public class View extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(lblBusquedaTablaGananciaFecha)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel10))))
+                        .addComponent(dchBusquedaTablaGananciaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblBusquedaTablaGananciaMatricula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBusquedaTablaGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+                        .addComponent(btnGananciaLimpiarBuscadores))
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addGap(70, 70, 70)
+                        .addGap(18, 18, 18)
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(26, 26, 26)
-                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(spnGanancias)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlGananciasLayout.createSequentialGroup()
+                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblGananciaGanancia)
+                                    .addComponent(lblGananciaFecha)
+                                    .addComponent(lblGananciaMatricula))
+                                .addGap(6, 6, 6)
+                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtGananciaMatricula, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(spnGananciaGanancia, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(dchGananciaMatricula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(pnlGananciasLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(btnGananciaAñadir)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnGananciaLimpiar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnGananciaModificar)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnGananciaEliminar)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(scpGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel7))
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 395, Short.MAX_VALUE)
-                        .addComponent(btnEventoLimpiarBuscadores1)))
+                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jDateChooser4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))))
                 .addContainerGap())
-            .addGroup(pnlGananciasLayout.createSequentialGroup()
-                .addComponent(btnEventoAñadir1)
-                .addGap(18, 18, 18)
-                .addComponent(btnEventoLimpiar1)
-                .addGap(18, 18, 18)
-                .addComponent(btnEventoModificar1)
-                .addGap(18, 18, 18)
-                .addComponent(btnEventoEliminar1)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
         pnlGananciasLayout.setVerticalGroup(
             pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -975,14 +979,14 @@ public class View extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnEventoLimpiarBuscadores1))
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblBusquedaTablaGananciaFecha)
+                        .addComponent(lblBusquedaTablaGananciaMatricula)
+                        .addComponent(txtBusquedaTablaGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGananciaLimpiarBuscadores))
+                    .addComponent(dchBusquedaTablaGananciaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scpGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlGananciasLayout.createSequentialGroup()
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
@@ -1001,22 +1005,22 @@ public class View extends javax.swing.JFrame {
                             .addComponent(jLabel10))))
                 .addGap(18, 18, 18)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(txtGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblGananciaMatricula))
                 .addGap(18, 18, 18)
-                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(spnGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dchGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblGananciaFecha))
+                .addGap(18, 18, 18)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEventoAñadir1)
-                    .addComponent(btnEventoLimpiar1)
-                    .addComponent(btnEventoModificar1)
-                    .addComponent(btnEventoEliminar1))
+                    .addComponent(spnGananciaGanancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblGananciaGanancia))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnGananciaAñadir)
+                    .addComponent(btnGananciaLimpiar)
+                    .addComponent(btnGananciaModificar)
+                    .addComponent(btnGananciaEliminar))
                 .addContainerGap())
         );
 
@@ -1058,14 +1062,6 @@ public class View extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
     
     
 
@@ -1083,15 +1079,15 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JButton btnConductorLimpiarBuscadores;
     public static javax.swing.JButton btnConductorModificar;
     public static javax.swing.JButton btnEventoAñadir;
-    public static javax.swing.JButton btnEventoAñadir1;
     public static javax.swing.JButton btnEventoEliminar;
-    public static javax.swing.JButton btnEventoEliminar1;
     public static javax.swing.JButton btnEventoLimpiar;
-    public static javax.swing.JButton btnEventoLimpiar1;
     public static javax.swing.JButton btnEventoLimpiarBuscadores;
-    public static javax.swing.JButton btnEventoLimpiarBuscadores1;
     public static javax.swing.JButton btnEventoModificar;
-    public static javax.swing.JButton btnEventoModificar1;
+    public static javax.swing.JButton btnGananciaAñadir;
+    public static javax.swing.JButton btnGananciaEliminar;
+    public static javax.swing.JButton btnGananciaLimpiar;
+    public static javax.swing.JButton btnGananciaLimpiarBuscadores;
+    public static javax.swing.JButton btnGananciaModificar;
     public static javax.swing.JButton btnReDo;
     public static javax.swing.JButton btnRepuestoAñadir;
     public static javax.swing.JButton btnRepuestoEliminar;
@@ -1106,28 +1102,19 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JComboBox<String> cmbRepuestoCantidadTipo;
     public static javax.swing.JComboBox<String> cmbRepuestoColectivos;
     public static com.toedter.calendar.JDateChooser dchBusquedaTablaEventoFecha;
+    private com.toedter.calendar.JDateChooser dchBusquedaTablaGananciaFecha;
     public static com.toedter.calendar.JDateChooser dchColectivoCompra;
     public static com.toedter.calendar.JDateChooser dchEventoFecha;
+    private com.toedter.calendar.JDateChooser dchGananciaMatricula;
     public static com.toedter.calendar.JDateChooser dchRepuestoCambio;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox3;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private com.toedter.calendar.JDateChooser jDateChooser3;
     private com.toedter.calendar.JDateChooser jDateChooser4;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lblBusquedaTablaColectivoMatricula;
     private javax.swing.JLabel lblBusquedaTablaColectivoRut;
     private javax.swing.JLabel lblBusquedaTablaConductorNombre;
@@ -1135,6 +1122,8 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel lblBusquedaTablaEventoFecha;
     private javax.swing.JLabel lblBusquedaTablaEventoNombre;
     private javax.swing.JLabel lblBusquedaTablaEventoTipo;
+    private javax.swing.JLabel lblBusquedaTablaGananciaFecha;
+    private javax.swing.JLabel lblBusquedaTablaGananciaMatricula;
     private javax.swing.JLabel lblBusquedaTablaRepuestoMatricula;
     private javax.swing.JLabel lblBusquedaTablaRepuestoTipo;
     private javax.swing.JLabel lblColectivo1Motor;
@@ -1155,10 +1144,15 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JLabel lblEventoIDActual;
     private javax.swing.JLabel lblEventoNombre;
     private javax.swing.JLabel lblEventoTipo;
+    private javax.swing.JLabel lblGananciaFecha;
+    private javax.swing.JLabel lblGananciaGanancia;
+    private javax.swing.JLabel lblGananciaMatricula;
     private javax.swing.JLabel lblRepuestoCambio;
     public static javax.swing.JLabel lblRepuestoCantidad;
     private javax.swing.JLabel lblRepuestoCantidadTipo;
     private javax.swing.JLabel lblRepuestoColectivos;
+    private javax.swing.JLabel lblRepuestoID;
+    public static javax.swing.JLabel lblRepuestoIDActual;
     private javax.swing.JLabel lblRepuestoKilometrajeMax;
     private javax.swing.JLabel lblRepuestoKilometrajeUsado;
     private javax.swing.JLabel lblRepuestoKilometrajeUsado1;
@@ -1171,22 +1165,25 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JScrollPane scpColectivos;
     private javax.swing.JScrollPane scpConductores;
     private javax.swing.JScrollPane scpEventos;
+    private javax.swing.JScrollPane scpGanancias;
     private javax.swing.JScrollPane scpRepuestos;
     public static javax.swing.JSpinner spnColectivoKilometraje;
     public static javax.swing.JSpinner spnEventoBeneficio;
-    public static javax.swing.JSpinner spnGanancias;
+    public static javax.swing.JSpinner spnGananciaGanancia;
     public static javax.swing.JSpinner spnRepuestoCantidad;
     public static javax.swing.JSpinner spnRepuestoKilometrajeActual;
     public static javax.swing.JSpinner spnRepuestoKilometrajeMax;
     public static javax.swing.JTable tblColectivos;
     public static javax.swing.JTable tblConductores;
     public static javax.swing.JTable tblEventos;
+    private javax.swing.JTable tblGanancias;
     public static javax.swing.JTable tblRepuestos;
     public static javax.swing.JTextField txtBusquedaTablaColectivoMatricula;
     public static javax.swing.JTextField txtBusquedaTablaColectivoRut;
     public static javax.swing.JTextField txtBusquedaTablaConductorNombre;
     public static javax.swing.JTextField txtBusquedaTablaConductorRut;
     public static javax.swing.JTextField txtBusquedaTablaEventoNombre;
+    private javax.swing.JTextField txtBusquedaTablaGananciaMatricula;
     public static javax.swing.JTextField txtBusquedaTablaRepuestoMatricula;
     public static javax.swing.JTextField txtBusquedaTablaRepuestoTipo;
     public static javax.swing.JTextField txtColectivoMarca;
@@ -1198,6 +1195,7 @@ public class View extends javax.swing.JFrame {
     public static javax.swing.JTextField txtConductorRut;
     public static javax.swing.JTextField txtConductorTelefono;
     public static javax.swing.JTextField txtEventoNombre;
+    private javax.swing.JComboBox<String> txtGananciaMatricula;
     public static javax.swing.JTextField txtRepuestoTipo;
     // End of variables declaration//GEN-END:variables
 }

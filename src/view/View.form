@@ -137,7 +137,7 @@
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblBusquedaTablaColectivoMatricula" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtBusquedaTablaColectivoMatricula" min="-2" max="-2" attributes="0"/>
@@ -535,20 +535,19 @@
                               </Group>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblBusquedaTablaConductorNombre" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtBusquedaTablaConductorNombre" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="lblBusquedaTablaConductorRut" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtBusquedaTablaConductorRut" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btnConductorLimpiarBuscadores" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                  </Group>
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                      <Component id="lblBusquedaTablaConductorNombre" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtBusquedaTablaConductorNombre" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="lblBusquedaTablaConductorRut" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="txtBusquedaTablaConductorRut" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="btnConductorLimpiarBuscadores" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -594,7 +593,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="84" max="32767" attributes="0"/>
+                      <EmptySpace pref="87" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnConductorAñadir" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnConductorLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -854,27 +853,45 @@
                               <Component id="btnRepuestoLimpiarBuscadores" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="lblRepuestoTipo" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="txtRepuestoTipo" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Component id="lblRepuestoCambio" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                                      <Component id="dchRepuestoCambio" min="-2" pref="200" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
                               <EmptySpace max="32767" attributes="0"/>
+                              <Component id="lblRepuestoKilometrajeMax" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="spnRepuestoKilometrajeMax" min="-2" pref="200" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="scpRepuestos" min="-2" pref="777" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="lblRepuestoKilometrajeMax" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="spnRepuestoKilometrajeMax" min="-2" pref="200" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
+                                  <Component id="lblRepuestoCantidadTipo" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cmbRepuestoCantidadTipo" min="-2" pref="200" max="-2" attributes="0"/>
+                                  <Component id="lblRepuestoCantidad" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Component id="lblRepuestoCambio" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                                              <Component id="dchRepuestoCambio" min="-2" pref="200" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="lblRepuestoID" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="lblRepuestoTipo" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="txtRepuestoTipo" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="lblRepuestoIDActual" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="lblRepuestoKilometrajeUsado" min="-2" max="-2" attributes="0"/>
                                           <Component id="lblRepuestoKilometrajeUsado1" min="-2" max="-2" attributes="0"/>
@@ -890,30 +907,19 @@
                                           </Group>
                                       </Group>
                                   </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="btnRepuestoAñadir" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="btnRepuestoLimpiar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="btnRepuestoModificar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="btnRepuestoEliminar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="lblRepuestoColectivos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
-                              <Component id="cmbRepuestoColectivos" min="-2" pref="200" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="scpRepuestos" min="-2" pref="777" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblRepuestoCantidadTipo" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cmbRepuestoCantidadTipo" min="-2" pref="200" max="-2" attributes="0"/>
-                                  <Component id="lblRepuestoCantidad" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Component id="btnRepuestoAñadir" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                      <Component id="btnRepuestoLimpiar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                      <Component id="btnRepuestoModificar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                      <Component id="btnRepuestoEliminar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="lblRepuestoColectivos" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                                      <Component id="cmbRepuestoColectivos" min="-2" pref="200" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                       </Group>
@@ -947,42 +953,60 @@
                               <Component id="lblRepuestoCantidad" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblRepuestoKilometrajeMax" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblRepuestoTipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtRepuestoTipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="spnRepuestoKilometrajeMax" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblRepuestoCambio" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="dchRepuestoCambio" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblRepuestoKilometrajeMax" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="spnRepuestoKilometrajeMax" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblRepuestoID" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblRepuestoIDActual" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="lblRepuestoKilometrajeUsado" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="spnRepuestoKilometrajeActual" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblRepuestoKilometrajeUsado1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="spnRepuestoCantidad" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="54" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="btnRepuestoAñadir" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                      <Component id="btnRepuestoEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnRepuestoLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnRepuestoModificar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblRepuestoColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmbRepuestoColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblRepuestoTipo" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtRepuestoTipo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblRepuestoCambio" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="dchRepuestoCambio" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblRepuestoKilometrajeUsado1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="spnRepuestoCantidad" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="54" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnRepuestoAñadir" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                              <Component id="btnRepuestoEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnRepuestoLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnRepuestoModificar" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblRepuestoColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cmbRepuestoColectivos" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1088,7 +1112,8 @@
                 <Component class="javax.swing.JTable" name="tblRepuestos">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="5" rowCount="0">
+                      <Table columnCount="6" rowCount="0">
+                        <Column editable="true" title="ID" type="java.lang.Object"/>
                         <Column editable="true" title="Tipo de Repuesto" type="java.lang.Object"/>
                         <Column editable="true" title="Patente auto asociado" type="java.lang.Object"/>
                         <Column editable="true" title="Fecha de Cambio" type="java.lang.Object"/>
@@ -1199,6 +1224,16 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
               </AuxValues>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblRepuestoID">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="ID:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblRepuestoIDActual">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="pnlEventos">
@@ -1240,7 +1275,7 @@
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Group type="102" attributes="0">
                                               <Component id="btnEventoAñadir" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -1252,8 +1287,9 @@
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="lblEventoFecha" min="-2" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="dchEventoFecha" min="-2" pref="239" max="-2" attributes="0"/>
+                                              <EmptySpace max="32767" attributes="0"/>
+                                              <Component id="dchEventoFecha" min="-2" pref="201" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="111" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
@@ -1267,7 +1303,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="lblEventoIDActual" min="-2" max="-2" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <Component id="cmbEventoTipo" min="-2" pref="238" max="-2" attributes="0"/>
+                                              <Component id="cmbEventoTipo" min="-2" pref="200" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" attributes="0">
                                                   <Group type="102" alignment="0" attributes="0">
                                                       <EmptySpace min="-2" pref="449" max="-2" attributes="0"/>
@@ -1321,7 +1357,7 @@
                           <Component id="lblEventoID" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblEventoIDActual" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="dchEventoFecha" min="-2" max="-2" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="3" attributes="0">
@@ -1330,21 +1366,21 @@
                               <Component id="txtEventoNombre" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblEventoTipo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="cmbEventoTipo" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblEventoBeneficio" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="spnEventoBeneficio" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="67" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnEventoAñadir" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEventoLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEventoModificar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEventoEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="138" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1607,69 +1643,66 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jScrollPane1" max="32767" attributes="0"/>
+                              <Component id="lblBusquedaTablaGananciaFecha" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jComboBox3" min="-2" pref="92" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jDateChooser3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jDateChooser4" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="1" attributes="0">
-                                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="dchBusquedaTablaGananciaFecha" min="-2" pref="200" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="lblBusquedaTablaGananciaMatricula" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="txtBusquedaTablaGananciaMatricula" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="291" max="32767" attributes="0"/>
+                              <Component id="btnGananciaLimpiarBuscadores" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel3" alignment="0" min="-2" pref="64" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jComboBox1" max="32767" attributes="0"/>
-                                  <Component id="spnGanancias" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jDateChooser2" alignment="0" min="-2" pref="116" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="lblGananciaGanancia" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblGananciaFecha" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblGananciaMatricula" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="txtGananciaMatricula" max="32767" attributes="0"/>
+                                          <Component id="spnGananciaGanancia" alignment="0" pref="200" max="32767" attributes="0"/>
+                                          <Component id="dchGananciaMatricula" alignment="0" max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                      <Component id="btnGananciaAñadir" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="btnGananciaLimpiar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="btnGananciaModificar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="btnGananciaEliminar" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                              <Component id="scpGanancias" min="-2" pref="700" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel6" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel8" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jDateChooser1" min="-2" pref="150" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField2" min="-2" pref="146" max="-2" attributes="0"/>
-                              <EmptySpace pref="395" max="32767" attributes="0"/>
-                              <Component id="btnEventoLimpiarBuscadores1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="jDateChooser4" max="32767" attributes="0"/>
+                                  <Component id="jDateChooser3" max="32767" attributes="0"/>
+                                  <Component id="jComboBox3" min="-2" pref="200" max="-2" attributes="0"/>
+                                  <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="btnEventoAñadir1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnEventoLimpiar1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnEventoModificar1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnEventoEliminar1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1679,16 +1712,16 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnEventoLimpiarBuscadores1" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblBusquedaTablaGananciaFecha" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblBusquedaTablaGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtBusquedaTablaGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnGananciaLimpiarBuscadores" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jDateChooser1" min="-2" max="-2" attributes="0"/>
+                          <Component id="dchBusquedaTablaGananciaFecha" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" min="-2" pref="204" max="-2" attributes="0"/>
+                          <Component id="scpGanancias" min="-2" pref="204" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1713,25 +1746,25 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jComboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jDateChooser2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                          <Component id="dchGananciaMatricula" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblGananciaFecha" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                          <Component id="spnGanancias" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="56" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnEventoAñadir1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEventoLimpiar1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEventoModificar1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEventoEliminar1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="spnGananciaGanancia" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblGananciaGanancia" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="50" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnGananciaAñadir" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnGananciaLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnGananciaModificar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnGananciaEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
@@ -1739,14 +1772,41 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+            <Component class="javax.swing.JLabel" name="lblBusquedaTablaGananciaFecha">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Buscar Fecha:"/>
+              </Properties>
+            </Component>
+            <Component class="com.toedter.calendar.JDateChooser" name="dchBusquedaTablaGananciaFecha">
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblBusquedaTablaGananciaMatricula">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Buscar Matricula:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtBusquedaTablaGananciaMatricula">
+              <Properties>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[200, 22]"/>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnGananciaLimpiarBuscadores">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Limpiar Buscadores"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="scpGanancias">
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
               </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable1">
+                <Component class="javax.swing.JTable" name="tblGanancias">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="3" rowCount="0">
@@ -1759,90 +1819,38 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JLabel" name="jLabel1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Buscar Fecha:"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel2">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Buscar Matricula:"/>
-              </Properties>
-            </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser1">
-            </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox1">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="Item 1"/>
-                    <StringItem index="1" value="Item 2"/>
-                    <StringItem index="2" value="Item 3"/>
-                    <StringItem index="3" value="Item 4"/>
-                  </StringArray>
-                </Property>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox1ActionPerformed"/>
-              </Events>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JLabel" name="jLabel3">
+            <Component class="javax.swing.JLabel" name="lblGananciaMatricula">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Matricula:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel4">
+            <Component class="javax.swing.JComboBox" name="txtGananciaMatricula">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblGananciaFecha">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Fecha:"/>
               </Properties>
             </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser2">
+            <Component class="com.toedter.calendar.JDateChooser" name="dchGananciaMatricula">
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel5">
+            <Component class="javax.swing.JLabel" name="lblGananciaGanancia">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ganancia:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JSpinner" name="spnGanancias">
+            <Component class="javax.swing.JSpinner" name="spnGananciaGanancia">
               <Properties>
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
                   <SpinnerModel initial="1" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
                 </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnEventoA&#xf1;adir1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnEventoLimpiar1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Limpiar"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnEventoModificar1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Modificar"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnEventoEliminar1">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
@@ -1860,7 +1868,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Ultima Fecha"/>
+                <Property name="text" type="java.lang.String" value="Ultima Fecha:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JComboBox" name="jComboBox3">
@@ -1878,23 +1886,39 @@
                 <Property name="text" type="java.lang.String" value="Ganancia:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField2ActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser3">
             </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser4">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel10">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="*Ganancia*"/>
-              </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnEventoLimpiarBuscadores1">
+            <Component class="javax.swing.JButton" name="btnGananciaA&#xf1;adir">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Limpiar Buscadores"/>
+                <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnGananciaLimpiar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Limpiar"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnGananciaModificar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Modificar"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnGananciaEliminar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>

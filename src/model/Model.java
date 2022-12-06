@@ -299,14 +299,14 @@ public class Model {
             v.cmbRepuestoCantidadTipo.addItem("Todos");
             DefaultTableModel tmRepuesto = (DefaultTableModel) v.tblRepuestos.getModel();
             tmRepuesto.setRowCount(0);
-            ppt = con.prepareStatement("SELECT r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1 AND r.TipoRepuesto LIKE ? AND cr.Matricula LIKE ? ORDER BY r.TipoRepuesto ASC;");
+            ppt = con.prepareStatement("SELECT r.IdRepuesto, r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1 AND r.TipoRepuesto LIKE ? AND cr.Matricula LIKE ? ORDER BY r.TipoRepuesto ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaRepuestoTipo.getText().strip() + '%');
             ppt.setString(2, '%' + v.txtBusquedaTablaRepuestoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
                 String matricula = (rs.getString("Matricula") != null) ? rs.getString("Matricula") : "------";
                 String cambio = (rs.getDate("Cambio") != null) ? rs.getDate("Cambio").toString() : "------";
-                Object [] fila = {rs.getString("TipoRepuesto"), matricula, cambio,  rs.getInt("KilometrajeMax"), rs.getInt("KilometrajeDeUso")};
+                Object [] fila = {rs.getInt("IdRepuesto"), rs.getString("TipoRepuesto"), matricula, cambio,  rs.getInt("KilometrajeMax"), rs.getInt("KilometrajeDeUso")};
                 tmRepuesto.addRow(fila);
             }
             rs = stm.executeQuery("SELECT DISTINCT(TipoRepuesto) FROM Repuesto;");
