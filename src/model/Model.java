@@ -253,8 +253,7 @@ public class Model {
     }
     
     public void refrescar(){
-        try {  
-            System.out.println(Array.get(Thread.currentThread().getStackTrace(), 2));
+        try {
             // Colectivos
             v.cmbRepuestoColectivos.removeAllItems();
             v.cmbRepuestoColectivos.addItem("------");
@@ -262,7 +261,12 @@ public class Model {
             v.cmbConductorColectivos.addItem("------");
             DefaultTableModel tmColectivos = (DefaultTableModel) v.tblColectivos.getModel();
             tmColectivos.setRowCount(0);
-            ppt = con.prepareStatement("SELECT c.Matricula, cc.RutConductor, c.Compra, c.KilometrajeActual, c.Marca, c.Vin, c.Motor FROM Colectivo c LEFT JOIN ColectivoConductor cc ON c.Matricula = cc.Matricula AND cc.Estado = 1 AND c.Matricula LIKE ? ORDER BY c.Matricula ASC;");
+            
+            String sql = "SELECT * FROM (SELECT c.Matricula, cc.RutConductor, c.Compra, c.KilometrajeActual, c.Marca, c.Vin, c.Motor FROM Colectivo c LEFT JOIN ColectivoConductor cc ON c.Matricula = cc.Matricula AND cc.Estado = 1)TB WHERE Matricula LIKE ? ";
+            if (!v.txtBusquedaTablaColectivoRut.getText().strip().equals("")) {
+                sql += "AND RutConductor LIKE '%" + v.txtBusquedaTablaColectivoRut.getText().strip() + "%' ";
+            }
+            ppt = con.prepareStatement(sql + "ORDER BY Matricula ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaColectivoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
@@ -281,7 +285,8 @@ public class Model {
             v.cmbColectivoConductores.addItem("------");
             DefaultTableModel tmConductores = (DefaultTableModel) v.tblConductores.getModel();
             tmConductores.setRowCount(0);
-            ppt = con.prepareStatement("SELECT c.RutConductor, cc.Matricula, c.Nombre, c.Direccion, c.Telefono FROM Conductor c LEFT JOIN ColectivoConductor cc ON c.RutConductor = cc.RutConductor AND cc.Estado = 1 AND c.Nombre LIKE ? AND c.RutConductor LIKE ? ORDER BY c.RutConductor ASC;");
+            
+            ppt = con.prepareStatement("SELECT * FROM (SELECT c.RutConductor, cc.Matricula, c.Nombre, c.Direccion, c.Telefono FROM Conductor c LEFT JOIN ColectivoConductor cc ON c.RutConductor = cc.RutConductor AND cc.Estado = 1)TB WHERE Nombre LIKE ? AND RutConductor LIKE ? ORDER BY RutConductor ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaConductorNombre.getText().strip() + '%');
             ppt.setString(2, '%' + v.txtBusquedaTablaConductorRut.getText().strip() + '%');
             rs = ppt.executeQuery();
@@ -299,7 +304,8 @@ public class Model {
             v.cmbRepuestoCantidadTipo.addItem("Todos");
             DefaultTableModel tmRepuesto = (DefaultTableModel) v.tblRepuestos.getModel();
             tmRepuesto.setRowCount(0);
-            ppt = con.prepareStatement("SELECT r.IdRepuesto, r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1 AND r.TipoRepuesto LIKE ? AND cr.Matricula LIKE ? ORDER BY r.TipoRepuesto ASC;");
+            
+            ppt = con.prepareStatement("SELECT * FROM (SELECT r.IdRepuesto, r.TipoRepuesto, cr.Matricula, cr.Cambio, r.KilometrajeMax, r.KilometrajeDeUso FROM Repuesto r LEFT JOIN ColectivoRepuesto cr ON r.IdRepuesto = cr.IdRepuesto AND cr.Estado = 1)TB WHERE TipoRepuesto LIKE ? AND Matricula LIKE ? ORDER BY TipoRepuesto ASC;");
             ppt.setString(1, '%' + v.txtBusquedaTablaRepuestoTipo.getText().strip() + '%');
             ppt.setString(2, '%' + v.txtBusquedaTablaRepuestoMatricula.getText().strip() + '%');
             rs = ppt.executeQuery();
@@ -318,15 +324,14 @@ public class Model {
             //Eventos
             DefaultTableModel tmEventos = (DefaultTableModel) v.tblEventos.getModel();
             tmEventos.setRowCount(0);
-            if (v.cmbBusquedaTablaEventoTipo.getSelectedIndex() == 0) {
-                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND NombreEvento LIKE ? ORDER BY Fecha ASC;");
-                ppt.setString(2, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
-            } else {
-                ppt = con.prepareStatement("SELECT * FROM Evento WHERE Fecha >= ? AND TipoEvento = ? AND NombreEvento LIKE ? ORDER BY Fecha ASC;");
-                ppt.setString(2, v.cmbBusquedaTablaEventoTipo.getSelectedItem().toString());
-                ppt.setString(3, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
+            
+            sql = "SELECT * FROM Evento WHERE Fecha >= ? AND NombreEvento LIKE ?";
+            if (v.cmbBusquedaTablaEventoTipo.getSelectedIndex() != 0) {
+                sql += " AND TipoEvento = " + v.cmbBusquedaTablaEventoTipo.getSelectedItem().toString() + " ";
             }
+            ppt = con.prepareStatement(sql + " ORDER BY Fecha ASC;");
             ppt.setString(1, formato.format((v.dchBusquedaTablaEventoFecha.getDate() == null) ? new Date(1L) : v.dchBusquedaTablaEventoFecha.getDate()));
+            ppt.setString(2, '%' + v.txtBusquedaTablaEventoNombre.getText().strip() + '%');
             rs = ppt.executeQuery();
             while (rs.next()) {
                 Object [] fila = {rs.getInt("IdEvento"), rs.getDate("Fecha"), rs.getString("TipoEvento"), rs.getString("NombreEvento"), rs.getInt("Beneficio")};

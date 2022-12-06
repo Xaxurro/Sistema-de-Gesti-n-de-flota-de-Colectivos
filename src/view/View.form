@@ -1615,7 +1615,7 @@
             <Component class="javax.swing.JSpinner" name="spnEventoBeneficio">
               <Properties>
                 <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-                  <SpinnerModel initial="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+                  <SpinnerModel initial="0" maximum="9999999" minimum="-9999999" numberType="java.lang.Integer" stepSize="1" type="number"/>
                 </Property>
               </Properties>
               <AuxValues>

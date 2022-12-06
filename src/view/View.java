@@ -760,7 +760,7 @@ public class View extends javax.swing.JFrame {
 
         lblEventoID.setText("ID:");
 
-        spnEventoBeneficio.setModel(new javax.swing.SpinnerNumberModel());
+        spnEventoBeneficio.setModel(new javax.swing.SpinnerNumberModel(0, -9999999, 9999999, 1));
 
         javax.swing.GroupLayout pnlEventosLayout = new javax.swing.GroupLayout(pnlEventos);
         pnlEventos.setLayout(pnlEventosLayout);

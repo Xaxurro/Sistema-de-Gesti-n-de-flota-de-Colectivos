@@ -234,10 +234,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         return true;
     }
     
-    public boolean validarRegEx(JTextField input, String regex, String campo){
+    public boolean validarRegEx(JTextField input, String regex){
         if(!Pattern.matches(regex, input.getText().strip())){
             if (!(input.getText().strip().equals(""))) {
-                JOptionPane.showMessageDialog(null, "Ingrese el formato valido en " + campo + ".\n(Coloque el mouse encima de este campo para ver el formato).");
+                JOptionPane.showMessageDialog(null, "Ingrese el formato valido en " + input.getName() + ".\n(Coloque el mouse encima de este campo para ver el formato).");
             }
             return false;
         }
@@ -298,7 +298,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //COLECTIVO
         if (e == v.btnColectivoAñadir) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula");
+            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}");
             if (validoFormato && validoEmpty) {
                 colectivo.insertar();
             }
@@ -308,14 +308,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         }
         if (e == v.btnColectivoModificar) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula");
+            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}");
             if (validoFormato && validoEmpty) {
                 colectivo.modificar();
             }
         }
         if (e == v.btnColectivoEliminar) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}", "Matricula");
+            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}");
             if (validoFormato && validoEmpty) {
                 colectivo.eliminar();
             }
@@ -324,7 +324,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //CONDUCTOR
         if (e == v.btnConductorAñadir) {
             validoEmpty = validarEmpty(inputConductor);
-            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d+$", "Telefono");
+            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
             if (validoEmpty && validoFormato) {
                 conductor.insertar();
             }
@@ -334,14 +334,14 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         }
         if (e == v.btnConductorModificar) {
             validoEmpty = validarEmpty(inputConductor);
-            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d+$", "Telefono");
+            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
             if (validoEmpty && validoFormato) {
                 conductor.modificar();
             }
         }
         if (e == v.btnConductorEliminar) {
             validoEmpty = validarEmpty(inputConductor);
-            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d+$", "Telefono");
+            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
             if (validoEmpty && validoFormato) {
                 conductor.eliminar();
             }
