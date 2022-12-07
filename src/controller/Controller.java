@@ -368,16 +368,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         
         //REPUESTO
         if (e == v.btnRepuestoAñadir) {
-            
+            repuesto.insertar();
         }
         if (e == v.btnRepuestoLimpiar) {
-            
+            limpiarInput(inputRepuesto);
         }
         if (e == v.btnRepuestoModificar) {
             
         }
         if (e == v.btnRepuestoEliminar) {
-            
+            repuesto.eliminar();
         }
         if (e == v.cmbRepuestoCantidadTipo) {
             repuesto.buscarCantidad();

@@ -108,7 +108,7 @@ public class Tabla {
     
     public void quitar(String columna, String registro){
         try {
-            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columna + " = '------' WHERE " + columna + " = ?;");
+            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columna + " = null WHERE " + columna + " = ?;");
             ppt.setString(1, registro);
             ppt.executeUpdate();
         } catch (SQLException e) {
@@ -116,9 +116,9 @@ public class Tabla {
         }
     }
     
-    public void añadir(String columnaAModificar, String registroAAñadir, String columnaABuscar, String registroABuscar){
+    public void añadir(String columnaAAñadir, String registroAAñadir, String columnaABuscar, String registroABuscar){
         try {
-            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columnaAModificar + " = ? WHERE " + columnaABuscar + " = ?;");
+            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columnaAAñadir + " = ? WHERE " + columnaABuscar + " = ?;");
             ppt.setString(1, registroAAñadir);
             ppt.setString(2, registroABuscar);
             ppt.executeUpdate();
@@ -126,49 +126,4 @@ public class Tabla {
             e.printStackTrace();
         }
     }
-    
-    /*
-    public void conectarTabla(Object tabla){
-        if (tabla instanceof Colectivo) {
-            this.colectivo = (Colectivo) tabla;
-        }
-        if (tabla instanceof Conductor) {
-            this.conductor = (Conductor) tabla;
-        }
-        if (tabla instanceof Repuesto) {
-            this.repuesto = (Repuesto) tabla;
-        }
-    }
-    */
-    /*
-    public void insertar(Object[] datos){
-        try {
-            ppt = con.prepareStatement(sqlInsertar);
-            asignarDatos(datos);
-            ppt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void modificar(Object[] datos){
-        try {
-            ppt = con.prepareStatement(sqlModificar);
-            asignarDatos(datos);
-            ppt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void eliminar(String registro){
-        try {
-            ppt = con.prepareStatement(sqlEliminar);
-            ppt.setString(1, registro);
-            ppt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 }

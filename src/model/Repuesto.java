@@ -40,7 +40,7 @@ public class Repuesto extends Tabla{
     }
     
     public void getInput(){
-        id = (v.lblRepuestoIDActual.getText().equals("")) ? Integer.valueOf(v.lblEventoIDActual.getText()) : 0;
+        id = (v.lblRepuestoIDActual.getText().equals("")) ? 0 : Integer.valueOf(v.lblRepuestoIDActual.getText());
         tipo = capitalizar(v.txtRepuestoTipo.getText().strip());
         matricula = v.cmbRepuestoColectivos.getSelectedItem().toString();
         cambio = formato.format(v.dchRepuestoCambio.getDate());
@@ -64,14 +64,68 @@ public class Repuesto extends Tabla{
         }
     }
     
+    private boolean buscarColectivo(){
+        try {
+            ppt = con.prepareStatement("SELECT Estado FROM ColectivoRepuesto WHERE Matricula = ? AND IdRepuesto = ? AND Estado = 1;");
+            ppt.setString(1, matricula);
+            ppt.setInt(2, id);
+            rs = ppt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     private void añadirColectivo(){
-        
+        try {
+            if (buscarColectivo()) {
+                ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Cambio = ?, Estado = 1 WHERE Matricula = ? AND IdRepuesto = ?;");
+                ppt.setString(1, cambio);
+                ppt.setString(2, matricula);
+                ppt.setInt(3, id);
+                ppt.executeUpdate();
+            } else {
+                ppt = con.prepareStatement("INSERT INTO ColectivoRepuesto(Matricula, IdRepuesto, Cambio, Estado) VALUES (?, ?, ?, 1);");
+                ppt.setString(1, matricula);
+                ppt.setInt(2, id);
+                ppt.setString(3, cambio);
+                ppt.execute();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void quitarColectivo() {
+        try {
+            if (buscarColectivo()) {
+                ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Estado = 0 WHERE Matricula = ? AND IdRepuesto = ?;");
+                ppt.setString(1, matricula);
+                ppt.setInt(2, id);
+                ppt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     
     public void insertar(){
         getInput();
         for (int i = 0; i < cantidad; i++) {
             asignarDatos(sqlInsertar, new Object[] {tipo, kilometrajeMax, kilometrajeDeUso});
+            if (v.cmbRepuestoColectivos.getSelectedIndex() != 0) {
+                try {
+                    rs = con.prepareStatement("SELECT MAX(IdRepuesto) FROM Repuesto;").executeQuery();
+                    if (rs.next()) {
+                        id = rs.getInt(1);
+                        quitarColectivo();
+                        añadirColectivo();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
     
@@ -86,12 +140,11 @@ public class Repuesto extends Tabla{
             JOptionPane.showMessageDialog(null, "No existe Rut.");
         }
     }
+    */
     
     public void eliminar(){
         getInput();
-        if (existe(rutConductor)) {
-            asignarDatos(sqlEliminar, new Object[] {rutConductor});
-        }
+        asignarDatos(sqlEliminar, new Object[] {id});
     }
-    */
+    
 }
