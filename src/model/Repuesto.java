@@ -21,21 +21,32 @@ import view.View;
 
 
 public class Repuesto extends Tabla{
-    private String idRepuesto;
-    private String tipoRepuesto;
+    private int id;
+    private String tipo;
     private String matricula;
     private String cambio;
-    private String kilometrajeMaxc;
-    private String kilometrajeDeUso;
+    private int kilometrajeMax;
+    private int kilometrajeDeUso;
+    private int cantidad;
     
     public Repuesto(View v, Connection con){
         super(v, con);
         this.nombre = "Repuesto";
         this.pk = "IdRepuesto";
         //this.campos = new String[] {"IdRepuesto", "TipoRepuesto", "KilometrajeMaxc", "KilometrajeDeUso", "Repuesto"};
+        this.sqlInsertar = "INSERT INTO Repuesto(TipoRepuesto, KilometrajeMax, KilometrajeDeUso) VALUES (?, ?, ?);";
+        this.sqlModificar = "UPDATE Repuesto SET TipoRepuesto = ?, KilometrajeMax = ?, KilometrajeDeUso = ? WHERE IdRepuesto = ?";
+        this.sqlEliminar = "DELETE FROM Repuesto WHERE IdRepuesto = ?;";
     }
     
     public void getInput(){
+        id = (v.lblRepuestoIDActual.getText().equals("")) ? Integer.valueOf(v.lblEventoIDActual.getText()) : 0;
+        tipo = capitalizar(v.txtRepuestoTipo.getText().strip());
+        matricula = v.cmbRepuestoColectivos.getSelectedItem().toString();
+        cambio = formato.format(v.dchRepuestoCambio.getDate());
+        kilometrajeMax = (int) v.spnRepuestoKilometrajeMax.getValue();
+        kilometrajeDeUso = (int) v.spnRepuestoKilometrajeActual.getValue();
+        cantidad = (int) v.spnRepuestoCantidad.getValue();
     }
 
     public void buscarCantidad() {
@@ -52,54 +63,19 @@ public class Repuesto extends Tabla{
             e.printStackTrace();
         }
     }
-    /*
-    private void quitarColectivo(){
-        try {
-            ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Estado = 0 WHERE Matricula = ? OR IdRepuesto = ?;");
-            ppt.setString(1, matricula);
-            ppt.setString(2, idRepuesto);
-            ppt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     
-    private void añadirColectivo() {
-        try {
-            quitarColectivo();
-            if (!rutConductor.equals("------")) {
-                ppt = con.prepareStatement("SELECT Estado FROM ColectivoConductor WHERE Matricula = ? AND RutConductor = ?;");
-                ppt.setString(1, matricula);
-                ppt.setString(2, rutConductor);
-                rs = ppt.executeQuery();
-                if(rs.next()){
-                    ppt = con.prepareStatement("UPDATE ColectivoConductor SET Estado = 1 WHERE Matricula = ? AND RutConductor = ?;");
-                    ppt.setString(1, matricula);
-                    ppt.setString(2, rutConductor);
-                    ppt.executeUpdate();
-                } else {
-                    ppt = con.prepareStatement("INSERT INTO ColectivoConductor(Matricula, RutConductor, Estado) VALUES (?, ?, 1);");
-                    ppt.setString(1, matricula);
-                    ppt.setString(2, rutConductor);
-                    ppt.execute();
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private void añadirColectivo(){
+        
     }
     
     public void insertar(){
         getInput();
-        if (!existe(rutConductor)) {
-            asignarDatos(sqlInsertar, new Object[] {rutConductor, nombreConductor, direccion, telefono});
-
-            añadirColectivo();
-        } else {
-            JOptionPane.showMessageDialog(null, "Rut Duplicado.");
+        for (int i = 0; i < cantidad; i++) {
+            asignarDatos(sqlInsertar, new Object[] {tipo, kilometrajeMax, kilometrajeDeUso});
         }
     }
     
+    /*
     public void modificar(){
         getInput();
         if (existe(rutConductor)) {

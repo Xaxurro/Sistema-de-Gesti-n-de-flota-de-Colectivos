@@ -336,7 +336,7 @@ public class Model {
             
             sql = "SELECT * FROM Evento WHERE Fecha >= ? AND NombreEvento LIKE ?";
             if (v.cmbBusquedaTablaEventoTipo.getSelectedIndex() != 0) {
-                sql += " AND TipoEvento = " + v.cmbBusquedaTablaEventoTipo.getSelectedItem().toString() + " ";
+                sql += " AND TipoEvento = '" + v.cmbBusquedaTablaEventoTipo.getSelectedItem().toString() + "'";
             }
             ppt = con.prepareStatement(sql + " ORDER BY Fecha ASC;");
             ppt.setString(1, formato.format((v.dchBusquedaTablaEventoFecha.getDate() == null) ? new Date(1L) : v.dchBusquedaTablaEventoFecha.getDate()));

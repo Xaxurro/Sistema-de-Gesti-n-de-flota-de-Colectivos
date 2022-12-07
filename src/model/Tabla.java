@@ -78,6 +78,17 @@ public class Tabla {
         return false;
     }
     
+    public boolean existe(String campo, String registro){
+        try {
+            ppt = con.prepareStatement("SELECT " + campo + " FROM " + nombre + " WHERE " + campo + " = ?;");
+            ppt.setString(1, registro);
+            return ppt.executeQuery().next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     public void asignarDatos(String sql, Object[] datos){
         try {
             ppt = con.prepareStatement(sql);

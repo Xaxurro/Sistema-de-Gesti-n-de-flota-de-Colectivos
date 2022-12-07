@@ -91,24 +91,47 @@ public class Colectivo extends Tabla{
     //OK
     public void insertar(){
         getInput();
-        if (!existe(matricula)) {
-            asignarDatos(sqlInsertar, new Object[] {matricula, compra, kilometrajeActual, marca, vin, motor});
-            
+        boolean valido = true;
+        if (existe(matricula)) {
+            JOptionPane.showMessageDialog(null, "Matricula duplicada.");
+            valido = false;
+        }
+        if (existe("Vin", vin)) {
+            JOptionPane.showMessageDialog(null, "Vin duplicado.");
+            valido = false;
+        }
+        if (existe("Motor", motor)) {
+            JOptionPane.showMessageDialog(null, "Número de motor duplicado.");
+            valido = false;
+        }
+        
+        if (valido) {
+            asignarDatos(sqlInsertar, new Object[] {matricula, compra, kilometrajeActual, marca, vin, motor});   
             añadirConductor();
-        } else {
-            JOptionPane.showMessageDialog(null, "Matricula Duplicada.");
         }
     }
     
     //OK
     public void modificar(){
         getInput();
-        if (existe(matricula)) {
+        boolean valido = true;
+        if (!existe(matricula)) {
+            JOptionPane.showMessageDialog(null, "Matricula no existe.");
+            valido = false;
+        }
+        if (!existe("Vin", vin)) {
+            JOptionPane.showMessageDialog(null, "Vin no existe.");
+            valido = false;
+        }
+        if (!existe("Motor", motor)) {
+            JOptionPane.showMessageDialog(null, "Número de motor no existe.");
+            valido = false;
+        }
+        
+        if (valido) {
             asignarDatos(sqlModificar, new Object[] {compra, kilometrajeActual, marca, vin, motor, matricula});
             
             añadirConductor();
-        } else {
-            JOptionPane.showMessageDialog(null, "No existe Matricula.");
         }
     }
     
@@ -117,6 +140,8 @@ public class Colectivo extends Tabla{
         getInput();
         if (existe(matricula)) {
             asignarDatos(sqlEliminar, new Object[] {matricula});
+        } else {
+            JOptionPane.showMessageDialog(null, "Matricula no existe.");
         }
     }
 }

@@ -170,16 +170,19 @@ public class View extends javax.swing.JFrame {
 
         lblColectivoMarca.setText("Marca:");
 
+        txtColectivoMarca.setToolTipText("Solo letras y números");
         txtColectivoMarca.setName("Marca"); // NOI18N
         txtColectivoMarca.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblColectivoVin.setText("Vin:");
 
+        txtColectivoVin.setToolTipText("Solo letras y números");
         txtColectivoVin.setName("Vin"); // NOI18N
         txtColectivoVin.setPreferredSize(new java.awt.Dimension(200, 22));
 
         lblColectivoMotor.setText("Número de Motor:");
 
+        txtColectivoMotor.setToolTipText("Solo letras y números");
         txtColectivoMotor.setName("Número de Motor"); // NOI18N
         txtColectivoMotor.setPreferredSize(new java.awt.Dimension(200, 22));
 
@@ -350,11 +353,13 @@ public class View extends javax.swing.JFrame {
 
         lblConductorNombre.setText("Nombre Completo:");
 
+        txtConductorNombre.setToolTipText("Solo letras");
         txtConductorNombre.setName("Nombre"); // NOI18N
         txtConductorNombre.setPreferredSize(new java.awt.Dimension(100, 22));
 
         lblConductorDireccion.setText("Direccion:");
 
+        txtConductorDireccion.setToolTipText("");
         txtConductorDireccion.setName("Dirección"); // NOI18N
         txtConductorDireccion.setPreferredSize(new java.awt.Dimension(200, 22));
 
@@ -499,6 +504,7 @@ public class View extends javax.swing.JFrame {
 
         lblRepuestoTipo.setText("Tipo Repuesto:");
 
+        txtRepuestoTipo.setToolTipText("Solo letras y números");
         txtRepuestoTipo.setName("Kilometraje Máximo"); // NOI18N
         txtRepuestoTipo.setPreferredSize(new java.awt.Dimension(200, 22));
 
@@ -702,7 +708,6 @@ public class View extends javax.swing.JFrame {
         lblBusquedaTablaEventoFecha.setText("Buscar Fecha:");
 
         dchBusquedaTablaEventoFecha.setDateFormatString("yyyy-MM-dd");
-        dchBusquedaTablaEventoFecha.setMinSelectableDate(new Date());
         dchBusquedaTablaEventoFecha.setName("Fecha de Compra"); // NOI18N
 
         lblBusquedaTablaEventoNombre.setText("Buscar Nombre:");
@@ -711,7 +716,7 @@ public class View extends javax.swing.JFrame {
 
         lblBusquedaTablaEventoTipo.setText("Buscar Tipo:");
 
-        cmbBusquedaTablaEventoTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Robo", "Accidente", "Renovacion", " " }));
+        cmbBusquedaTablaEventoTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Otro", "Robo", "Accidente", "Renovacion" }));
         cmbBusquedaTablaEventoTipo.setToolTipText("");
         cmbBusquedaTablaEventoTipo.setName("Matricula"); // NOI18N
 

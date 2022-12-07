@@ -27,7 +27,7 @@ public class Evento extends Tabla{
     }
     
     public void getInput(){
-        id = Integer.valueOf(v.lblEventoIDActual.getText());
+        id = (v.lblEventoIDActual.getText().equals("")) ? Integer.valueOf(v.lblEventoIDActual.getText()) : 0;
         fecha = formato.format(v.dchEventoFecha.getDate());
         tipo = v.cmbEventoTipo.getSelectedItem().toString();
         nombre = capitalizar(v.txtEventoNombre.getText().strip());
