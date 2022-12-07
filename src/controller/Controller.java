@@ -317,7 +317,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //COLECTIVO
         if (e == v.btnColectivoAñadir) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
+            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^\\d&&\\w]{1,15}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
             if (validoFormato && validoEmpty) {
                 colectivo.insertar();
             }
@@ -327,7 +327,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         }
         if (e == v.btnColectivoModificar) {
             validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
+            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^\\d&&\\w]{1,15}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
             if (validoFormato && validoEmpty) {
                 colectivo.modificar();
             }
