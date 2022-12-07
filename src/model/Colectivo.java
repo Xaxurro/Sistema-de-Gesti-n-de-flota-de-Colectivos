@@ -119,14 +119,6 @@ public class Colectivo extends Tabla{
             JOptionPane.showMessageDialog(null, "Matricula no existe.");
             valido = false;
         }
-        if (!existe("Vin", vin)) {
-            JOptionPane.showMessageDialog(null, "Vin no existe.");
-            valido = false;
-        }
-        if (!existe("Motor", motor)) {
-            JOptionPane.showMessageDialog(null, "Número de motor no existe.");
-            valido = false;
-        }
         
         if (valido) {
             asignarDatos(sqlModificar, new Object[] {compra, kilometrajeActual, marca, vin, motor, matricula});
