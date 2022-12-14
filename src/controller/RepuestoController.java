@@ -71,7 +71,7 @@ public class RepuestoController extends Controller{
         //CONDUCTOR
         if (e == v.btnRepuestoAñadir) {
             validoEmpty = validarEmpty(inputMain);
-            validoFormato = validarRegEx(v.txtRepuestoTipo, "^\\w$");
+            validoFormato = validarRegEx(v.txtRepuestoTipo, "^.{1,30}$");
             if (validoEmpty && validoFormato) {
                 repuesto.getInput(v);
                 repuesto.insertar();
@@ -83,7 +83,7 @@ public class RepuestoController extends Controller{
         }
         if (e == p.btnModificar) {
             validoEmpty = validarEmpty(inputMain);
-            validoFormato = validarRegEx(p.txtRepuestoTipo, "^\\w$");
+            validoFormato = validarRegEx(p.txtRepuestoTipo, "^.{1,30}$");
             if (validoEmpty && validoFormato) {
                 repuesto.getInput(p);
                 repuesto.modificar(registro[0].toString());
