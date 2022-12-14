@@ -30,11 +30,18 @@ import model.ColectivoModel;
 import model.ConductorModel;
 import model.RepuestoModel;
 import model.EventoModel;
+import model.LoginModel;
 import view.ColectivoView;
+import view.LoginView;
+import view.RegistroView;
 
 public class Controller implements ActionListener, MouseListener, KeyListener, PropertyChangeListener, ItemListener, ChangeListener{
     public View v;
     public Model m;
+    
+    LoginView vl = new LoginView();
+    RegistroView vr = new RegistroView();
+    LoginModel login;
     
     private ColectivoController colectivo = null;
     private ConductorController conductor = null;
@@ -44,6 +51,8 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     boolean validoEmpty = true;
     boolean validoFormato = true;
     
+    private List<Object> inputLogin = new ArrayList<Object>();
+    private List<Object> inputRegistro = new ArrayList<Object>();
     private List<Object> inputColectivo = new ArrayList<Object>();
     private List<Object> inputConductor = new ArrayList<Object>();
     private List<Object> inputRepuesto = new ArrayList<Object>();
@@ -65,72 +74,40 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.btnSalir.addActionListener(this);
         v.btnAñadirKilometraje.addActionListener(this);
         
-        /*
-        //BUSCADORES
-        v.txtBusquedaTablaColectivoMatricula.addKeyListener(this);
-        v.txtBusquedaTablaColectivoRut.addKeyListener(this);
-        v.txtBusquedaTablaConductorNombre.addKeyListener(this);
-        v.txtBusquedaTablaConductorRut.addKeyListener(this);
-        v.txtBusquedaTablaRepuestoTipo.addKeyListener(this);
-        v.txtBusquedaTablaRepuestoMatricula.addKeyListener(this);
-        v.dchBusquedaTablaEventoFecha.addPropertyChangeListener(this);
-        v.txtBusquedaTablaEventoNombre.addKeyListener(this);
-        v.cmbBusquedaTablaEventoTipo.addActionListener(this);
-        */
-        
-        //DEBUG (BORRAR)
         v.btnReDo.addActionListener(this);
         
-        /*
-        //COLECTIVO
-        v.btnColectivoAñadir.addActionListener(this);
-        v.btnColectivoLimpiar.addActionListener(this);
-        v.btnColectivoModificar.addActionListener(this);
-        v.btnColectivoEliminar.addActionListener(this);
-        v.btnColectivoLimpiarBuscadores.addActionListener(this);
-        v.tblColectivos.addMouseListener(this);
+        vl.btnIniciarSesion.addActionListener(this);
+        vl.btnRegistrarse.addActionListener(this);
         
-        //CONDUCTOR
-        v.btnConductorAñadir.addActionListener(this);
-        v.btnConductorLimpiar.addActionListener(this);
-        v.btnConductorModificar.addActionListener(this);
-        v.btnConductorEliminar.addActionListener(this);
-        v.btnConductorLimpiarBuscadores.addActionListener(this);
-        v.tblConductores.addMouseListener(this);
+        vr.btnRegistrarse.addActionListener(this);
+        vr.btnVolver.addActionListener(this);
         
-        //REPUESTO
-        v.btnRepuestoAñadir.addActionListener(this);
-        v.btnRepuestoLimpiar.addActionListener(this);
-        v.btnRepuestoModificar.addActionListener(this);
-        v.btnRepuestoEliminar.addActionListener(this);
-        v.cmbRepuestoCantidadTipo.addItemListener(this);
-        v.spnRepuestoKilometrajeMax.addChangeListener(this);
-        v.tblRepuestos.addMouseListener(this);
+        login = m.crearLogin();
         
-        //EVENTO
-        v.btnEventoAñadir.addActionListener(this);
-        v.btnEventoLimpiar.addActionListener(this);
-        v.btnEventoModificar.addActionListener(this);
-        v.btnEventoEliminar.addActionListener(this);
-        v.btnEventoLimpiarBuscadores.addActionListener(this);
-        v.cmbEventoTipo.addItemListener(this);
-        v.tblEventos.addMouseListener(this);
-        */
+        inputLogin.add(vl.txtUsuario);
+        inputLogin.add(vl.pwdContraseña);
+        
+        inputRegistro.add(vr.txtUsuario);
+        inputRegistro.add(vr.pwdContraseña);
+        inputRegistro.add(vr.pwdContraseñaConfirmar);
     }
     
-    //AÑADIR A LAS LISTAS
     public void iniciar(){
+        vl.iniciar();
+    }
+    
+    public void crearView(){
         v.pack();
         v.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         v.setLocationRelativeTo(null);
         v.setVisible(true);
-        
+
         //CREAR OBJETOS
         colectivo = new ColectivoController(m, v);
         conductor = new ConductorController(m, v);
         repuesto = new RepuestoController(m, v);
         evento = new EventoController(m, v);
-        
+
         m.refrescar();
     }
     
@@ -282,6 +259,38 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     @Override
     public void actionPerformed(ActionEvent evt){
         Object e = evt.getSource();
+        if (e == vl.btnIniciarSesion){
+            validoEmpty = validarEmpty(inputLogin);
+            if (validoEmpty) {
+                if (login.inicioSesion(vl.txtUsuario.getText().strip(), new String(vl.pwdContraseña.getPassword()))) {
+                    crearView();
+                } else {
+                    mensaje(vl, "Usuario o Contraseña incorrecta.", "Error", JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
+                }
+            }
+        }
+        if (e == vl.btnRegistrarse){
+            vl.dispose();
+            vr.iniciar();
+        }
+        if (e == vr.btnRegistrarse){
+            validoEmpty = validarEmpty(inputRegistro);
+            if (validoEmpty) {
+                if (new String (vr.pwdContraseña.getPassword()).equals(new String (vr.pwdContraseñaConfirmar.getPassword()))){
+                    login.registrarse(vr.txtUsuario.getText().strip(), new String (vr.pwdContraseña.getPassword()));
+                    vr.dispose();
+                    crearView();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+        if (e == vr.btnVolver){
+            vr.dispose();
+            vl.iniciar();
+        }
+        
         //GENERAL
         if (e == v.btnSalir) {
             System.exit(0);

@@ -8,7 +8,7 @@ public class RepuestoView extends javax.swing.JFrame {
     }
     
     public void iniciar(){
-        setTitle("Modificar Conductor");
+        setTitle("Modificar Repuesto");
         setLocationRelativeTo(null);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

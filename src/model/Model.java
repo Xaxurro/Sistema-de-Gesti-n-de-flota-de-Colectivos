@@ -23,18 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import view.View;
 
-public class Model {
-    /*
-    //INICIAR CON LOGIN
-    String usuario = JOptionPane.showInputDialog("Usuario:");
-    String contraseña = JOptionPane.showInputDialog("Contraseña:");
-    */
-    
-    //INICIAR SIN LOGIN
-    String usuario = "admin";
-    String contraseña = "12345";
-    
-    
+public class Model {    
     String nombreDB = "colectivos";
     Connection con = null;
     PreparedStatement ppt = null;
@@ -46,12 +35,16 @@ public class Model {
     
     public Model(View v){
         try {
-            con = conectar(usuario, contraseña);
+            con = conectar();
             stm = con.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         this.v = v;
+    }
+    
+    public LoginModel crearLogin(){
+        return new LoginModel(con);
     }
     
     public ColectivoModel crearColectivo(){
@@ -71,22 +64,13 @@ public class Model {
     }
     
     
-    private Connection conectar(String usuario, String contraseña){
+    private Connection conectar(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", "");
             stm = con.createStatement();
             if(!existeDB(nombreDB)){
                 crearDB();
-            }
-            ppt = con.prepareStatement("SELECT * FROM Administrador WHERE Usuario = ? AND Contraseña = ?;");
-            ppt.setString(1, usuario);
-            ppt.setString(2, contraseña);
-            rs = ppt.executeQuery();
-            
-            if (!rs.next()) {
-                JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecta.");
-                System.exit(0);
             }
             return con;
         } catch (Exception e) {

@@ -17,6 +17,5 @@ public class Principal {
         Model m = new Model(v);
         Controller c = new Controller(m, v);
         c.iniciar();
-    }
-    
+    }    
 }

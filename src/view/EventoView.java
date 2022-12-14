@@ -8,7 +8,7 @@ public class EventoView extends javax.swing.JFrame {
     }
     
     public void iniciar(){
-        setTitle("Modificar Colectivo");
+        setTitle("Modificar Evento");
         setLocationRelativeTo(null);
         pack();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
