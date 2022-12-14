@@ -44,8 +44,9 @@ public class EventoController extends Controller{
         
         evento = m.crearEvento();
         
-        buscador.add(v.txtBusquedaTablaColectivoMatricula);
-        buscador.add(v.txtBusquedaTablaColectivoRut);
+        buscador.add(v.dchBusquedaTablaEventoFecha);
+        buscador.add(v.txtBusquedaTablaEventoNombre);
+        buscador.add(v.cmbBusquedaTablaEventoTipo);
         
         //AÑADIR A LAS LISTAS
         inputMain.add(v.dchEventoFecha);
