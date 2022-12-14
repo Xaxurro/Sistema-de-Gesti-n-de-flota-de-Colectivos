@@ -23,8 +23,8 @@ public class ConductorController extends Controller{
         super(m, v);
         
         //BUSCADORES
-        v.txtBusquedaTablaColectivoMatricula.addKeyListener(this);
-        v.txtBusquedaTablaColectivoRut.addKeyListener(this);
+        v.txtBusquedaTablaConductorNombre.addKeyListener(this);
+        v.txtBusquedaTablaConductorRut.addKeyListener(this);
         
         //MAIN
         v.btnConductorAñadir.addActionListener(this);
