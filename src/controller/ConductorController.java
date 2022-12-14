@@ -64,7 +64,7 @@ public class ConductorController extends Controller{
         //CONDUCTOR
         if (e == v.btnConductorAñadir) {
             validoEmpty = validarEmpty(inputMain);
-            validoFormato = validarRut(v.txtConductorRut) && validarRegEx(v.txtConductorNombre, "^[a-zA-Z]${1,50}") && validarRegEx(v.txtConductorDireccion, "^[\\w\\-,.#\\\"'\\s]{1,150}$") && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
+            validoFormato = validarRut(v.txtConductorRut) && validarRegEx(v.txtConductorNombre, "^[a-zA-Z]{1,50}$") && validarRegEx(v.txtConductorDireccion, "^[\\w\\-,.#\\\"'\\s]{1,150}$") && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
             if (validoEmpty && validoFormato) {
                 conductor.getInput(v);
                 conductor.insertar();
@@ -76,7 +76,7 @@ public class ConductorController extends Controller{
         }
         if (e == p.btnModificar) {
             validoEmpty = validarEmpty(inputPopUp);
-            validoFormato = validarRut(p.txtConductorRut) && validarRegEx(p.txtConductorNombre, "^[a-zA-Z]${1,50}") && validarRegEx(p.txtConductorDireccion, "^[\\w\\-,.#\\\"'\\s]{1,150}$") && validarRegEx(p.txtConductorTelefono, "^\\+\\d{11}$");
+            validoFormato = validarRut(p.txtConductorRut) && validarRegEx(p.txtConductorNombre, "^[a-zA-Z]{1,50}$") && validarRegEx(p.txtConductorDireccion, "^[\\w\\-,.#\\\"'\\s]{1,150}$") && validarRegEx(p.txtConductorTelefono, "^\\+\\d{11}$");
             if (validoEmpty && validoFormato) {
                 conductor.getInput(p);
                 conductor.modificar(registro[0].toString());
