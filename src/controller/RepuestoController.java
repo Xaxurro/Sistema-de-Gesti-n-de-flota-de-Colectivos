@@ -82,7 +82,7 @@ public class RepuestoController extends Controller{
             limpiarInput(inputMain);
         }
         if (e == p.btnModificar) {
-            validoEmpty = validarEmpty(inputMain);
+            validoEmpty = validarEmpty(inputPopUp);
             validoFormato = validarRegEx(p.txtRepuestoTipo, "^.{1,30}$");
             if (validoEmpty && validoFormato) {
                 repuesto.getInput(p);
