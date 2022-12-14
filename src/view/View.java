@@ -102,8 +102,6 @@ public class View extends javax.swing.JFrame {
         lblBusquedaTablaEventoTipo = new javax.swing.JLabel();
         cmbBusquedaTablaEventoTipo = new javax.swing.JComboBox<>();
         btnEventoAñadir = new javax.swing.JButton();
-        btnEventoModificar = new javax.swing.JButton();
-        btnEventoEliminar = new javax.swing.JButton();
         btnEventoLimpiar = new javax.swing.JButton();
         btnEventoLimpiarBuscadores = new javax.swing.JButton();
         scpEventos = new javax.swing.JScrollPane();
@@ -691,10 +689,6 @@ public class View extends javax.swing.JFrame {
 
         btnEventoAñadir.setText("Añadir");
 
-        btnEventoModificar.setText("Modificar");
-
-        btnEventoEliminar.setText("Eliminar");
-
         btnEventoLimpiar.setText("Limpiar");
 
         btnEventoLimpiarBuscadores.setText("Limpiar Buscadores");
@@ -760,10 +754,6 @@ public class View extends javax.swing.JFrame {
                         .addComponent(btnEventoAñadir)
                         .addGap(18, 18, 18)
                         .addComponent(btnEventoLimpiar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEventoModificar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEventoEliminar)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(pnlEventosLayout.createSequentialGroup()
@@ -825,9 +815,7 @@ public class View extends javax.swing.JFrame {
                 .addGap(94, 94, 94)
                 .addGroup(pnlEventosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEventoAñadir)
-                    .addComponent(btnEventoLimpiar)
-                    .addComponent(btnEventoModificar)
-                    .addComponent(btnEventoEliminar))
+                    .addComponent(btnEventoLimpiar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1041,10 +1029,8 @@ public class View extends javax.swing.JFrame {
     public javax.swing.JButton btnConductorLimpiar;
     public javax.swing.JButton btnConductorLimpiarBuscadores;
     public javax.swing.JButton btnEventoAñadir;
-    public javax.swing.JButton btnEventoEliminar;
     public javax.swing.JButton btnEventoLimpiar;
     public javax.swing.JButton btnEventoLimpiarBuscadores;
-    public javax.swing.JButton btnEventoModificar;
     public javax.swing.JButton btnGananciaAñadir;
     public javax.swing.JButton btnGananciaEliminar;
     public javax.swing.JButton btnGananciaLimpiar;

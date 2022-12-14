@@ -58,6 +58,7 @@ public class ColectivoView extends javax.swing.JFrame {
 
         lblColectivoMarca.setText("Marca:");
 
+        txtColectivoMarca.setToolTipText("aslfjkhasdfhaskldfhlaksdf");
         txtColectivoMarca.setName("Marca"); // NOI18N
         txtColectivoMarca.setPreferredSize(new java.awt.Dimension(200, 22));
 

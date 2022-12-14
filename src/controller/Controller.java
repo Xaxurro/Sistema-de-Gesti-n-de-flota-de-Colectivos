@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -222,6 +223,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         return true;
     }
     
+    public boolean validarRegEx(JTextArea input, String regex){
+        if(!Pattern.matches(regex, input.getText().strip())){
+            if (!(input.getText().strip().equals(""))) {
+                JOptionPane.showMessageDialog(null, "Ingrese el formato valido en " + input.getName() + ".\n(Coloque el mouse encima de este campo para ver el formato).");
+            }
+            return false;
+        }
+        return true;
+    }
+    
     public boolean validarRegEx(String input){
         if(!Pattern.matches("^\\d{1,7}$", input.strip())){
             if (!(input.strip().equals(""))) {
@@ -269,12 +280,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     }
     
     public Object getValor(JTable tabla, int columna){
-        return tabla.getValueAt(tabla.getSelectedRow(), columna);
+        return tabla.getModel().getValueAt(tabla.getSelectedRow(), columna);
     }
     
     public Object[] getRegistro(JTable tabla){
         List<Object> registro = new ArrayList<Object>();
-        for (int i = 0; i < tabla.getColumnCount(); i++) {
+        for (int i = 0; i < tabla.getModel().getColumnCount(); i++) {
             registro.add(getValor(tabla, i));
         }
         return registro.toArray();
@@ -378,6 +389,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             repuesto.buscarCantidad(v);
         }
         */
+        /*
         //EVENTO
         if (e == v.btnEventoAñadir) {
             validoEmpty = validarEmpty(inputEvento);
@@ -400,13 +412,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
                 evento.eliminar();
             }
         }
-        
+        */
         //LIMPIAR BUSCADORES
         if (e == v.btnColectivoLimpiarBuscadores) {
             limpiarInput(buscadorColectivo);
         }
         if (e == v.btnConductorLimpiarBuscadores) {
             limpiarInput(buscadorConductor);
+        }
+        if (e == v.btnRepuestoLimpiarBuscadores) {
+            limpiarInput(buscadorRepuesto);
         }
         if (e == v.btnEventoLimpiarBuscadores) {
             limpiarInput(buscadorEvento);

@@ -58,7 +58,10 @@ public class Tabla {
     }
     
     public String capitalizar(String s){
-        return s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+        if (s.length() > 0) {
+            return s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+        }
+        return "";
     }
     
     public boolean existe(String registro){

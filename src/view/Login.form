@@ -25,16 +25,25 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblContraseña" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="txtUsuario" max="32767" attributes="0"/>
-                  <Component id="pwdContraseña" pref="200" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblContraseña" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUsuario" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtUsuario" max="32767" attributes="0"/>
+                          <Component id="pwdContraseña" pref="200" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="btnIniciarSesion" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="81" max="32767" attributes="0"/>
+                      <Component id="btnCrearUsuario" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace pref="113" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -51,7 +60,12 @@
                   <Component id="lblContraseña" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="pwdContraseña" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="238" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnIniciarSesion" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCrearUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -76,6 +90,16 @@
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnIniciarSesion">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Iniciar Sesion"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnCrearUsuario">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Crear Usuario"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

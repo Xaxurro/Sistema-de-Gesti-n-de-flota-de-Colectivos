@@ -35,12 +35,12 @@ public class EventoController extends Controller{
         v.tblEventos.addMouseListener(this);
         
         //POPUP
-        //CAMBIAR
         p.btnModificar.addActionListener(this);
+        p.btnAñadirColectivo.addActionListener(this);
+        p.btnEliminarColectivo.addActionListener(this);
         p.btnRestablecer.addActionListener(this);
         p.btnEliminar.addActionListener(this);
         p.btnSalir.addActionListener(this);
-        //CAMBIAR
         
         evento = m.crearEvento();
         
@@ -48,23 +48,17 @@ public class EventoController extends Controller{
         buscador.add(v.txtBusquedaTablaColectivoRut);
         
         //AÑADIR A LAS LISTAS
-        inputMain.add(v.txtColectivoMatricula);
-        inputMain.add(v.cmbColectivoConductores);
-        inputMain.add(v.dchColectivoCompra);
-        inputMain.add(v.spnColectivoKilometraje);
-        inputMain.add(v.txtColectivoMarca);
-        inputMain.add(v.txtColectivoVin);
-        inputMain.add(v.txtColectivoMotor);
+        inputMain.add(v.dchEventoFecha);
+        inputMain.add(v.cmbEventoTipo);
+        inputMain.add(v.txtEventoNombre);
+        inputMain.add(v.spnEventoBeneficio);
         
-        //CAMBIAR
-        inputPopUp.add(p.txtColectivoMatricula);
-        inputPopUp.add(p.cmbColectivoConductores);
-        inputPopUp.add(p.dchColectivoCompra);
-        inputPopUp.add(p.spnColectivoKilometraje);
-        inputPopUp.add(p.txtColectivoMarca);
-        inputPopUp.add(p.txtColectivoVin);
-        inputPopUp.add(p.txtColectivoMotor);
-        //CAMBIAR
+        inputPopUp.add(p.dchEventoFecha);
+        inputPopUp.add(p.cmbEventoTipo);
+        inputPopUp.add(p.txtEventoNombre);
+        inputPopUp.add(p.spnEventoBeneficio);
+        inputPopUp.add(p.txaDescription);
+        inputPopUp.add(p.cmbColectivos);
     }
     
     @Override
@@ -72,33 +66,46 @@ public class EventoController extends Controller{
         Object e = evt.getSource();
         
         //COLECTIVO
-        if (e == v.btnColectivoAñadir) {
+        if (e == v.btnEventoAñadir) {
             validoEmpty = validarEmpty(inputMain);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^\\d&&\\w]{1,15}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
+            validoFormato = validarRegEx(p.txtEventoNombre, "^[\\w\\s]{1,50}$");
             if (validoFormato && validoEmpty) {
-                colectivo.getInput(v);
-                colectivo.insertar();
-                mensaje(p, "Colectivo Insertado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                evento.getInput(v);
+                evento.insertar();
+                mensaje(p, "Evento Insertado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        if (e == v.btnColectivoLimpiar) {
+        if (e == v.btnEventoLimpiar) {
             limpiarInput(inputMain);
         }
-        if (e == p.btnColectivoModificar) {
+        if (e == p.btnModificar) {
             validoEmpty = validarEmpty(inputPopUp);
-            validoFormato = validarRegEx(p.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(p.txtColectivoMarca, "^[^\\d&&\\w]{1,15}$") && validarRegEx(p.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(p.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
+            validoFormato = validarRegEx(p.txtEventoNombre, "^[\\w\\s]{1,50}$") && validarRegEx(p.txaDescription, ".{1,150}");
             if (validoFormato && validoEmpty) {
-                colectivo.getInput(p);
-                colectivo.modificar(registro[0].toString(), registro[5].toString(), registro[6].toString());
-                mensaje(p, "Colectivo modificado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                evento.getInput(p);
+                evento.modificar(Integer.valueOf(registro[0].toString()));
+                mensaje(p, "Evento modificado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
             }
+        }
+        if (e == p.btnAñadirColectivo) {
+            evento.getInput(p);
+            if (p.cmbColectivos.getSelectedIndex() > 0) {
+                evento.añadirColectivo(Integer.valueOf(registro[0].toString()));
+                evento.refrescarPopUp(p, Integer.valueOf(registro[0].toString()));
+            } else {
+                JOptionPane.showMessageDialog(null, "Porfavor seleccione un colectivo para añadr al evento.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (e == p.btnEliminarColectivo) {
+            evento.eliminarColectivo(p.lstColectivosImplicados.getSelectedValue(), Integer.valueOf(registro[0].toString()));
+            evento.refrescarPopUp(p, Integer.valueOf(registro[0].toString()));
         }
         if (e == p.btnRestablecer) {
             m.restablecer(inputPopUp, registro);
         }
-        if (e == p.btnColectivoEliminar) {
-            colectivo.eliminar(registro[0].toString());
-            mensaje(p, "Colectivo Eliminado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
+        if (e == p.btnEliminar) {
+            evento.eliminar(Integer.valueOf(registro[0].toString()));
+            mensaje(p, "Evento Eliminado", "Informacion", JOptionPane.INFORMATION_MESSAGE);
         }
         if (e == p.btnSalir) {
             p.dispose();
@@ -116,12 +123,13 @@ public class EventoController extends Controller{
     public void mouseClicked(MouseEvent evt){
         Object e = evt.getSource();
         
-        if (e == v.tblColectivos) {
+        if (e == v.tblEventos) {
             p.iniciar();
-            registro = getRegistro(v.tblColectivos);
-            m.refrescarCmb(p.cmbColectivoConductores, "RutConductor", "Conductor");
-            p.cmbColectivoConductores.setSelectedItem(registro[1].toString());
-            m.transferirValores(v.tblColectivos, inputPopUp);
+            registro = getRegistro(v.tblEventos);
+            m.refrescarCmb(p.cmbColectivos, "Matricula", "Colectivo");
+            p.cmbColectivos.setSelectedItem("------");
+            m.transferirValores(v.tblEventos, inputPopUp);
+            evento.refrescarPopUp(p, Integer.valueOf(registro[0].toString()));
         }
     }
 }

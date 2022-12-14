@@ -1185,10 +1185,6 @@
                               <Component id="btnEventoAñadir" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnEventoLimpiar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnEventoModificar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnEventoEliminar" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -1272,8 +1268,6 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnEventoAñadir" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnEventoLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEventoModificar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnEventoEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -1337,22 +1331,6 @@
             <Component class="javax.swing.JButton" name="btnEventoA&#xf1;adir">
               <Properties>
                 <Property name="text" type="java.lang.String" value="A&#xf1;adir"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnEventoModificar">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Modificar"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-              </AuxValues>
-            </Component>
-            <Component class="javax.swing.JButton" name="btnEventoEliminar">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
