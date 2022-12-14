@@ -47,21 +47,19 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     private ConductorController conductor = null;
     private RepuestoController repuesto = null;
     private EventoController evento = null;
+    private GananciaController ganancia = null;
     
     boolean validoEmpty = true;
     boolean validoFormato = true;
     
     private List<Object> inputLogin = new ArrayList<Object>();
     private List<Object> inputRegistro = new ArrayList<Object>();
-    private List<Object> inputColectivo = new ArrayList<Object>();
-    private List<Object> inputConductor = new ArrayList<Object>();
-    private List<Object> inputRepuesto = new ArrayList<Object>();
-    private List<Object> inputEvento = new ArrayList<Object>();
     
     private List<Object> buscadorColectivo = new ArrayList<Object>();
     private List<Object> buscadorConductor = new ArrayList<Object>();
     private List<Object> buscadorRepuesto = new ArrayList<Object>();
     private List<Object> buscadorEvento = new ArrayList<Object>();
+    private List<Object> buscadorGanancia = new ArrayList<Object>();
     
     public Object[] registro = null;
 
@@ -92,8 +90,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         inputRegistro.add(vr.pwdContraseñaConfirmar);
     }
     
-    public void iniciar(){
-        vl.iniciar();
+    public void iniciar(boolean debug){
+        if (debug){
+            crearView();
+        } else {
+            vl.iniciar();
+        }
     }
     
     public void crearView(){
@@ -107,6 +109,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         conductor = new ConductorController(m, v);
         repuesto = new RepuestoController(m, v);
         evento = new EventoController(m, v);
+        ganancia = new GananciaController(m, v);
 
         m.refrescar();
     }
@@ -320,32 +323,15 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         if (e == v.btnEventoLimpiarBuscadores) {
             limpiarInput(buscadorEvento);
         }
+        if (e == v.btnGananciaLimpiarBuscadores) {
+            limpiarInput(buscadorGanancia);
+        }
         
         m.refrescar();
     }
 
     @Override
     public void mouseClicked(MouseEvent evt){
-        Object e = evt.getSource();
-        
-        //TODO HACER QUE CUANDO SE DE DOBLE CLICK QUE SALGA UN POP UP PARA 
-        //MODIFICAR VALORES DE LA TABLA EN VEZ DE USAR LOS INPUTS
-        if (evt.getClickCount() == 1) {
-            if (e == v.tblColectivos) {
-                m.transferirValores(v.tblColectivos, inputColectivo);
-            }
-            if (e == v.tblConductores) {
-                m.transferirValores(v.tblConductores, inputConductor);
-            }
-            if (e == v.tblRepuestos) {
-                m.transferirValores(v.tblRepuestos, inputRepuesto);
-            }
-            if (e == v.tblEventos) {
-                m.transferirValores(v.tblEventos, inputEvento);
-            }
-        } else {
-            
-        }
     }
     
     @Override

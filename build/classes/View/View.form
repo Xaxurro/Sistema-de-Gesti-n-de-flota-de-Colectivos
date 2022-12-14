@@ -1028,12 +1028,12 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="6" rowCount="0">
-                        <Column editable="true" title="ID" type="java.lang.Object"/>
-                        <Column editable="true" title="Tipo de Repuesto" type="java.lang.Object"/>
-                        <Column editable="true" title="Patente auto asociado" type="java.lang.Object"/>
-                        <Column editable="true" title="Fecha de Cambio" type="java.lang.Object"/>
-                        <Column editable="true" title="Kilometraje M&#xe1;ximo" type="java.lang.Object"/>
-                        <Column editable="true" title="Kilometraje Actual" type="java.lang.Object"/>
+                        <Column editable="false" title="ID" type="java.lang.Object"/>
+                        <Column editable="false" title="Tipo de Repuesto" type="java.lang.Object"/>
+                        <Column editable="false" title="Patente auto asociado" type="java.lang.Object"/>
+                        <Column editable="false" title="Fecha de Cambio" type="java.lang.Object"/>
+                        <Column editable="false" title="Kilometraje M&#xe1;ximo" type="java.lang.Object"/>
+                        <Column editable="false" title="Kilometraje Actual" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="showGrid" type="boolean" value="true"/>
@@ -1363,11 +1363,11 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="5" rowCount="0">
-                        <Column editable="true" title="ID" type="java.lang.Object"/>
-                        <Column editable="true" title="Fecha" type="java.lang.Object"/>
-                        <Column editable="true" title="Tipo" type="java.lang.Object"/>
-                        <Column editable="true" title="Nombre" type="java.lang.Object"/>
-                        <Column editable="true" title="Beneficio" type="java.lang.Object"/>
+                        <Column editable="false" title="ID" type="java.lang.Object"/>
+                        <Column editable="false" title="Fecha" type="java.lang.Object"/>
+                        <Column editable="false" title="Tipo" type="java.lang.Object"/>
+                        <Column editable="false" title="Nombre" type="java.lang.Object"/>
+                        <Column editable="false" title="Beneficio" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -1510,53 +1510,71 @@
                               <Component id="lblBusquedaTablaGananciaMatricula" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="txtBusquedaTablaGananciaMatricula" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="291" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnGananciaLimpiarBuscadores" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="scpGanancias" alignment="0" min="-2" pref="700" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="lblGananciaMatricula" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblGananciaFecha" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lblGananciaGanancia" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="lblGananciaGanancia" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                                                  <Component id="spnGananciaGanancia" min="-2" pref="200" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="lblGananciaMatricula" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="102" alignment="0" attributes="0">
+                                                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                                          <Component id="lblGananciaFecha" min="-2" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="dchGananciaFecha" max="32767" attributes="0"/>
+                                                      <Component id="cmbGananciaMatricula" max="32767" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                              <Component id="btnGananciaAñadir" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="btnGananciaLimpiar" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="btnGananciaModificar" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                                              <Component id="btnGananciaEliminar" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="35" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lblGananciaBusquedaTotal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblGananciaBusquedaFechaFinal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblGananciaBusquedaFechaInicial" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblGananciaBusquedaMatricula" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="cmbGananciaMatricula" max="32767" attributes="0"/>
-                                          <Component id="spnGananciaGanancia" alignment="0" pref="200" max="32767" attributes="0"/>
-                                          <Component id="dchGananciaMatricula" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="dchGananciaBusquedaFechaFinal" max="32767" attributes="0"/>
+                                          <Component id="dchGananciaBusquedaFechaInicial" max="32767" attributes="0"/>
+                                          <Component id="cmbGananciaBusquedaMatricula" min="-2" pref="200" max="-2" attributes="0"/>
+                                          <Component id="lblGananciaTotal" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                                      <Component id="btnGananciaAñadir" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btnGananciaLimpiar" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btnGananciaModificar" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="btnGananciaEliminar" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="lblGananciaDepositar" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
+                                      <Component id="lblGananciaDepositarEmergencia" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                              </Group>
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="scpGanancias" min="-2" pref="700" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblGananciaBusquedaTotal" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblGananciaBusquedaFechaFinal" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblGananciaBusquedaFechaInicial" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblGananciaBusquedaMatricula" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="dchGananciaBusquedaFechaFinal" max="32767" attributes="0"/>
-                                  <Component id="dchGananciaBusquedaFechaInicial" max="32767" attributes="0"/>
-                                  <Component id="cmbGananciaBusquedaMatricula" min="-2" pref="200" max="-2" attributes="0"/>
-                                  <Component id="lblGananciaTotal" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -1567,7 +1585,7 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblBusquedaTablaGananciaFecha" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1602,29 +1620,31 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cmbGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="dchGananciaMatricula" min="-2" max="-2" attributes="0"/>
+                          <Component id="dchGananciaFecha" min="-2" max="-2" attributes="0"/>
                           <Component id="lblGananciaFecha" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cmbGananciaMatricula" alignment="3" max="32767" attributes="0"/>
+                          <Component id="lblGananciaMatricula" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="spnGananciaGanancia" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblGananciaGanancia" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="50" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btnGananciaAñadir" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGananciaLimpiar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGananciaModificar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnGananciaEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblGananciaDepositar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblGananciaDepositarEmergencia" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1636,6 +1656,9 @@
               </Properties>
             </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="dchBusquedaTablaGananciaFecha">
+              <Properties>
+                <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
+              </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
@@ -1674,9 +1697,9 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="3" rowCount="0">
-                        <Column editable="true" title="Fecha" type="java.lang.Object"/>
-                        <Column editable="true" title="Matricula" type="java.lang.Object"/>
-                        <Column editable="true" title="Ganancia" type="java.lang.Object"/>
+                        <Column editable="false" title="Fecha" type="java.lang.Object"/>
+                        <Column editable="false" title="Matricula" type="java.lang.Object"/>
+                        <Column editable="false" title="Ganancia" type="java.lang.Object"/>
                       </Table>
                     </Property>
                   </Properties>
@@ -1707,7 +1730,7 @@
                 <Property name="text" type="java.lang.String" value="Fecha:"/>
               </Properties>
             </Component>
-            <Component class="com.toedter.calendar.JDateChooser" name="dchGananciaMatricula">
+            <Component class="com.toedter.calendar.JDateChooser" name="dchGananciaFecha">
               <Properties>
                 <Property name="dateFormatString" type="java.lang.String" value="yyyy-MM-dd"/>
               </Properties>
@@ -1778,6 +1801,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblGananciaTotal">
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="btnGananciaA&#xf1;adir">
               <Properties>
@@ -1807,6 +1833,16 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblGananciaDepositar">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Dinero a depositar en caso de emergencia:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblGananciaDepositarEmergencia">
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>

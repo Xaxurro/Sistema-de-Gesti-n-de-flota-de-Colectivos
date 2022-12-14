@@ -40,7 +40,7 @@ public class EventoModel extends Tabla{
         fecha = formato.format(v.dchEventoFecha.getDate());
         tipo = v.cmbEventoTipo.getSelectedItem().toString();
         nombre = capitalizar(v.txtEventoNombre.getText().strip());
-        beneficio = (Integer) v.spnEventoBeneficio.getValue();
+        beneficio = (int) v.spnEventoBeneficio.getValue();
         descripcion = capitalizar(v.txaDescription.getText().strip());
         matricula = v.cmbColectivos.getSelectedItem().toString();
     }

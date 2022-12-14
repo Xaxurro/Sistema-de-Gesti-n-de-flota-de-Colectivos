@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,7 +30,7 @@ public class Model {
     PreparedStatement ppt = null;
     Statement stm = null;
     ResultSet rs = null;
-    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+    public SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
     
     View v = null;
     
@@ -61,6 +62,10 @@ public class Model {
     
     public EventoModel crearEvento(){
         return new EventoModel(con);
+    }
+    
+    public GananciaModel crearGanancia(){
+        return new GananciaModel(con);
     }
     
     
@@ -320,6 +325,28 @@ public class Model {
                 tmEventos.addRow(fila);
             }
             v.tblEventos.setModel(tmEventos);
+            
+            //Ganancias
+            DefaultTableModel tmGanancias = (DefaultTableModel) v.tblGanancias.getModel();
+            tmGanancias.setRowCount(0);
+            
+            ppt = con.prepareStatement("SELECT * FROM Ganancia WHERE Fecha >= ? AND Matricula LIKE ? ORDER BY Fecha ASC;");
+            ppt.setString(1, formato.format((v.dchBusquedaTablaGananciaFecha.getDate() == null) ? new Date(1L) : v.dchBusquedaTablaGananciaFecha.getDate()));
+            ppt.setString(2, '%' + v.txtBusquedaTablaGananciaMatricula.getText().strip() + '%');
+            rs = ppt.executeQuery();
+            while (rs.next()) {
+                Object [] fila = {rs.getDate("Fecha"), rs.getString("Matricula"), rs.getInt("Ganancia")};
+                tmGanancias.addRow(fila);
+            }
+            v.tblGanancias.setModel(tmGanancias);
+            
+            ppt = con.prepareStatement("SELECT SUM(Ganancia) as Suma FROM Ganancia WHERE Fecha >= ?;");
+            ppt.setDate(1, new java.sql.Date(System.currentTimeMillis() - (7 * 1000 * 60 * 60 * 24)));
+            System.out.println(ppt);
+            rs = ppt.executeQuery();
+            if (rs.next()) {
+                v.lblGananciaDepositarEmergencia.setText('$' + String.valueOf(rs.getInt("Suma") * 0.1));
+            }
             
         } catch (SQLException e) {
             e.printStackTrace();

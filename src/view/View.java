@@ -125,7 +125,7 @@ public class View extends javax.swing.JFrame {
         lblGananciaMatricula = new javax.swing.JLabel();
         cmbGananciaMatricula = new javax.swing.JComboBox<>();
         lblGananciaFecha = new javax.swing.JLabel();
-        dchGananciaMatricula = new com.toedter.calendar.JDateChooser();
+        dchGananciaFecha = new com.toedter.calendar.JDateChooser();
         lblGananciaGanancia = new javax.swing.JLabel();
         spnGananciaGanancia = new javax.swing.JSpinner();
         lblGananciaBusquedaMatricula = new javax.swing.JLabel();
@@ -140,6 +140,8 @@ public class View extends javax.swing.JFrame {
         btnGananciaLimpiar = new javax.swing.JButton();
         btnGananciaModificar = new javax.swing.JButton();
         btnGananciaEliminar = new javax.swing.JButton();
+        lblGananciaDepositar = new javax.swing.JLabel();
+        lblGananciaDepositarEmergencia = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
         btnAñadirKilometraje = new javax.swing.JButton();
         btnReDo = new javax.swing.JButton();
@@ -522,7 +524,15 @@ public class View extends javax.swing.JFrame {
             new String [] {
                 "ID", "Tipo de Repuesto", "Patente auto asociado", "Fecha de Cambio", "Kilometraje Máximo", "Kilometraje Actual"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblRepuestos.setShowGrid(true);
         scpRepuestos.setViewportView(tblRepuestos);
 
@@ -700,7 +710,15 @@ public class View extends javax.swing.JFrame {
             new String [] {
                 "ID", "Fecha", "Tipo", "Nombre", "Beneficio"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblEventos.setToolTipText("");
         tblEventos.setCellSelectionEnabled(true);
         tblEventos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
@@ -825,6 +843,8 @@ public class View extends javax.swing.JFrame {
 
         lblBusquedaTablaGananciaFecha.setText("Buscar Fecha:");
 
+        dchBusquedaTablaGananciaFecha.setDateFormatString("yyyy-MM-dd");
+
         lblBusquedaTablaGananciaMatricula.setText("Buscar Matricula:");
 
         txtBusquedaTablaGananciaMatricula.setPreferredSize(new java.awt.Dimension(200, 22));
@@ -838,14 +858,22 @@ public class View extends javax.swing.JFrame {
             new String [] {
                 "Fecha", "Matricula", "Ganancia"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         scpGanancias.setViewportView(tblGanancias);
 
         lblGananciaMatricula.setText("Matricula:");
 
         lblGananciaFecha.setText("Fecha:");
 
-        dchGananciaMatricula.setDateFormatString("yyyy-MM-dd");
+        dchGananciaFecha.setDateFormatString("yyyy-MM-dd");
 
         lblGananciaGanancia.setText("Ganancia:");
 
@@ -871,6 +899,8 @@ public class View extends javax.swing.JFrame {
 
         btnGananciaEliminar.setText("Eliminar");
 
+        lblGananciaDepositar.setText("Dinero a depositar en caso de emergencia:");
+
         javax.swing.GroupLayout pnlGananciasLayout = new javax.swing.GroupLayout(pnlGanancias);
         pnlGanancias.setLayout(pnlGananciasLayout);
         pnlGananciasLayout.setHorizontalGroup(
@@ -886,45 +916,56 @@ public class View extends javax.swing.JFrame {
                         .addComponent(lblBusquedaTablaGananciaMatricula)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtBusquedaTablaGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 291, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGananciaLimpiarBuscadores))
-                    .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlGananciasLayout.createSequentialGroup()
                         .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scpGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlGananciasLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlGananciasLayout.createSequentialGroup()
+                                            .addComponent(lblGananciaGanancia)
+                                            .addGap(7, 7, 7)
+                                            .addComponent(spnGananciaGanancia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlGananciasLayout.createSequentialGroup()
+                                            .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lblGananciaMatricula)
+                                                .addGroup(pnlGananciasLayout.createSequentialGroup()
+                                                    .addGap(3, 3, 3)
+                                                    .addComponent(lblGananciaFecha)))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(dchGananciaFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(cmbGananciaMatricula, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addGroup(pnlGananciasLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(btnGananciaAñadir)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnGananciaLimpiar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnGananciaModificar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnGananciaEliminar)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlGananciasLayout.createSequentialGroup()
                                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblGananciaMatricula)
-                                    .addComponent(lblGananciaFecha)
-                                    .addComponent(lblGananciaGanancia))
-                                .addGap(6, 6, 6)
+                                    .addComponent(lblGananciaBusquedaTotal)
+                                    .addComponent(lblGananciaBusquedaFechaFinal)
+                                    .addComponent(lblGananciaBusquedaFechaInicial)
+                                    .addComponent(lblGananciaBusquedaMatricula))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cmbGananciaMatricula, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(spnGananciaGanancia, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(dchGananciaMatricula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(dchGananciaBusquedaFechaFinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(dchGananciaBusquedaFechaInicial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbGananciaBusquedaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblGananciaTotal)))
                             .addGroup(pnlGananciasLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(btnGananciaAñadir)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnGananciaLimpiar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnGananciaModificar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnGananciaEliminar)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(pnlGananciasLayout.createSequentialGroup()
-                        .addComponent(scpGanancias, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblGananciaBusquedaTotal)
-                            .addComponent(lblGananciaBusquedaFechaFinal)
-                            .addComponent(lblGananciaBusquedaFechaInicial)
-                            .addComponent(lblGananciaBusquedaMatricula))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(dchGananciaBusquedaFechaFinal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(dchGananciaBusquedaFechaInicial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cmbGananciaBusquedaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblGananciaTotal))))
+                                .addComponent(lblGananciaDepositar)
+                                .addGap(46, 46, 46)
+                                .addComponent(lblGananciaDepositarEmergencia)))))
                 .addContainerGap())
         );
         pnlGananciasLayout.setVerticalGroup(
@@ -958,23 +999,25 @@ public class View extends javax.swing.JFrame {
                             .addComponent(lblGananciaBusquedaTotal)
                             .addComponent(lblGananciaTotal))))
                 .addGap(18, 18, 18)
-                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblGananciaMatricula))
-                .addGap(18, 18, 18)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(dchGananciaMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dchGananciaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblGananciaFecha))
+                .addGap(18, 18, 18)
+                .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbGananciaMatricula)
+                    .addComponent(lblGananciaMatricula))
                 .addGap(18, 18, 18)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spnGananciaGanancia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblGananciaGanancia))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGap(50, 50, 50)
                 .addGroup(pnlGananciasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGananciaAñadir)
                     .addComponent(btnGananciaLimpiar)
                     .addComponent(btnGananciaModificar)
-                    .addComponent(btnGananciaEliminar))
+                    .addComponent(btnGananciaEliminar)
+                    .addComponent(lblGananciaDepositar)
+                    .addComponent(lblGananciaDepositarEmergencia))
                 .addContainerGap())
         );
 
@@ -1055,7 +1098,7 @@ public class View extends javax.swing.JFrame {
     public com.toedter.calendar.JDateChooser dchEventoFecha;
     public com.toedter.calendar.JDateChooser dchGananciaBusquedaFechaFinal;
     public com.toedter.calendar.JDateChooser dchGananciaBusquedaFechaInicial;
-    public com.toedter.calendar.JDateChooser dchGananciaMatricula;
+    public com.toedter.calendar.JDateChooser dchGananciaFecha;
     public com.toedter.calendar.JDateChooser dchRepuestoCambio;
     private javax.swing.JLabel lblBusquedaTablaColectivoMatricula;
     private javax.swing.JLabel lblBusquedaTablaColectivoRut;
@@ -1088,10 +1131,12 @@ public class View extends javax.swing.JFrame {
     private javax.swing.JLabel lblGananciaBusquedaFechaInicial;
     private javax.swing.JLabel lblGananciaBusquedaMatricula;
     private javax.swing.JLabel lblGananciaBusquedaTotal;
+    private javax.swing.JLabel lblGananciaDepositar;
+    public javax.swing.JLabel lblGananciaDepositarEmergencia;
     private javax.swing.JLabel lblGananciaFecha;
     private javax.swing.JLabel lblGananciaGanancia;
     private javax.swing.JLabel lblGananciaMatricula;
-    private javax.swing.JLabel lblGananciaTotal;
+    public javax.swing.JLabel lblGananciaTotal;
     private javax.swing.JLabel lblRepuestoCambio;
     public static javax.swing.JLabel lblRepuestoCantidad;
     private javax.swing.JLabel lblRepuestoCantidadTipo;

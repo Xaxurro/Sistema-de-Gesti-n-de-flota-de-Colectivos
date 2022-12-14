@@ -16,6 +16,6 @@ public class Principal {
         View v = new View();
         Model m = new Model(v);
         Controller c = new Controller(m, v);
-        c.iniciar();
+        c.iniciar(true);
     }    
 }
