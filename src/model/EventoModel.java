@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import view.View;
 
-public class Evento extends Tabla{
+public class EventoModel extends Tabla{
     private int id;
     private String fecha;
     private String tipo;
@@ -16,8 +16,8 @@ public class Evento extends Tabla{
     
     private String matricula;
     
-    public Evento(View v, Connection con){
-        super(v, con);
+    public EventoModel(Connection con){
+        super(con);
         this.nombre = "Evento";
         this.pk = "IdEvento";
         
@@ -26,8 +26,7 @@ public class Evento extends Tabla{
         this.sqlEliminar = "DELETE FROM Evento WHERE IdEvento = ?;";
     }
     
-    public void getInput(){
-        id = (v.lblEventoIDActual.getText().equals("")) ? 0 : Integer.valueOf(v.lblEventoIDActual.getText());
+    public void getInput(View v){
         fecha = formato.format(v.dchEventoFecha.getDate());
         tipo = v.cmbEventoTipo.getSelectedItem().toString();
         nombre = capitalizar(v.txtEventoNombre.getText().strip());
@@ -58,19 +57,16 @@ public class Evento extends Tabla{
     
     //OK
     public void insertar(){
-        getInput();
         asignarDatos(sqlInsertar, new Object[] {fecha, tipo, nombre, beneficio});
     }
     
     //OK
     public void modificar(){
-        getInput();
         asignarDatos(sqlModificar, new Object[] {fecha, tipo, nombre, beneficio, id});
     }
     
     //OK
     public void eliminar(){
-        getInput();
         asignarDatos(sqlEliminar, new Object[] {id});
     }
 }

@@ -1,7 +1,6 @@
 package model;
 
 import com.toedter.calendar.JDateChooser;
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -10,8 +9,11 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -52,20 +54,20 @@ public class Model {
         this.v = v;
     }
     
-    public Colectivo crearColectivo(){
-        return new Colectivo(v, con);
+    public ColectivoModel crearColectivo(){
+        return new ColectivoModel(con);
     }
     
-    public Conductor crearConductor(){
-        return new Conductor(v, con);
+    public ConductorModel crearConductor(){
+        return new ConductorModel(con);
     }
     
-    public Repuesto crearRepuesto(){
-        return new Repuesto(v, con);
+    public RepuestoModel crearRepuesto(){
+        return new RepuestoModel(con);
     }
     
-    public Evento crearEvento(){
-        return new Evento(v, con);
+    public EventoModel crearEvento(){
+        return new EventoModel(con);
     }
     
     
@@ -88,7 +90,7 @@ public class Model {
             }
             return con;
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "No se pudo conectar a la base de datos, porfavor inicie XAMPP.", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
         return null;
@@ -116,6 +118,14 @@ public class Model {
             stm.execute("USE Colectivos;");
 
             //TABLAS
+            //Administrador
+            stm.execute("CREATE TABLE Administrador("
+                    + "Usuario VarChar(30) NOT NULL, "
+                    + "Contraseña VarChar(30) NOT NULL, "
+                    + "PRIMARY KEY (Usuario));");
+            
+            stm.execute("INSERT INTO Administrador VALUES ('admin', '12345');");
+            
             //Colectivo
             stm.execute("CREATE TABLE Colectivo("
                     + "Matricula Char(6) NOT NULL, "
@@ -126,7 +136,7 @@ public class Model {
                     + "Motor VarChar(12), "
                     + "PRIMARY KEY (Matricula));");
             
-            //Colectivo-Conductor
+            //Colectivo-ConductorModel
             stm.execute("CREATE TABLE ColectivoConductor("
                     + "Matricula Char(6) NOT NULL, "
                     + "RutConductor Char(10) NOT NULL, "
@@ -142,7 +152,7 @@ public class Model {
                     + "Telefono VarChar(12), "
                     + "PRIMARY KEY (RutConductor));");
             
-            //Colectivo-Repuesto
+            //Colectivo-RepuestoModel
             stm.execute("CREATE TABLE ColectivoRepuesto("
                     + "Matricula Char(6) NOT NULL, "
                     + "IdRepuesto Int(3) NOT NULL, "
@@ -174,7 +184,7 @@ public class Model {
                     + "PRIMARY KEY (IdCompra));");
             */
             
-            //Colectivo-Evento
+            //Colectivo-EventoModel
             stm.execute("CREATE TABLE ColectivoEvento("
                     + "Matricula Char(6) NOT NULL,"
                     + "IdEvento Int(3) NOT NULL,"
@@ -211,35 +221,27 @@ public class Model {
                     + "Ganancia Int(7), "
                     + "PRIMARY KEY (Fecha, Matricula));");
             
-            //Administrador
-            stm.execute("CREATE TABLE Administrador("
-                    + "Usuario VarChar(30) NOT NULL, "
-                    + "Contraseña VarChar(30) NOT NULL, "
-                    + "PRIMARY KEY (Usuario));");
-            
-            
             //CLAVES FORANEAS
-            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
-            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE ON UPDATE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoConductor ADD CONSTRAINT FK_COLECTIVOCONDUCTOR_CONDUCTOR FOREIGN KEY (RutConductor) REFERENCES Conductor(RutConductor) ON DELETE CASCADE ON UPDATE CASCADE;");
             
-            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
-            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
-            
-            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE ON UPDATE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoRepuesto ADD CONSTRAINT FK_COLECTIVOREPUESTO_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE ON UPDATE CASCADE;");
+            /*
+            stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES RepuestoModel(IdRepuesto) ON DELETE CASCADE;");
             stm.execute("ALTER TABLE RepuestoCompra ADD CONSTRAINT FK_REPUESTOCOMPRA_COMPRA FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra) ON DELETE CASCADE;");
+            */
+            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE ON UPDATE CASCADE;");
+            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_EVENTO FOREIGN KEY (IdEvento) REFERENCES Evento(IdEvento) ON DELETE CASCADE ON UPDATE CASCADE;");
             
-            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
-            stm.execute("ALTER TABLE ColectivoEvento ADD CONSTRAINT FK_COLECTIVOEVENTO_EVENTO FOREIGN KEY (IdEvento) REFERENCES Evento(IdEvento) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE RepuestoAjuste ADD CONSTRAINT FK_REPUESTOAJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE ON UPDATE CASCADE;");
+            stm.execute("ALTER TABLE RepuestoAjuste ADD CONSTRAINT FK_REPUESTOAJUSTE_AJUSTE FOREIGN KEY (IdAjuste) REFERENCES Ajuste(IdAjuste) ON DELETE CASCADE ON UPDATE CASCADE;");
             
-            stm.execute("ALTER TABLE RepuestoAjuste ADD CONSTRAINT FK_REPUESTOAJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
-            stm.execute("ALTER TABLE RepuestoAjuste ADD CONSTRAINT FK_REPUESTOAJUSTE_AJUSTE FOREIGN KEY (IdAjuste) REFERENCES Ajuste(IdAjuste) ON DELETE CASCADE;");
+            //stm.execute("ALTER TABLE Ajuste ADD CONSTRAINT FK_AJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES RepuestoModel(IdRepuesto) ON DELETE CASCADE;");
             
-            //stm.execute("ALTER TABLE Ajuste ADD CONSTRAINT FK_AJUSTE_REPUESTO FOREIGN KEY (IdRepuesto) REFERENCES Repuesto(IdRepuesto) ON DELETE CASCADE;");
-            
-            stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE;");
+            stm.execute("ALTER TABLE Ganancia ADD CONSTRAINT FK_GANANCIA_COLECTIVO FOREIGN KEY (Matricula) REFERENCES Colectivo(Matricula) ON DELETE CASCADE ON UPDATE CASCADE;");
             
             //INSERTAR DATOS INICIALES
-            stm.execute("INSERT INTO Administrador VALUES ('admin', '12345');");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -255,14 +257,9 @@ public class Model {
     public void refrescar(){
         try {
             // Colectivos
-            v.cmbRepuestoColectivos.removeAllItems();
-            v.cmbRepuestoColectivos.addItem("------");
-            v.cmbConductorColectivos.removeAllItems();
-            v.cmbConductorColectivos.addItem("------");
-            v.cmbGananciaBusquedaMatricula.removeAllItems();
-            v.cmbGananciaBusquedaMatricula.addItem("------");
-            v.cmbGananciaMatricula.removeAllItems();
-            v.cmbGananciaMatricula.addItem("------");
+            JComboBox[] cmbColectivos = {v.cmbRepuestoColectivos, v.cmbConductorColectivos, v.cmbGananciaBusquedaMatricula, v.cmbGananciaMatricula};
+            Model.this.refrescarCmb(cmbColectivos, "Matricula", "Colectivo");
+            
             DefaultTableModel tmColectivos = (DefaultTableModel) v.tblColectivos.getModel();
             tmColectivos.setRowCount(0);
             
@@ -278,17 +275,13 @@ public class Model {
                 String rutConductor = (rs.getString("RutConductor") != null) ? rs.getString("RutConductor") : "------";
                 Object [] fila = {matricula, rutConductor, rs.getString("Compra"), rs.getString("KilometrajeActual"), rs.getString("Marca"), rs.getString("Vin"), rs.getString("Motor")};
                 tmColectivos.addRow(fila);
-                v.cmbRepuestoColectivos.addItem(matricula);
-                v.cmbConductorColectivos.addItem(matricula);
-                v.cmbGananciaBusquedaMatricula.addItem(matricula);
-                v.cmbGananciaMatricula.addItem(matricula);
             }
             v.tblColectivos.setModel(tmColectivos);
             
             
-            // Conductores 
-            v.cmbColectivoConductores.removeAllItems();
-            v.cmbColectivoConductores.addItem("------");
+            // Conductores
+            refrescarCmb(v.cmbColectivoConductores, "RutConductor", "Conductor");
+            
             DefaultTableModel tmConductores = (DefaultTableModel) v.tblConductores.getModel();
             tmConductores.setRowCount(0);
             
@@ -301,13 +294,13 @@ public class Model {
                 String matricula = (rs.getString("Matricula") != null) ? rs.getString("Matricula") : "------";
                 Object [] fila = {rutConductor, matricula, rs.getString("Nombre"), rs.getString("Direccion"), rs.getString("Telefono")};
                 tmConductores.addRow(fila);
-                v.cmbColectivoConductores.addItem(rutConductor);
             }
             v.tblConductores.setModel(tmConductores);
             
             // Repuestos
-            v.cmbRepuestoCantidadTipo.removeAllItems();
-            v.cmbRepuestoCantidadTipo.addItem("Todos");
+            JComboBox[] cmbRepuestos = {v.cmbRepuestoCantidadTipo};
+            refrescarCmb(v.cmbRepuestoCantidadTipo, "TipoRepuesto", "Repuesto");
+            
             DefaultTableModel tmRepuesto = (DefaultTableModel) v.tblRepuestos.getModel();
             tmRepuesto.setRowCount(0);
             
@@ -323,10 +316,6 @@ public class Model {
                 String cambio = (rs.getDate("Cambio") != null) ? rs.getDate("Cambio").toString() : "------";
                 Object [] fila = {rs.getInt("IdRepuesto"), rs.getString("TipoRepuesto"), matricula, cambio,  rs.getInt("KilometrajeMax"), rs.getInt("KilometrajeDeUso")};
                 tmRepuesto.addRow(fila);
-            }
-            rs = stm.executeQuery("SELECT DISTINCT(TipoRepuesto) FROM Repuesto;");
-            while (rs.next()) {
-                v.cmbRepuestoCantidadTipo.addItem(rs.getString("TipoRepuesto"));
             }
             v.tblRepuestos.setModel(tmRepuesto);
             
@@ -353,47 +342,81 @@ public class Model {
         }
     }
     
-    public void consultarValores(JTable tabla, List<Object> inputList){
+    public void refrescarCmb(JComboBox[] cmbs, String pk, String tabla){
         try {
-            int fila = tabla.getSelectedRow();
-            Object input = null;
-            Object valor = null;
-            
-            JComboBox cb = null;
-            JTextField tf = null;
-            JDateChooser dc = null;
-            JLabel lbl = null;
-            JSpinner spn = null;
-            
-            for (int i = 0; i < tabla.getColumnCount(); i++) {
-                input = inputList.get(i);
-                valor = tabla.getValueAt(fila, i);
-                if (input instanceof JTextField) {
-                    tf = (JTextField) input;
-                    tf.setText(valor.toString());
+            List<String> pks = new ArrayList<String>();
+            ppt = con.prepareStatement("SELECT " + pk + " FROM " + tabla + ";");
+            rs = ppt.executeQuery();
+            while (rs.next()) {
+                pks.add(rs.getString("Matricula"));
+            }
+            for (JComboBox cmb : cmbs) {
+                cmb.removeAllItems();
+                cmb.addItem("------");
+                for (String matricula : pks) {
+                    cmb.addItem(matricula);
                 }
-                if (input instanceof JDateChooser) {
-                    dc = (JDateChooser) input;
-                    dc.setDate((valor != "------") ? formato.parse(valor.toString()) : null);
-                }
-                if (input instanceof JComboBox) {
-                    cb = (JComboBox) input;
-                    cb.setSelectedItem(valor);
-                }
-                if (input instanceof JLabel) {
-                    lbl = (JLabel) input;
-                    lbl.setText(valor.toString());
-                }
-                if (input instanceof JSpinner) {
-                    spn = (JSpinner) input;
-                    spn.setValue(Integer.valueOf(valor.toString()));
-                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    public void refrescarCmb(JComboBox cmb, String pk, String tabla){
+        try {
+            List<String> pks = new ArrayList<String>();
+            ppt = con.prepareStatement("SELECT DISTINCT " + pk + " FROM " + tabla + ";");
+            rs = ppt.executeQuery();
+            while (rs.next()) {
+                pks.add(rs.getString(pk));
+            }
+            cmb.removeAllItems();
+            cmb.addItem("------");
+            for (String matricula : pks) {
+                cmb.addItem(matricula);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void setValor(Object input, Object valor){
+        try {
+            if (input instanceof JTextField) {
+                ((JTextField) input).setText(valor.toString());
+            }
+            if (input instanceof JDateChooser) {
+                    ((JDateChooser) input).setDate((valor != "------") ? formato.parse(valor.toString()) : null);
+            }
+            if (input instanceof JComboBox) {
+                ((JComboBox) input).setSelectedItem(valor);
+            }
+            if (input instanceof JLabel) {
+                ((JLabel) input).setText(valor.toString());
+            }
+            if (input instanceof JSpinner) {
+                ((JSpinner) input).setValue(Integer.valueOf(valor.toString()));
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
+    
+    public void transferirValores(JTable tabla, List<Object> inputList){
+        int fila = tabla.getSelectedRow();
 
+        for (int i = 0; i < tabla.getColumnCount(); i++) {
+            setValor(inputList.get(i), tabla.getValueAt(fila, i));
+        }
+    }
+
+    public void restablecer(List<Object> inputList, Object[] data){
+        for (int i = 0; i < data.length; i++) {
+            setValor(inputList.get(i), data[i]);
+        }
+    }
+    
     public void añadirKilometraje() {
         
     }

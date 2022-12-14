@@ -20,23 +20,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import model.Colectivo;
-import model.Conductor;
-import model.Repuesto;
-import model.Evento;
+import model.ColectivoModel;
+import model.ConductorModel;
+import model.RepuestoModel;
+import model.EventoModel;
+import view.ColectivoView;
 
 public class Controller implements ActionListener, MouseListener, KeyListener, PropertyChangeListener, ItemListener, ChangeListener{
-    private View v;
-    private Model m;
+    public View v;
+    public Model m;
     
-    private Colectivo colectivo;
-    private Conductor conductor;
-    private Repuesto repuesto;
-    private Evento evento;
+    private ColectivoController colectivo = null;
+    private ConductorController conductor = null;
+    private RepuestoController repuesto = null;
+    private EventoController evento = null;
     
     boolean validoEmpty = true;
     boolean validoFormato = true;
@@ -45,10 +47,13 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
     private List<Object> inputConductor = new ArrayList<Object>();
     private List<Object> inputRepuesto = new ArrayList<Object>();
     private List<Object> inputEvento = new ArrayList<Object>();
+    
     private List<Object> buscadorColectivo = new ArrayList<Object>();
     private List<Object> buscadorConductor = new ArrayList<Object>();
     private List<Object> buscadorRepuesto = new ArrayList<Object>();
     private List<Object> buscadorEvento = new ArrayList<Object>();
+    
+    public Object[] registro = null;
 
     //LISTENERS
     public Controller(Model model, View view) {
@@ -59,6 +64,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.btnSalir.addActionListener(this);
         v.btnAñadirKilometraje.addActionListener(this);
         
+        /*
         //BUSCADORES
         v.txtBusquedaTablaColectivoMatricula.addKeyListener(this);
         v.txtBusquedaTablaColectivoRut.addKeyListener(this);
@@ -69,10 +75,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.dchBusquedaTablaEventoFecha.addPropertyChangeListener(this);
         v.txtBusquedaTablaEventoNombre.addKeyListener(this);
         v.cmbBusquedaTablaEventoTipo.addActionListener(this);
+        */
         
         //DEBUG (BORRAR)
         v.btnReDo.addActionListener(this);
         
+        /*
         //COLECTIVO
         v.btnColectivoAñadir.addActionListener(this);
         v.btnColectivoLimpiar.addActionListener(this);
@@ -106,6 +114,7 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.btnEventoLimpiarBuscadores.addActionListener(this);
         v.cmbEventoTipo.addItemListener(this);
         v.tblEventos.addMouseListener(this);
+        */
     }
     
     //AÑADIR A LAS LISTAS
@@ -117,37 +126,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         
         //AÑADIR A LAS LISTAS
         //COLECTIVO
-        inputColectivo.add(v.txtColectivoMatricula);
-        inputColectivo.add(v.cmbColectivoConductores);
-        inputColectivo.add(v.dchColectivoCompra);
-        inputColectivo.add(v.spnColectivoKilometraje);
-        inputColectivo.add(v.txtColectivoMarca);
-        inputColectivo.add(v.txtColectivoVin);
-        inputColectivo.add(v.txtColectivoMotor);
-        
-        buscadorColectivo.add(v.txtBusquedaTablaColectivoMatricula);
-        buscadorColectivo.add(v.txtBusquedaTablaColectivoRut);
         
         //CONDUCTOR
-        inputConductor.add(v.txtConductorRut);
-        inputConductor.add(v.cmbConductorColectivos);
-        inputConductor.add(v.txtConductorNombre);
-        inputConductor.add(v.txtConductorDireccion);
-        inputConductor.add(v.txtConductorTelefono);
-        
-        buscadorConductor.add(v.txtBusquedaTablaConductorNombre);
-        buscadorConductor.add(v.txtBusquedaTablaConductorRut);
         
         //REPUESTO
-        inputRepuesto.add(v.lblRepuestoIDActual);
-        inputRepuesto.add(v.txtRepuestoTipo);
-        inputRepuesto.add(v.cmbRepuestoColectivos);
-        inputRepuesto.add(v.dchRepuestoCambio);
-        inputRepuesto.add(v.spnRepuestoKilometrajeMax);
-        inputRepuesto.add(v.spnRepuestoKilometrajeActual);
         
         //Evento
-        inputEvento.add(v.lblEventoIDActual);
         inputEvento.add(v.dchEventoFecha);
         inputEvento.add(v.cmbEventoTipo);
         inputEvento.add(v.txtEventoNombre);
@@ -158,22 +142,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         buscadorEvento.add(v.cmbBusquedaTablaEventoTipo);
         
         //CREAR OBJETOS
-        colectivo = m.crearColectivo();
-        conductor = m.crearConductor();
-        repuesto = m.crearRepuesto();
-        evento = m.crearEvento();
+        colectivo = new ColectivoController(m, v);
+        conductor = new ConductorController(m, v);
+        repuesto = new RepuestoController(m, v);
+        evento = new EventoController(m, v);
         
         m.refrescar();
-        /*
-        colectivo.conectarTabla(conductor);
-        colectivo.conectarTabla(repuesto);
-        
-        conductor.conectarTabla(colectivo);
-        conductor.conectarTabla(repuesto);
-        
-        repuesto.conectarTabla(colectivo);
-        repuesto.conectarTabla(conductor);
-        */
     }
     
     //VALIDACIONES
@@ -204,14 +178,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         return false;
     }
     
-    public boolean validarRut(){
-        if(!Pattern.matches("^[0-9]+-[0-9kK]{1}$", v.txtConductorRut.getText().strip()) || !(v.txtConductorRut.getText().strip().length() >= 9)){
-            if (!(v.txtConductorRut.getText().strip().equals(""))) {
-                JOptionPane.showMessageDialog(null, "Ingrese el formato valido en Rut.\n(Coloque el mouse encima de este campo para ver el formato).");
-            }
+    public boolean validarRut(JTextField txt){
+        String rut = txt.getText().strip().toUpperCase();
+        if(!Pattern.matches("^[0-9]+-[0-9kK]{1}$", rut) || !(rut.length() >= 9)){
+            JOptionPane.showMessageDialog(null, "Ingrese el formato valido en Rut.\n(Coloque el mouse encima de este campo para ver el formato).");
             return false;
         }
-        String rut = v.txtConductorRut.getText().strip().toUpperCase();
         int suma = 0;
         char digitoV = 0;
         int i = 2;
@@ -296,6 +268,23 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         }
     }
     
+    public Object getValor(JTable tabla, int columna){
+        return tabla.getValueAt(tabla.getSelectedRow(), columna);
+    }
+    
+    public Object[] getRegistro(JTable tabla){
+        List<Object> registro = new ArrayList<Object>();
+        for (int i = 0; i < tabla.getColumnCount(); i++) {
+            registro.add(getValor(tabla, i));
+        }
+        return registro.toArray();
+    }
+    
+    public void mensaje(JFrame jframe, String mensaje, String titulo, int tipo){
+        JOptionPane.showMessageDialog(null, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
+        jframe.dispose();
+    }
+    
     @Override
     public void actionPerformed(ActionEvent evt){
         Object e = evt.getSource();
@@ -312,8 +301,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         if (e == v.btnReDo) {
             m.eliminarDB();
             m.crearDB();
+            System.out.println("DB Recreada.");
         }
         
+        /*
         //COLECTIVO
         if (e == v.btnColectivoAñadir) {
             validoEmpty = validarEmpty(inputColectivo);
@@ -339,8 +330,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
                 colectivo.eliminar();
             }
         }
+        */
         
         //CONDUCTOR
+        /*
         if (e == v.btnConductorAñadir) {
             validoEmpty = validarEmpty(inputConductor);
             validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
@@ -365,10 +358,11 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
                 conductor.eliminar();
             }
         }
-        
+        */
+        /*
         //REPUESTO
         if (e == v.btnRepuestoAñadir) {
-            repuesto.insertar();
+            repuesto.insertar(v);
         }
         if (e == v.btnRepuestoLimpiar) {
             limpiarInput(inputRepuesto);
@@ -380,9 +374,10 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             repuesto.eliminar();
         }
         if (e == v.cmbRepuestoCantidadTipo) {
-            repuesto.buscarCantidad();
+            System.out.println("controller.Controller.actionPerformed()");
+            repuesto.buscarCantidad(v);
         }
-        
+        */
         //EVENTO
         if (e == v.btnEventoAñadir) {
             validoEmpty = validarEmpty(inputEvento);
@@ -428,16 +423,16 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         //MODIFICAR VALORES DE LA TABLA EN VEZ DE USAR LOS INPUTS
         if (evt.getClickCount() == 1) {
             if (e == v.tblColectivos) {
-                m.consultarValores(v.tblColectivos, inputColectivo);
+                m.transferirValores(v.tblColectivos, inputColectivo);
             }
             if (e == v.tblConductores) {
-                m.consultarValores(v.tblConductores, inputConductor);
+                m.transferirValores(v.tblConductores, inputConductor);
             }
             if (e == v.tblRepuestos) {
-                m.consultarValores(v.tblRepuestos, inputRepuesto);
+                m.transferirValores(v.tblRepuestos, inputRepuesto);
             }
             if (e == v.tblEventos) {
-                m.consultarValores(v.tblEventos, inputEvento);
+                m.transferirValores(v.tblEventos, inputEvento);
             }
         } else {
             
@@ -454,35 +449,12 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         m.refrescar();
     }
     
-    @Override
-    public void itemStateChanged (ItemEvent evt){
-        Object e = evt.getSource();
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            if (e == v.cmbRepuestoCantidadTipo) {
-                repuesto.buscarCantidad();
-            }
-            if (e == v.cmbEventoTipo) {
-                if (v.cmbEventoTipo.getSelectedItem() == "Robo" || v.cmbEventoTipo.getSelectedItem() == "Accidente") {
-                    System.out.println("controller.Controller.itemStateChanged()");
-                }
-            }
-        }
-    }
-    
-    public void stateChanged(ChangeEvent evt){
-        System.out.println("controller.Controller.stateChanged()");
-        SpinnerNumberModel spnModel = (SpinnerNumberModel) v.spnRepuestoKilometrajeActual.getModel();
-        int max = (int) v.spnRepuestoKilometrajeMax.getValue();
-        if ((int) spnModel.getValue() >= max) {
-            spnModel.setValue(max - 1);
-        }
-        spnModel.setMaximum(max - 1);
-    }
-    
-    public void mousePressed(MouseEvent eve){};
-    public void mouseReleased(MouseEvent eve){};
-    public void mouseEntered(MouseEvent eve){};
-    public void mouseExited(MouseEvent eve){};
+    public void itemStateChanged (ItemEvent evt){}
+    public void stateChanged(ChangeEvent evt){} 
+    public void mousePressed(MouseEvent eve){}
+    public void mouseReleased(MouseEvent eve){}
+    public void mouseEntered(MouseEvent eve){}
+    public void mouseExited(MouseEvent eve){}
     public void keyPressed (KeyEvent e){}
-    public void keyTyped (KeyEvent e){};
+    public void keyTyped (KeyEvent e){}
 }

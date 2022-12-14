@@ -20,11 +20,6 @@ import javax.swing.table.DefaultTableModel;
 import view.View;
 
 public class Tabla {
-    public View v = null;
-    public Colectivo colectivo = null;
-    public Conductor conductor = null;
-    public Repuesto repuesto = null;
-    
     public Connection con = null;
     public PreparedStatement ppt = null;
     public Statement stm = null;
@@ -53,9 +48,8 @@ public class Tabla {
     public String sqlModificar = "";
     public String sqlEliminar = "";
     
-    public Tabla(View v, Connection con){
+    public Tabla(Connection con){
         try {
-            this.v = v;
             this.con = con;
             this.stm = con.createStatement();
         } catch (SQLException e) {
@@ -101,27 +95,6 @@ public class Tabla {
                 }
             }
             ppt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void quitar(String columna, String registro){
-        try {
-            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columna + " = null WHERE " + columna + " = ?;");
-            ppt.setString(1, registro);
-            ppt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void añadir(String columnaAAñadir, String registroAAñadir, String columnaABuscar, String registroABuscar){
-        try {
-            ppt = con.prepareStatement("UPDATE " + nombre + " SET " + columnaAAñadir + " = ? WHERE " + columnaABuscar + " = ?;");
-            ppt.setString(1, registroAAñadir);
-            ppt.setString(2, registroABuscar);
-            ppt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -17,10 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import view.RepuestoView;
 import view.View;
 
 
-public class Repuesto extends Tabla{
+public class RepuestoModel extends Tabla{
     private int id;
     private String tipo;
     private String matricula;
@@ -29,18 +30,16 @@ public class Repuesto extends Tabla{
     private int kilometrajeDeUso;
     private int cantidad;
     
-    public Repuesto(View v, Connection con){
-        super(v, con);
+    public RepuestoModel(Connection con){
+        super(con);
         this.nombre = "Repuesto";
         this.pk = "IdRepuesto";
-        //this.campos = new String[] {"IdRepuesto", "TipoRepuesto", "KilometrajeMaxc", "KilometrajeDeUso", "Repuesto"};
         this.sqlInsertar = "INSERT INTO Repuesto(TipoRepuesto, KilometrajeMax, KilometrajeDeUso) VALUES (?, ?, ?);";
-        this.sqlModificar = "UPDATE Repuesto SET TipoRepuesto = ?, KilometrajeMax = ?, KilometrajeDeUso = ? WHERE IdRepuesto = ?";
+        this.sqlModificar = "UPDATE Repuesto SET IdRepuesto = ?, TipoRepuesto = ?, KilometrajeMax = ?, KilometrajeDeUso = ? WHERE IdRepuesto = ?";
         this.sqlEliminar = "DELETE FROM Repuesto WHERE IdRepuesto = ?;";
     }
     
-    public void getInput(){
-        id = (v.lblRepuestoIDActual.getText().equals("")) ? 0 : Integer.valueOf(v.lblRepuestoIDActual.getText());
+    public void getInput(View v){
         tipo = capitalizar(v.txtRepuestoTipo.getText().strip());
         matricula = v.cmbRepuestoColectivos.getSelectedItem().toString();
         cambio = formato.format(v.dchRepuestoCambio.getDate());
@@ -48,8 +47,16 @@ public class Repuesto extends Tabla{
         kilometrajeDeUso = (int) v.spnRepuestoKilometrajeActual.getValue();
         cantidad = (int) v.spnRepuestoCantidad.getValue();
     }
+    
+    public void getInput(RepuestoView v){
+        tipo = capitalizar(v.txtRepuestoTipo.getText().strip());
+        matricula = v.cmbRepuestoColectivos.getSelectedItem().toString();
+        cambio = formato.format(v.dchRepuestoCambio.getDate());
+        kilometrajeMax = (int) v.spnRepuestoKilometrajeMax.getValue();
+        kilometrajeDeUso = (int) v.spnRepuestoKilometrajeActual.getValue();
+    }
 
-    public void buscarCantidad() {
+    public void buscarCantidad(View v) {
         try {
             String sql = "SELECT Count(TipoRepuesto) FROM Repuesto";
             if (!v.cmbRepuestoCantidadTipo.getSelectedItem().toString().equals("Todos")) {
@@ -77,9 +84,21 @@ public class Repuesto extends Tabla{
         return false;
     }
     
+    private void quitarColectivo() {
+        try {
+            ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Estado = 0 WHERE Matricula = ? AND IdRepuesto = ?;");
+            ppt.setString(1, matricula);
+            ppt.setInt(2, id);
+            ppt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void añadirColectivo(){
         try {
             if (buscarColectivo()) {
+                quitarColectivo();
                 ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Cambio = ?, Estado = 1 WHERE Matricula = ? AND IdRepuesto = ?;");
                 ppt.setString(1, cambio);
                 ppt.setString(2, matricula);
@@ -97,54 +116,21 @@ public class Repuesto extends Tabla{
         }
     }
     
-    private void quitarColectivo() {
-        try {
-            if (buscarColectivo()) {
-                ppt = con.prepareStatement("UPDATE ColectivoRepuesto SET Estado = 0 WHERE Matricula = ? AND IdRepuesto = ?;");
-                ppt.setString(1, matricula);
-                ppt.setInt(2, id);
-                ppt.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    
     public void insertar(){
-        getInput();
         for (int i = 0; i < cantidad; i++) {
             asignarDatos(sqlInsertar, new Object[] {tipo, kilometrajeMax, kilometrajeDeUso});
-            if (v.cmbRepuestoColectivos.getSelectedIndex() != 0) {
-                try {
-                    rs = con.prepareStatement("SELECT MAX(IdRepuesto) FROM Repuesto;").executeQuery();
-                    if (rs.next()) {
-                        id = rs.getInt(1);
-                        quitarColectivo();
-                        añadirColectivo();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            if (!matricula.equals("------")) {
+                añadirColectivo();
             }
         }
     }
     
-    /*
-    public void modificar(){
-        getInput();
-        if (existe(rutConductor)) {
-            asignarDatos(sqlModificar, new Object[] {nombreConductor, direccion, telefono, rutConductor});
-            
-            añadirColectivo();
-        } else {
-            JOptionPane.showMessageDialog(null, "No existe Rut.");
-        }
+    public void modificar(String registro){
+        asignarDatos(sqlModificar, new Object[] {id, tipo, kilometrajeMax, kilometrajeDeUso, registro});
     }
-    */
     
-    public void eliminar(){
-        getInput();
-        asignarDatos(sqlEliminar, new Object[] {id});
+    public void eliminar(String registro){
+        asignarDatos(sqlEliminar, new Object[] {registro});
     }
     
 }

@@ -17,28 +17,37 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import view.ConductorView;
 import view.View;
 
 
-public class Conductor extends Tabla{
+public class ConductorModel extends Tabla{
     private String rutConductor;
     private String matricula;
     private String nombreConductor;
     private String direccion;
     private String telefono;
     
-    public Conductor(View v, Connection con){
-        super(v, con);
+    public ConductorModel(Connection con){
+        super(con);
         this.nombre = "Conductor";
         this.pk = "RutConductor";
         //this.campos = new String[] {"RutConductor", "Matricula", "Nombre", "Direccion", "Telefono"};
         
         this.sqlInsertar = "INSERT INTO Conductor VALUES (?, ?, ?, ?);";
-        this.sqlModificar = "UPDATE Conductor SET Nombre = ?, Direccion = ?, Telefono = ? WHERE RutConductor = ?";
+        this.sqlModificar = "UPDATE Conductor SET RutConductor = ?, Nombre = ?, Direccion = ?, Telefono = ? WHERE RutConductor = ?";
         this.sqlEliminar = "DELETE FROM Conductor WHERE RutConductor = ?;";
     }
     
-    public void getInput(){
+    public void getInput(View v){
+        rutConductor = v.txtConductorRut.getText().strip();
+        matricula = v.cmbConductorColectivos.getSelectedItem().toString();
+        nombreConductor = capitalizar(v.txtConductorNombre.getText().strip());
+        direccion = capitalizar(v.txtConductorDireccion.getText().strip());
+        telefono = v.txtConductorTelefono.getText().strip();
+    }
+    
+    public void getInput(ConductorView v){
         rutConductor = v.txtConductorRut.getText().strip();
         matricula = v.cmbConductorColectivos.getSelectedItem().toString();
         nombreConductor = capitalizar(v.txtConductorNombre.getText().strip());
@@ -60,7 +69,7 @@ public class Conductor extends Tabla{
     private void añadirColectivo() {
         try {
             quitarColectivo();
-            if (!rutConductor.equals("------")) {
+            if (!matricula.equals("------")) {
                 ppt = con.prepareStatement("SELECT Estado FROM ColectivoConductor WHERE Matricula = ? AND RutConductor = ?;");
                 ppt.setString(1, matricula);
                 ppt.setString(2, rutConductor);
@@ -83,31 +92,27 @@ public class Conductor extends Tabla{
     }
     
     public void insertar(){
-        getInput();
         if (!existe(rutConductor)) {
             asignarDatos(sqlInsertar, new Object[] {rutConductor, nombreConductor, direccion, telefono});
-
+            
             añadirColectivo();
         } else {
             JOptionPane.showMessageDialog(null, "Rut Duplicado.");
         }
     }
     
-    public void modificar(){
-        getInput();
-        if (existe(rutConductor)) {
-            asignarDatos(sqlModificar, new Object[] {nombreConductor, direccion, telefono, rutConductor});
-            
-            añadirColectivo();
+    public boolean modificar(String registro){
+        if (existe(rutConductor) && !rutConductor.equals(registro)) {
+            JOptionPane.showMessageDialog(null, "Rut Duplicado.");
+            return false;
         } else {
-            JOptionPane.showMessageDialog(null, "No existe Rut.");
+            asignarDatos(sqlModificar, new Object[] {rutConductor, nombreConductor, direccion, telefono, registro});
+            añadirColectivo();
+            return true;
         }
     }
     
-    public void eliminar(){
-        getInput();
-        if (existe(rutConductor)) {
-            asignarDatos(sqlEliminar, new Object[] {rutConductor});
-        }
+    public void eliminar(String registro){
+        asignarDatos(sqlEliminar, new Object[] {registro});
     }
 }
