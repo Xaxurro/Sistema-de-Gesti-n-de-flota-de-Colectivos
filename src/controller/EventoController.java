@@ -113,7 +113,7 @@ public class EventoController extends Controller{
         }
         
         //LIMPIAR BUSCADORES
-        if (e == v.btnColectivoLimpiarBuscadores) {
+        if (e == v.btnEventoLimpiarBuscadores) {
             limpiarInput(buscador);
         }
         

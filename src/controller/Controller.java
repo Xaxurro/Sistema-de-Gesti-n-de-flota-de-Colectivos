@@ -125,23 +125,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
         v.setLocationRelativeTo(null);
         v.setVisible(true);
         
-        //AÑADIR A LAS LISTAS
-        //COLECTIVO
-        
-        //CONDUCTOR
-        
-        //REPUESTO
-        
-        //Evento
-        inputEvento.add(v.dchEventoFecha);
-        inputEvento.add(v.cmbEventoTipo);
-        inputEvento.add(v.txtEventoNombre);
-        inputEvento.add(v.spnEventoBeneficio);
-        
-        buscadorEvento.add(v.dchBusquedaTablaEventoFecha);
-        buscadorEvento.add(v.txtBusquedaTablaEventoNombre);
-        buscadorEvento.add(v.cmbBusquedaTablaEventoTipo);
-        
         //CREAR OBJETOS
         colectivo = new ColectivoController(m, v);
         conductor = new ConductorController(m, v);
@@ -315,104 +298,6 @@ public class Controller implements ActionListener, MouseListener, KeyListener, P
             System.out.println("DB Recreada.");
         }
         
-        /*
-        //COLECTIVO
-        if (e == v.btnColectivoAñadir) {
-            validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^\\d&&\\w]{1,15}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
-            if (validoFormato && validoEmpty) {
-                colectivo.insertar();
-            }
-        }
-        if (e == v.btnColectivoLimpiar) {
-            limpiarInput(inputColectivo);
-        }
-        if (e == v.btnColectivoModificar) {
-            validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}") && validarRegEx(v.txtColectivoMarca, "^[^\\d&&\\w]{1,15}$") && validarRegEx(v.txtColectivoVin, "^[^iIoOqQñÑ_\\W]{1,17}$") && validarRegEx(v.txtColectivoMotor, "^[^iIoOqQñÑ_\\W]{1,12}$");
-            if (validoFormato && validoEmpty) {
-                colectivo.modificar();
-            }
-        }
-        if (e == v.btnColectivoEliminar) {
-            validoEmpty = validarEmpty(inputColectivo);
-            validoFormato = validarRegEx(v.txtColectivoMatricula, "[0-9a-zA-Z]{6}");
-            if (validoFormato && validoEmpty) {
-                colectivo.eliminar();
-            }
-        }
-        */
-        
-        //CONDUCTOR
-        /*
-        if (e == v.btnConductorAñadir) {
-            validoEmpty = validarEmpty(inputConductor);
-            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
-            if (validoEmpty && validoFormato) {
-                conductor.insertar();
-            }
-        }
-        if (e == v.btnConductorLimpiar) {
-            limpiarInput(inputConductor);
-        }
-        if (e == v.btnConductorModificar) {
-            validoEmpty = validarEmpty(inputConductor);
-            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
-            if (validoEmpty && validoFormato) {
-                conductor.modificar();
-            }
-        }
-        if (e == v.btnConductorEliminar) {
-            validoEmpty = validarEmpty(inputConductor);
-            validoFormato = validarRut() && validarRegEx(v.txtConductorTelefono, "^\\+\\d{11}$");
-            if (validoEmpty && validoFormato) {
-                conductor.eliminar();
-            }
-        }
-        */
-        /*
-        //REPUESTO
-        if (e == v.btnRepuestoAñadir) {
-            repuesto.insertar(v);
-        }
-        if (e == v.btnRepuestoLimpiar) {
-            limpiarInput(inputRepuesto);
-        }
-        if (e == v.btnRepuestoModificar) {
-            
-        }
-        if (e == v.btnRepuestoEliminar) {
-            repuesto.eliminar();
-        }
-        if (e == v.cmbRepuestoCantidadTipo) {
-            System.out.println("controller.Controller.actionPerformed()");
-            repuesto.buscarCantidad(v);
-        }
-        */
-        /*
-        //EVENTO
-        if (e == v.btnEventoAñadir) {
-            validoEmpty = validarEmpty(inputEvento);
-            if (validoEmpty) {
-                evento.insertar();
-            }
-        }
-        if (e == v.btnEventoLimpiar) {
-            limpiarInput(inputEvento);
-        }
-        if (e == v.btnEventoModificar) {
-            validoEmpty = validarEmpty(inputEvento);
-            if (validoEmpty) {
-                evento.modificar();
-            }
-        }
-        if (e == v.btnEventoEliminar) {
-            validoEmpty = validarEmpty(inputEvento);
-            if (validoEmpty) {
-                evento.eliminar();
-            }
-        }
-        */
         //LIMPIAR BUSCADORES
         if (e == v.btnColectivoLimpiarBuscadores) {
             limpiarInput(buscadorColectivo);
